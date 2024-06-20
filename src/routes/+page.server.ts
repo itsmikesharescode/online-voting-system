@@ -18,5 +18,13 @@ export const actions: Actions = {
 		if (!form.valid) return fail(401, { form });
 
 		return { form };
+	},
+
+	register: async (event) => {
+		const form = await superValidate(event, zod(registerSchema));
+
+		if (!form.valid) return fail(401, { form });
+
+		return { form };
 	}
 };
