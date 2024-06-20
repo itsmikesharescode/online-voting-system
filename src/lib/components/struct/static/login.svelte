@@ -49,6 +49,6 @@
 
 	<Separator />
 
-	<Button variant="secondary">Forgot Password</Button>
-	<Button variant="secondary">Create Account</Button>
+	<Button variant="secondary" href="/?q=forgot-password">Forgot Password</Button>
+	<Button variant="secondary" href="/?q=register">Create Account</Button>
 </div>

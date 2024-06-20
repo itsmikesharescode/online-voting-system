@@ -9,7 +9,7 @@
 
 <div class="flex min-h-screen flex-col justify-center p-[1rem]">
 	{#if $page.url.searchParams.get('q') === 'register'}
-		<Register />
+		<Register registerForm={data.registerForm} />
 	{:else if $page.url.searchParams.get('q') === 'forgot-password'}
 		<ForgotPassword />
 	{:else}
