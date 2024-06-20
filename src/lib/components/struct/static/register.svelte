@@ -22,7 +22,7 @@
 	<div class="">
 		<h3 class="scroll-m-20 text-center text-2xl font-semibold tracking-tight">Register</h3>
 		<p class="text-center text-sm leading-7 text-muted-foreground">
-			Enter your email and password to log in
+			Enter your details to register
 		</p>
 	</div>
 
