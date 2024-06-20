@@ -8,7 +8,7 @@
 </script>
 
 <div class="grid md:grid-cols-2">
-	<div class="hidden border-r-[1px] md:block">
+	<div class="hidden md:block">
 		<div class="mx-auto mt-[20dvh] md:px-[2rem] lg:px-[5rem]">
 			<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
 				Online Voting System
