@@ -2,9 +2,22 @@ import { message, superValidate } from 'sveltekit-superforms';
 import type { Actions, PageServerLoad } from './$types';
 import { zod } from 'sveltekit-superforms/adapters';
 import { forgotPwdSchema, loginSchema, registerSchema } from '$lib/schema';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
+	const session = await safeGetSession();
+
+	if (session.user) {
+		const {
+			user_metadata: { role }
+		} = session.user;
+
+		if (role === 'voter') redirect(301, '/voter');
+		else if (role === 'admin') redirect(301, '/admin');
+
+		console.log(session.user);
+	}
+
 	return {
 		loginForm: await superValidate(zod(loginSchema), { id: crypto.randomUUID() }),
 		registerForm: await superValidate(zod(registerSchema), { id: crypto.randomUUID() }),
@@ -54,6 +67,9 @@ export const actions: Actions = {
 				}
 			}
 		});
+
+		if (error) return message(form, { status: 401, msg: error.message });
+		else return message(form, { status: 200, msg: 'Account created.' });
 	},
 
 	forgotPwd: async (event) => {
