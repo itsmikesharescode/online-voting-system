@@ -27,5 +27,12 @@ export const actions: Actions = {
 		if (!form.valid) return fail(401, { form });
 
 		return { form };
+	},
+
+	forgotPwd: async (event) => {
+		const form = await superValidate(event, zod(forgotPwdSchema));
+
+		if (!form.valid) return fail(401, { form });
+		return { form };
 	}
 };
