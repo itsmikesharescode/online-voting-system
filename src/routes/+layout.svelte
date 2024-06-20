@@ -1,7 +1,11 @@
-<script>
+<script lang="ts">
 	import '../app.css';
+	import { Toaster } from '$lib/components/ui/sonner';
+	import Footer from '$lib/components/general/footer.svelte';
+
+	const { children } = $props();
 </script>
 
-<slot></slot>
-
-<style></style>
+<Toaster />
+{@render children()}
+<Footer />
