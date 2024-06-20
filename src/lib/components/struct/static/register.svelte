@@ -6,6 +6,8 @@
 	import { Input } from '$lib/components/ui/input';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { toast } from 'svelte-sonner';
+	import { LoaderCircle } from 'lucide-svelte';
 
 	interface PropType {
 		registerForm: SuperValidated<Infer<RegisterSchema>>;
@@ -16,6 +18,34 @@
 	const form = superForm(registerForm, { validators: zodClient(registerSchema) });
 
 	const { form: formData, enhance, submitting, message } = form;
+
+	$effect(() => {
+		if ($message) {
+			const { msg, status } = $message as { msg: string; status: number };
+
+			switch (status) {
+				case 200:
+					toast.success('', {
+						description: msg,
+						action: {
+							label: 'Undo',
+							onClick: () => {}
+						}
+					});
+					break;
+
+				case 401:
+					toast.error('', {
+						description: msg,
+						action: {
+							label: 'Undo',
+							onClick: () => {}
+						}
+					});
+					break;
+			}
+		}
+	});
 </script>
 
 <div class="mx-auto grid w-[300px] gap-[20px] sm:w-[350px]">
@@ -26,7 +56,7 @@
 		</p>
 	</div>
 
-	<form method="POST" use:enhance class="grid gap-[10px]">
+	<form method="POST" action="?/register" use:enhance class="grid gap-[10px]">
 		<Form.Field {form} name="displayName">
 			<Form.Control let:attrs>
 				<Form.Label>Display Name</Form.Label>
@@ -63,7 +93,13 @@
 			<Form.FieldErrors />
 		</Form.Field>
 
-		<Form.Button>Create Account</Form.Button>
+		<Form.Button disabled={$submitting}>
+			{#if $submitting}
+				<LoaderCircle class="animate-spin" />
+			{:else}
+				Create Account
+			{/if}
+		</Form.Button>
 	</form>
 
 	<Separator />

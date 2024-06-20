@@ -36,11 +36,24 @@ export const actions: Actions = {
 	},
 
 	register: async (event) => {
+		const {
+			locals: { supabase }
+		} = event;
+
 		const form = await superValidate(event, zod(registerSchema));
 
 		if (!form.valid) return fail(401, { form });
 
-		return { form };
+		const { data, error } = await supabase.auth.signUp({
+			email: form.data.email,
+			password: form.data.password,
+			options: {
+				data: {
+					displayName: form.data.displayName,
+					role: 'admin'
+				}
+			}
+		});
 	},
 
 	forgotPwd: async (event) => {
