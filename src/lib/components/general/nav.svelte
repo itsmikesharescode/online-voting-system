@@ -8,10 +8,10 @@
 
 	interface PropType {
 		user: User | null;
-		children: Snippet;
+		child: Snippet;
 	}
 
-	const { user, children }: PropType = $props();
+	const { user, child }: PropType = $props();
 
 	const adminSelections = [
 		{
@@ -107,5 +107,5 @@
 		</div>
 	{/if}
 
-	{@render children()}
+	{@render child()}
 </div>

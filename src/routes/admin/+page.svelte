@@ -2,8 +2,14 @@
 	import { routeState } from '$lib/runes.svelte';
 	import DetailsCard from '$lib/components/struct/admin/root/details-card.svelte';
 	import { UserCheck, NotebookText } from 'lucide-svelte';
+	import LineChart from '$lib/components/struct/admin/root/line-chart.svelte';
+	import BarChart from '$lib/components/struct/admin/root/bar-chart.svelte';
+	import { onMount } from 'svelte';
 
-	routeState.setActiveRoute('/admin');
+	onMount(() => {
+		routeState.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
+		routeState.setActiveRoute('/admin');
+	});
 </script>
 
 {#snippet userCheck()}
@@ -15,7 +21,17 @@
 {/snippet}
 
 <div class="min-h-screen p-[1rem] md:border-l-[1px]">
-	<div class="grid gap-[10px] md:grid-cols-2 lg:grid-cols-4">
+	<div class="grid gap-[10px] lg:grid-cols-2">
+		<div class="flex h-[30dvh] items-center">
+			<BarChart />
+		</div>
+
+		<div class="flex h-[30dvh] items-center">
+			<LineChart />
+		</div>
+	</div>
+
+	<div class="mt-[20px] grid gap-[10px] md:grid-cols-2 lg:grid-cols-4">
 		<DetailsCard title="Total Voter" icon={userCheck} value={30} />
 		<DetailsCard title="Total Voted" icon={userCheck} value={30} />
 		<DetailsCard title="Total Positions" icon={noteBookText} value={30} />
