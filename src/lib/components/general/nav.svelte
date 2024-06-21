@@ -3,7 +3,8 @@
 	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import type { Snippet } from 'svelte';
 	import Button from '../ui/button/button.svelte';
-	import { LogOut } from 'lucide-svelte';
+	import { LogOut, Menu, X } from 'lucide-svelte';
+	import { routeState } from '$lib/runes.svelte';
 
 	interface PropType {
 		user: User | null;
@@ -12,12 +13,42 @@
 
 	const { user, children }: PropType = $props();
 
-	const selections = ['Dashboard', 'Live Result', 'Voters', 'Position', 'Candidates'];
+	const adminSelections = [
+		{
+			title: 'Dashboard',
+			url: '/admin'
+		},
+
+		{
+			title: 'Live Result',
+			url: '/admin/live-result'
+		},
+
+		{
+			title: 'Voters',
+			url: '/admin/voters'
+		},
+
+		{
+			title: 'Position',
+			url: '/admin/position'
+		},
+
+		{
+			title: 'Candidates',
+			url: '/admin/candidates'
+		}
+	];
+	const userSelections = ['Ballot', 'Live Result'];
+
+	let showMenu = $state(false);
 </script>
 
 <nav
-	class="sticky top-0 flex justify-end border-b-[1px] p-[10px] backdrop-blur-lg md:static lg:px-[2rem]"
+	class="sticky top-0 flex items-center justify-between border-b-[1px] p-[10px] backdrop-blur-lg md:static md:justify-end lg:px-[2rem]"
 >
+	<button onclick={() => (showMenu = true)} class="md:hidden"><Menu /></button>
+
 	<div class="flex items-center gap-[10px]">
 		<p>{user?.user_metadata.displayName}</p>
 
@@ -29,16 +60,38 @@
 </nav>
 
 <div class="grid md:grid-cols-[300px,1fr]">
+	<!--Desktop-->
 	<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
 		<Button class="relative my-[20px] flex items-center gap-[5px]">
 			<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
 			Log out
 		</Button>
 
-		{#each selections as selection}
-			<a href=" " class="rounded-r-full p-[1rem] hover:bg-secondary">{selection}</a>
+		{#each adminSelections as selection}
+			<a href={selection.url} class="rounded-r-full p-[1rem] hover:bg-secondary"
+				>{selection.title}</a
+			>
 		{/each}
 	</div>
+
+	<!--Mobile-->
+	{#if showMenu}
+		<div
+			class="fixed bottom-0 left-0 right-0 top-0 z-10 flex items-center justify-center bg-secondary md:hidden"
+		>
+			<button onclick={() => (showMenu = false)} class="fixed right-0 top-0 m-[10px] p-[10px]">
+				<X />
+			</button>
+
+			<div class="grid gap-[10px] p-[10px]">
+				{#each adminSelections as selection}
+					<a href={selection.url} class="border-b-[1px] border-red-500 p-[10px]"
+						>{selection.title}</a
+					>
+				{/each}
+			</div>
+		</div>
+	{/if}
 
 	{@render children()}
 </div>
