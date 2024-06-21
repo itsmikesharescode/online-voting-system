@@ -12,10 +12,10 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
 			user_metadata: { role }
 		} = session.user;
 
-		if (role === 'voter') redirect(301, '/voter');
-		else if (role === 'admin') redirect(301, '/admin');
-
 		console.log(session.user);
+
+		if (role === 'voter') redirect(302, '/voter');
+		else if (role === 'admin') redirect(302, '/admin');
 	}
 
 	return {
