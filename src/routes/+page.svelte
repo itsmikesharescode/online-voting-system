@@ -11,16 +11,6 @@
 
 <div class="grid md:grid-cols-2">
 	<div class="hidden md:block">
-		<!-- <div class="mx-auto mt-[20dvh] md:px-[2rem] lg:px-[5rem]">
-			<h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-				Online Voting System
-			</h1>
-			<p class="mt-[10px] leading-7 text-muted-foreground">
-				Take charge of your voting process with our easy-to-use platform. Create and manage your own
-				voting events with complete control over every detail.
-			</p>
-		</div> -->
-
 		<div class="flex h-[100%] w-full flex-col items-center overflow-hidden rounded-md bg-black">
 			<div class="mx-auto mt-[20dvh] md:px-[2rem] lg:px-[5rem]">
 				<h1
@@ -56,6 +46,7 @@
 					particleDensity={300}
 					className="w-full h-full"
 					particleColor="#FFFFFF"
+					speed={3}
 				/>
 
 				<!-- Radial Gradient to prevent sharp edges -->

@@ -1,14 +1,26 @@
 <script lang="ts">
 	import { cn } from '$lib/utilss/cn';
 	import { Motion } from 'svelte-motion';
-	let randomMove = () => Math.random() * 4 - 2;
 
-	export let minSize: number = 0.6;
-	export let maxSize: number = 1.5;
-	export let speed: number = 3;
-	export let particleColor: string = '#ffffff';
-	export let particleDensity: number | undefined = 200;
-	export let className: string | undefined = undefined;
+	interface PropType {
+		minSize: number;
+		maxSize: number;
+		speed: number;
+		particleColor: string;
+		particleDensity: number | undefined;
+		className: string | undefined;
+	}
+
+	const {
+		minSize = 0.6,
+		maxSize = 1.5,
+		speed = 3,
+		particleColor = '#ffffff',
+		particleDensity = 200,
+		className = undefined
+	}: PropType = $props();
+
+	let randomMove = () => Math.random() * 4 - 2;
 
 	function getRandomValue() {
 		return minSize + Math.random() * (maxSize - minSize);
