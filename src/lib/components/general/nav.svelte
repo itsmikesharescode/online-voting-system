@@ -30,8 +30,8 @@
 		},
 
 		{
-			title: 'Position',
-			url: '/admin/position'
+			title: 'Positions',
+			url: '/admin/positions'
 		},
 
 		{
@@ -68,9 +68,14 @@
 		</Button>
 
 		{#each adminSelections as selection}
-			<a href={selection.url} class="rounded-r-full p-[1rem] hover:bg-secondary"
-				>{selection.title}</a
+			<a
+				href={selection.url}
+				class="rounded-r-full p-[1rem] hover:font-semibold
+				{routeState.getActiveRoute() === selection.url ? 'bg-secondary font-semibold' : ''} "
+				onclick={() => routeState.setActiveRoute(selection.url)}
 			>
+				{selection.title}
+			</a>
 		{/each}
 	</div>
 
@@ -85,9 +90,18 @@
 
 			<div class="grid gap-[10px] p-[10px]">
 				{#each adminSelections as selection}
-					<a href={selection.url} class="border-b-[1px] border-red-500 p-[10px]"
-						>{selection.title}</a
+					<a
+						href={selection.url}
+						class=" p-[10px]
+						{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
+					"
+						onclick={() => {
+							routeState.setActiveRoute(selection.url);
+							showMenu = false;
+						}}
 					>
+						{selection.title}
+					</a>
 				{/each}
 			</div>
 		</div>
