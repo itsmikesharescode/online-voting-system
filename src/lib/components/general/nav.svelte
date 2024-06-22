@@ -62,7 +62,6 @@
 				case 200:
 					toast.success('', { description: msg });
 					logoutLoader = false;
-					goto('/', { invalidateAll: true });
 					break;
 
 				case 401:
@@ -95,7 +94,11 @@
 	<!--Desktop-->
 	<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
 		<form method="post" action="?/logout" class="w-full" use:enhance={logout}>
-			<Button type="submit" class="relative my-[20px] flex w-full items-center gap-[5px]">
+			<Button
+				disabled={logoutLoader}
+				type="submit"
+				class="relative my-[20px] flex w-full items-center gap-[5px]"
+			>
 				{#if logoutLoader}
 					<LoaderCircle class="animate-spin" />
 				{:else}

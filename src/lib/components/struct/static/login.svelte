@@ -8,7 +8,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { toast } from 'svelte-sonner';
 	import { LoaderCircle } from 'lucide-svelte';
-	import { goto } from '$app/navigation';
 
 	interface PropType {
 		loginForm: SuperValidated<Infer<LoginSchema>>;
@@ -16,7 +15,7 @@
 
 	const { loginForm }: PropType = $props();
 
-	const form = superForm(loginForm, { validators: zodClient(loginSchema), invalidateAll: false });
+	const form = superForm(loginForm, { validators: zodClient(loginSchema) });
 
 	const { form: formData, enhance, submitting, message } = form;
 
@@ -25,16 +24,6 @@
 			const { msg, status } = $message as { msg: string; status: number };
 
 			switch (status) {
-				case 200:
-					toast.success('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
-					goto('/admin');
-					break;
 				case 401:
 					toast.error('', {
 						description: msg,
