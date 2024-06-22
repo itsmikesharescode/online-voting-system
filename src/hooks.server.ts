@@ -1,15 +1,16 @@
 import { createServerClient } from '@supabase/ssr';
-import type { Handle } from '@sveltejs/kit';
-import sharp from 'sharp';
+import { type Handle, redirect } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
 const sKey = import.meta.env.VITE_SB_KEY;
 const sUrl = import.meta.env.VITE_SB_URL;
 const sAdminKey = import.meta.env.VITE_SB_ADMIN_KEY;
 
-export const handle: Handle = async ({ event, resolve }) => {
+const supabase: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createServerClient(sUrl, sKey, {
 		cookies: {
 			get: (key) => event.cookies.get(key),
+
 			set: (key, value, options) => {
 				event.cookies.set(key, value, { ...options, path: '/' });
 			},
@@ -22,6 +23,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabaseAdmin = createServerClient(sUrl, sAdminKey, {
 		cookies: {
 			get: (key) => event.cookies.get(key),
+
 			set: (key, value, options) => {
 				event.cookies.set(key, value, { ...options, path: '/' });
 			},
@@ -44,47 +46,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 			error
 		} = await event.locals.supabase.auth.getUser();
 		if (error) {
+			// JWT validation has failed
 			return { session: null, user: null };
 		}
 
 		return { session, user };
-	};
-
-	event.locals.compressImage = async (fileObject, targetSizeKB = 300) => {
-		const maxWidth = 150;
-		const maxHeight = 150;
-		let quality = 90; // Initial quality setting
-		let outputBuffer = null;
-
-		try {
-			// Read the input image buffer
-			const inputImageBuffer = await fileObject.arrayBuffer();
-
-			// Resize and compress loop
-			while (quality > 0) {
-				// Resize and compress the image to WebP format
-				outputBuffer = await sharp(inputImageBuffer)
-					.resize({ width: maxWidth, height: maxHeight, fit: 'cover' })
-					.toFormat('webp', { quality: quality })
-					.toBuffer();
-
-				// Calculate output size in KB
-				const outputSizeKB = outputBuffer.length / 1024;
-
-				// Check if output size meets the target
-				if (outputSizeKB <= targetSizeKB) {
-					const blob = new Blob([outputBuffer], { type: 'image/webp' });
-					return blob;
-				}
-
-				// Reduce quality for next iteration
-				quality -= 10;
-			}
-		} catch (error) {
-			console.error('Error compressing image:', error);
-		}
-
-		return null; // Return null if image processing fails or target size not achieved
 	};
 
 	return resolve(event, {
@@ -93,3 +59,44 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	});
 };
+
+const authGuard: Handle = async ({ event, resolve }) => {
+	const { session, user } = await event.locals.safeGetSession();
+	event.locals.session = session;
+	event.locals.user = user;
+
+	if (
+		(!event.locals.session && event.url.pathname.startsWith('/voter')) ||
+		(!event.locals.session && event.url.pathname.startsWith('/admin'))
+	) {
+		redirect(303, '/');
+	}
+
+	if (event.locals.session && event.url.pathname === '/admin') {
+		const {
+			user: {
+				user_metadata: { role }
+			}
+		} = event.locals.session;
+
+		if (role === 'voter') redirect(301, '/voter');
+	}
+
+	if (event.locals.session && event.url.pathname === '/voter') {
+		const {
+			user: {
+				user_metadata: { role }
+			}
+		} = event.locals.session;
+
+		if (role === 'admin') redirect(301, '/admin');
+	}
+
+	return resolve(event);
+};
+
+const workers: Handle = async ({ event, resolve }) => {
+	return resolve(event);
+};
+
+export const handle: Handle = sequence(supabase, authGuard, workers);
