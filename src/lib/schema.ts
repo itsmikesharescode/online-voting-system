@@ -36,3 +36,18 @@ export const forgotPwdSchema = z.object({
 export type LoginSchema = typeof loginSchema;
 export type RegisterSchema = typeof registerSchema;
 export type ForgotPwdSchema = typeof forgotPwdSchema;
+
+// admin schema
+export const createVoterSchema = z.object({
+	adminId: z.string(),
+	displayName: z
+		.string()
+		.min(4, { message: 'Must enter a valid display name.' })
+		.max(25, { message: 'Max char is 25.' }),
+	email: z
+		.string()
+		.email({ message: 'Must enter a valid email.' })
+		.max(40, { message: 'Max char is 40.' }),
+	password: z.string().min(6, { message: 'Must choose a strong password.' }),
+	confirmPassword: z.string()
+});
