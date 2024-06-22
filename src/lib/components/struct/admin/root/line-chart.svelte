@@ -60,8 +60,8 @@
 
 	onMount(async () => {
 		if (typeof window !== 'undefined') {
-			const zoomPlugin = await import('chartjs-plugin-zoom');
-			Chart.register(zoomPlugin.default);
+			/* const zoomPlugin = await import('chartjs-plugin-zoom');
+			Chart.register(zoomPlugin.default); */
 			createChart();
 		}
 	});

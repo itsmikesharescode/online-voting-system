@@ -3,7 +3,6 @@
 	import DetailsCard from '$lib/components/struct/admin/root/details-card.svelte';
 	import { UserCheck, NotebookText } from 'lucide-svelte';
 	import LineChart from '$lib/components/struct/admin/root/line-chart.svelte';
-	import BarChart from '$lib/components/struct/admin/root/bar-chart.svelte';
 	import { onMount } from 'svelte';
 
 	onMount(() => {
