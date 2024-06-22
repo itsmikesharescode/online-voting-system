@@ -45,7 +45,7 @@
 </script>
 
 <nav
-	class="sticky top-0 flex items-center justify-between border-b-[1px] p-[10px] backdrop-blur-lg md:static md:justify-end lg:px-[2rem]"
+	class="sticky top-0 z-10 flex items-center justify-between border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:static md:justify-end lg:px-[2rem]"
 >
 	<button onclick={() => (showMenu = true)} class="md:hidden"><Menu /></button>
 

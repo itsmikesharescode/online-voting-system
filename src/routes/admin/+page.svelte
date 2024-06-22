@@ -19,7 +19,7 @@
 	<NotebookText />
 {/snippet}
 
-<div class="min-h-screen p-[1rem] md:border-l-[1px]">
+<div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
 	<div class="">
 		<div class="flex h-[50dvh] items-center">
 			<LineChart />

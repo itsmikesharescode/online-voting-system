@@ -39,11 +39,12 @@
 
 		chartInstance = new Chart(ctx, {
 			type: 'bar',
+
 			data: {
 				labels: chartLabels,
 				datasets: [
 					{
-						label: 'Senators',
+						label: 'Senators Graph',
 						backgroundColor: getColor(),
 						data: chartValues
 					}
@@ -52,6 +53,7 @@
 			options: {
 				responsive: true,
 				maintainAspectRatio: false,
+
 				scales: {
 					x: {
 						display: false,

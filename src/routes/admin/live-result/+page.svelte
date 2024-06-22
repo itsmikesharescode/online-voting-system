@@ -4,5 +4,9 @@
 </script>
 
 <div class="min-h-screen p-[1rem] md:border-l-[1px]">
-	<ResultCard />
+	<div class="grid gap-[5px] lg:grid-cols-3">
+		{#each Array(5) as _}
+			<ResultCard />
+		{/each}
+	</div>
 </div>
