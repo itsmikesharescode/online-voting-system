@@ -45,11 +45,7 @@
 		{ x: '2023-01-04', y: 35 },
 		{ x: '2023-01-05', y: 10 },
 		{ x: '2023-01-06', y: 3 },
-		{ x: '2023-01-07', y: 5 },
-		{ x: '2023-01-08', y: 10 },
-		{ x: '2023-01-09', y: 11 },
-		{ x: '2023-01-10', y: 30 },
-		{ x: '2023-01-11', y: 2 }
+		{ x: '2023-01-07', y: 5 }
 	];
 
 	const chartValues4: { x: string; y: number }[] = [
@@ -175,10 +171,14 @@
 								day: 'MMM d'
 							}
 						},
-
+						offset: true,
 						ticks: {
 							source: 'data' // Only show ticks at data points
 						}
+					},
+
+					y: {
+						offset: true
 					}
 				},
 
