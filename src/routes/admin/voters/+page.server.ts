@@ -26,6 +26,7 @@ export const actions: Actions = {
 		} = await supabaseAdmin.auth.admin.createUser({
 			email: form.data.email,
 			password: form.data.password,
+			email_confirm: true,
 			user_metadata: {
 				displayName: form.data.displayName,
 				role: 'voter',

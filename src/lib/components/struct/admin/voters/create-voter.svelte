@@ -18,11 +18,10 @@
 
 	const { createVoterForm, user }: PropType = $props();
 
-	let open = $state(true);
+	let open = $state(false);
 
 	const form = superForm(createVoterForm, {
-		validators: zodClient(createVoterSchema),
-		invalidateAll: false
+		validators: zodClient(createVoterSchema)
 	});
 
 	const { form: formData, enhance, submitting, message } = form;
@@ -41,7 +40,6 @@
 						}
 					});
 					open = false;
-					invalidateAll();
 					break;
 				case 401:
 					toast.error('', {
