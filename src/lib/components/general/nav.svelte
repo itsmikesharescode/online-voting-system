@@ -94,11 +94,16 @@
 <div class="grid md:grid-cols-[300px,1fr]">
 	<!--Desktop-->
 	<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
-		<Button class="relative my-[20px] flex items-center gap-[5px]">
-			<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
-			Log out
-		</Button>
-
+		<form method="post" action="?/logout" class="w-full" use:enhance={logout}>
+			<Button type="submit" class="relative my-[20px] flex w-full items-center gap-[5px]">
+				{#if logoutLoader}
+					<LoaderCircle class="animate-spin" />
+				{:else}
+					<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
+					Log out
+				{/if}
+			</Button>
+		</form>
 		{#each adminSelections as selection}
 			<a
 				href={selection.url}
