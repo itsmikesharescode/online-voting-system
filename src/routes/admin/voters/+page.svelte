@@ -5,5 +5,5 @@
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
-	<CreateVoter createVoterForm={data.createVoterForm} />
+	<CreateVoter createVoterForm={data.createVoterForm} user={data.user} />
 </div>

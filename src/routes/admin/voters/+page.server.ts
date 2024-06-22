@@ -14,6 +14,8 @@ export const actions: Actions = {
 	createVoter: async (event) => {
 		const form = await superValidate(event, zod(createVoterSchema));
 
+		console.log(form.data);
+
 		if (!form.valid) return fail(401, { form });
 
 		return { form };
