@@ -24,16 +24,6 @@
 			const { msg, status } = $message as { msg: string; status: number };
 
 			switch (status) {
-				case 200:
-					toast.success('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
-					break;
-
 				case 401:
 					toast.error('', {
 						description: msg,
