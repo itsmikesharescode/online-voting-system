@@ -3,7 +3,7 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import Footer from '$lib/components/general/footer.svelte';
 
-	const { children } = $props();
+	const { children, data } = $props();
 </script>
 
 <Toaster />
