@@ -1,6 +1,6 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { superValidate } from 'sveltekit-superforms';
+import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createVoterSchema } from '$lib/schema';
 
@@ -12,13 +12,29 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	createVoter: async (event) => {
-		const form = await superValidate(event, zod(createVoterSchema));
+		const {
+			locals: { supabaseAdmin }
+		} = event;
 
-		console.log(form.data);
+		const form = await superValidate(event, zod(createVoterSchema));
 
 		if (!form.valid) return fail(401, { form });
 
-		return { form };
+		const {
+			data: { user },
+			error
+		} = await supabaseAdmin.auth.admin.createUser({
+			email: form.data.email,
+			password: form.data.password,
+			user_metadata: {
+				displayName: form.data.displayName,
+				role: 'voter',
+				adminId: form.data.adminId
+			}
+		});
+
+		if (error) return message(form, { status: 401, msg: error.message });
+		else if (user) return message(form, { status: 200, msg: 'Account Created.' });
 	},
 
 	logout: async ({ locals: { supabase } }) => {
