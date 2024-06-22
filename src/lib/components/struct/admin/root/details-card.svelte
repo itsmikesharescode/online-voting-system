@@ -11,7 +11,7 @@
 	const { title, icon, value }: PropType = $props();
 </script>
 
-<Card.Root>
+<Card.Root class="border-[1px] border-slate-700">
 	<Card.Header>
 		<Card.Title class="flex items-center justify-between">
 			{title}

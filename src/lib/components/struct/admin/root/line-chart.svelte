@@ -171,6 +171,9 @@
 								day: 'MMM d'
 							}
 						},
+						grid: {
+							display: false
+						},
 						offset: true,
 						ticks: {
 							source: 'data' // Only show ticks at data points
@@ -178,6 +181,9 @@
 					},
 
 					y: {
+						grid: {
+							display: false
+						},
 						offset: true
 					}
 				},
