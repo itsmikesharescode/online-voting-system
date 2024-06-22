@@ -25,6 +25,13 @@
 			Chart.register(zoomPlugin.default);
 			createChart();
 		}
+
+		// Add an event listener to window resize to update chart size
+		window.addEventListener('resize', () => {
+			if (chartInstance) {
+				chartInstance.resize();
+			}
+		});
 	});
 
 	function createChart() {
@@ -104,3 +111,10 @@
 </script>
 
 <canvas bind:this={chartCanvas} id="myChart"></canvas>
+
+<style>
+	canvas {
+		width: 100% !important;
+		height: 100% !important;
+	}
+</style>

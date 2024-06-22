@@ -21,12 +21,8 @@
 {/snippet}
 
 <div class="min-h-screen p-[1rem] md:border-l-[1px]">
-	<div class="grid gap-[10px] lg:grid-cols-2">
-		<div class="flex h-[30dvh] items-center">
-			<BarChart />
-		</div>
-
-		<div class="flex h-[30dvh] items-center">
+	<div class="">
+		<div class="flex h-[50dvh] items-center">
 			<LineChart />
 		</div>
 	</div>
