@@ -100,7 +100,7 @@
 					ctx.moveTo(x, topY);
 					ctx.lineTo(x, bottomY);
 					ctx.lineWidth = 1;
-					ctx.strokeStyle = 'rgb(250, 204, 21)';
+					ctx.strokeStyle = getColor();
 					ctx.stroke();
 					ctx.restore();
 				}
