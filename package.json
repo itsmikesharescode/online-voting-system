@@ -43,6 +43,7 @@
     "bits-ui": "^0.21.10",
     "chart.js": "^4.4.3",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-annotation": "^3.0.1",
     "chartjs-plugin-zoom": "^2.0.1",
     "clsx": "^2.1.1",
     "cmdk-sv": "^0.0.17",
