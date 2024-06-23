@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Ellipsis } from 'lucide-svelte';
+	import { Ellipsis, User } from 'lucide-svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import EditVoter from './operations/edit-voter.svelte';
 	import DeleteVoter from './operations/delete-voter.svelte';
@@ -29,10 +29,7 @@
 				class=" grid grid-cols-[90%,8%] items-center gap-[2%] p-[10px] md:grid-cols-[41%,41%,5%] lg:grid-cols-[37.5%,37.5%,15%,8%]"
 			>
 				<div class="flex items-center gap-[5px]">
-					<Avatar.Root>
-						<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-						<Avatar.Fallback>CN</Avatar.Fallback>
-					</Avatar.Root>
+					<User class="h-[40px] w-[40px] rounded-full border-[1px] bg-secondary p-[5px]" />
 					<p class="">{voterInfo.display_name}</p>
 				</div>
 				<p class="hidden md:block">{voterInfo.email}</p>
