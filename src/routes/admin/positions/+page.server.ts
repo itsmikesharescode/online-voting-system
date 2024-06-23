@@ -36,6 +36,14 @@ export const actions: Actions = {
 		else return message(form, { status: 200, msg: 'Position created.' });
 	},
 
+	deletePositon: async ({ locals: { supabase }, request }) => {
+		const positionId = (await request.formData()).get('positionId') as string;
+
+		const { error } = await supabase.from('position_list_tb').delete().eq('id', positionId);
+		if (error) return fail(401, { msg: error.message });
+		else return { msg: 'Position has been deleted.' };
+	},
+
 	logout: async ({ locals: { supabase } }) => {
 		const { error } = await supabase.auth.signOut();
 

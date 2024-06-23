@@ -2,9 +2,7 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Ellipsis, FlagTriangleRight } from 'lucide-svelte';
-	import * as Avatar from '$lib/components/ui/avatar';
 	import DeletePosition from './operations/delete-position.svelte';
-	import EditPosition from './operations/edit-position.svelte';
 	import type { Positions } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import { adminState } from '$lib/runes.svelte';
@@ -16,7 +14,6 @@
 
 	const { positions, user }: Props = $props();
 
-	let openEdit = $state(false);
 	let openDelete = $state(false);
 </script>
 
@@ -60,15 +57,6 @@
 								class="cursor-pointer"
 								onclick={() => {
 									adminState.setSelectedPosition(positionInfo);
-									openEdit = true;
-								}}
-							>
-								Edit
-							</DropdownMenu.Item>
-							<DropdownMenu.Item
-								class="cursor-pointer"
-								onclick={() => {
-									adminState.setSelectedPosition(positionInfo);
 									openDelete = true;
 								}}
 							>
@@ -78,6 +66,8 @@
 					</DropdownMenu.Root>
 				</div>
 			</div>
+
+			<DeletePosition bind:openDelete />
 		{/each}
 	{:else}
 		<div class="mt-[10dvh] p-[20px]">
