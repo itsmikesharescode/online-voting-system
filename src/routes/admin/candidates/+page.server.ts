@@ -77,6 +77,20 @@ export const actions: Actions = {
 		else return message(form, { status: 200, msg: 'Updated a candidate.' });
 	},
 
+	deleteCandidate: async ({ locals: { supabase }, request }) => {
+		const formData = await request.formData();
+		const adminId = formData.get('adminId') as string;
+		const candidateId = formData.get('candidateId') as string;
+
+		const { error } = await supabase
+			.from('candidate_list_tb')
+			.delete()
+			.match({ admin_id: adminId, id: candidateId });
+
+		if (error) return fail(401, { msg: error.message });
+		else return { msg: 'Deleted a candidated.' };
+	},
+
 	logout: async ({ locals: { supabase } }) => {
 		const { error } = await supabase.auth.signOut();
 
