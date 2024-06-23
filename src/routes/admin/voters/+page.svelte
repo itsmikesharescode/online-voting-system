@@ -5,6 +5,10 @@
 	import { onMount } from 'svelte';
 
 	const { data } = $props();
+
+	onMount(() => {
+		routeState.setActiveRoute('/admin/voters');
+	});
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
