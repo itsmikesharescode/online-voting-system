@@ -83,3 +83,4 @@ export const createCandidateSchema = z.object({
 
 export type CreateVoterSchema = typeof createVoterSchema;
 export type CreatePositionSchema = typeof createPositionSchema;
+export type CreateCandidateSchema = typeof createCandidateSchema;

@@ -2,25 +2,27 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
-	import { createVoterSchema, type CreateVoterSchema } from '$lib/schema';
+	import { createCandidateSchema, type CreateCandidateSchema } from '$lib/schema';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { toast } from 'svelte-sonner';
 	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { LoaderCircle, X } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
+	import SelectPosition from './select-position.svelte';
 
 	interface PropType {
-		createVoterForm: SuperValidated<Infer<CreateVoterSchema>>;
+		createCandidateForm: SuperValidated<Infer<CreateCandidateSchema>>;
 		user: User | null;
 	}
 
-	const { createVoterForm, user }: PropType = $props();
+	const { createCandidateForm, user }: PropType = $props();
 
 	let open = $state(false);
 
-	const form = superForm(createVoterForm, {
-		validators: zodClient(createVoterSchema)
+	const form = superForm(createCandidateForm, {
+		validators: zodClient(createCandidateSchema)
 	});
 
 	const { form: formData, enhance, submitting, message } = form;
@@ -54,7 +56,7 @@
 	});
 </script>
 
-<Button onclick={() => (open = true)}>Create Voter</Button>
+<Button onclick={() => (open = true)}>Add Candidate</Button>
 
 <AlertDialog.Root bind:open>
 	<AlertDialog.Content>
@@ -65,9 +67,9 @@
 			<X />
 		</button>
 		<AlertDialog.Header>
-			<AlertDialog.Title>Create Voter Account</AlertDialog.Title>
+			<AlertDialog.Title>Add Candidate</AlertDialog.Title>
 			<AlertDialog.Description>
-				Account that is been created can login directly at same login page.
+				This will add a candidate that voters can vote on.
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 
@@ -79,6 +81,15 @@
 					</Form.Control>
 				</Form.Field>
 
+				<Form.Field {form} name="selectedPosition">
+					<Form.Control let:attrs>
+						<Form.Label>Positions</Form.Label>
+						<SelectPosition />
+					</Form.Control>
+					<Form.Description>Select the position.</Form.Description>
+					<Form.FieldErrors />
+				</Form.Field>
+
 				<Form.Field {form} name="displayName">
 					<Form.Control let:attrs>
 						<Form.Label>Display Name</Form.Label>
@@ -88,30 +99,12 @@
 					<Form.FieldErrors />
 				</Form.Field>
 
-				<Form.Field {form} name="email">
+				<Form.Field {form} name="motto">
 					<Form.Control let:attrs>
-						<Form.Label>Email</Form.Label>
-						<Input type="email" {...attrs} bind:value={$formData.email} />
+						<Form.Label>Candidate Motto</Form.Label>
+						<Textarea {...attrs} bind:value={$formData.motto} />
 					</Form.Control>
-					<Form.Description>Enter the email.</Form.Description>
-					<Form.FieldErrors />
-				</Form.Field>
-
-				<Form.Field {form} name="password">
-					<Form.Control let:attrs>
-						<Form.Label>Password</Form.Label>
-						<Input type="password" {...attrs} bind:value={$formData.password} />
-					</Form.Control>
-					<Form.Description>Enter the password.</Form.Description>
-					<Form.FieldErrors />
-				</Form.Field>
-
-				<Form.Field {form} name="confirmPassword">
-					<Form.Control let:attrs>
-						<Form.Label>Confirm Password</Form.Label>
-						<Input type="password" {...attrs} bind:value={$formData.confirmPassword} />
-					</Form.Control>
-					<Form.Description>Confirm the password.</Form.Description>
+					<Form.Description>Enter the motto.</Form.Description>
 					<Form.FieldErrors />
 				</Form.Field>
 			</div>

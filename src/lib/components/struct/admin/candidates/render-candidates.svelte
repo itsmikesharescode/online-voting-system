@@ -3,8 +3,8 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Ellipsis } from 'lucide-svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import EditVoter from './operations/edit-voter.svelte';
-	import DeleteVoter from './operations/delete-voter.svelte';
+	import DeleteCandidate from './operations/delete-candidate.svelte';
+	import EditCandidate from './operations/edit-candidate.svelte';
 </script>
 
 <div class="grid gap-[10px]">
@@ -42,8 +42,8 @@
 						<DropdownMenu.Label>Actions</DropdownMenu.Label>
 
 						<div class="grid gap-[5px] p-[10px]">
-							<EditVoter />
-							<DeleteVoter />
+							<EditCandidate />
+							<DeleteCandidate />
 						</div>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
