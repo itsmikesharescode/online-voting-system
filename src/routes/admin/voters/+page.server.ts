@@ -69,6 +69,14 @@ export const actions: Actions = {
 		else if (user) return message(form, { status: 200, msg: 'Voter info has been updated.' });
 	},
 
+	deleteVoter: async ({ locals: { supabaseAdmin }, request }) => {
+		const voterId = (await request.formData()).get('voterId') as string;
+
+		const { error } = await supabaseAdmin.auth.admin.deleteUser(voterId);
+		if (error) return fail(401, { msg: error.message });
+		else return { msg: `Voter has been deleted.` };
+	},
+
 	logout: async ({ locals: { supabase } }) => {
 		const { error } = await supabase.auth.signOut();
 

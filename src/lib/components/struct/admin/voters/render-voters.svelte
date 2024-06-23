@@ -52,7 +52,7 @@
 
 							<div class="grid gap-[5px] p-[10px]">
 								<EditVoter {voterInfo} {user} {updateVoterForm} />
-								<DeleteVoter />
+								<DeleteVoter {voterInfo} />
 							</div>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
@@ -61,5 +61,7 @@
 		{/each}
 	</div>
 {:else}
-	no voters
+	<div class="mt-[10dvh] p-[20px]">
+		<p class="text-center text-muted-foreground">There is no voters. Create now!</p>
+	</div>
 {/if}
