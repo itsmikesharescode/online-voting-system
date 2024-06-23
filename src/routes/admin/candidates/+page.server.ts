@@ -2,7 +2,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { createCandidateSchema } from '$lib/schema';
+import { createCandidateSchema, updateCandidateSchema } from '$lib/schema';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 import type { Candidate, Position } from '$lib/types';
 
@@ -17,6 +17,9 @@ export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 			.select('*')
 			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Position[]>,
 		createCandidateForm: await superValidate(zod(createCandidateSchema), {
+			id: crypto.randomUUID()
+		}),
+		updateCandidateForm: await superValidate(zod(updateCandidateSchema), {
 			id: crypto.randomUUID()
 		})
 	};
@@ -45,6 +48,17 @@ export const actions: Actions = {
 
 		if (error) return message(form, { status: 401, msg: error.message });
 		else return message(form, { status: 200, msg: 'Added a candidate.' });
+	},
+
+	updateCandidate: async (event) => {
+		const {
+			locals: { supabase }
+		} = event;
+
+		const form = await superValidate(event, zod(updateCandidateSchema));
+		if (!form.valid) return fail(401, { form });
+
+		const selectedPosition = JSON.parse(form.data.selectedPosition) as Position;
 	},
 
 	logout: async ({ locals: { supabase } }) => {
