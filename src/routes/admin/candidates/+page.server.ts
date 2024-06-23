@@ -3,9 +3,15 @@ import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createCandidateSchema } from '$lib/schema';
+import type { PostgrestSingleResponse } from '@supabase/supabase-js';
+import type { Positions } from '$lib/types';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 	return {
+		positions: (await supabase
+			.from('position_list_tb')
+			.select('*')
+			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Positions[]>,
 		createCandidateForm: await superValidate(zod(createCandidateSchema), {
 			id: crypto.randomUUID()
 		})

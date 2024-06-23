@@ -12,7 +12,11 @@
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
-	<CreateCandidate createCandidateForm={data.createCandidateForm} user={data.user} />
+	<CreateCandidate
+		createCandidateForm={data.createCandidateForm}
+		positions={data.positions.data}
+		user={data.user}
+	/>
 
 	<div class="mt-[20px]">
 		<RenderCandidates />

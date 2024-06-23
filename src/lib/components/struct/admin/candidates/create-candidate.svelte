@@ -8,16 +8,18 @@
 	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
-	import { LoaderCircle, X } from 'lucide-svelte';
+	import { LoaderCircle, Rabbit, X } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
-	import SelectPosition from './select-position.svelte';
+	import * as Select from '$lib/components/ui/select';
+	import type { Positions } from '$lib/types';
 
 	interface PropType {
 		createCandidateForm: SuperValidated<Infer<CreateCandidateSchema>>;
+		positions: Positions[] | null;
 		user: User | null;
 	}
 
-	const { createCandidateForm, user }: PropType = $props();
+	const { createCandidateForm, positions, user }: PropType = $props();
 
 	let open = $state(false);
 
@@ -54,6 +56,11 @@
 			}
 		}
 	});
+
+	const selectedPositon = $derived({
+		label: $formData.selectedPosition,
+		value: $formData.selectedPosition
+	});
 </script>
 
 <Button onclick={() => (open = true)}>Add Candidate</Button>
@@ -84,7 +91,36 @@
 				<Form.Field {form} name="selectedPosition">
 					<Form.Control let:attrs>
 						<Form.Label>Positions</Form.Label>
-						<SelectPosition />
+						<Select.Root
+							selected={selectedPositon}
+							onSelectedChange={(v) => {
+								v && ($formData.selectedPosition = v.value);
+							}}
+						>
+							<Select.Trigger class="w-full">
+								<Select.Value placeholder="" />
+							</Select.Trigger>
+							<Select.Content>
+								{#if positions?.length}
+									{#each positions as position}
+										<Select.Item value={JSON.stringify(position)}
+											>{position.position_name}</Select.Item
+										>
+									{/each}
+								{:else}
+									<div class=" flex flex-col items-center justify-center p-[20px]">
+										<Rabbit class="mx-auto h-[150px] w-[150px] text-muted-foreground" />
+										<p class="text-center text-muted-foreground">
+											There is no available positions. Create one to add candidate.
+										</p>
+
+										<Button variant="link" class="mx-auto max-w-fit" href="/admin/positions"
+											>Create Position Here</Button
+										>
+									</div>
+								{/if}
+							</Select.Content>
+						</Select.Root>
 					</Form.Control>
 					<Form.Description>Select the position.</Form.Description>
 					<Form.FieldErrors />
