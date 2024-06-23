@@ -8,6 +8,7 @@
 	import type { User } from '@supabase/supabase-js';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateVoterSchema } from '$lib/schema';
+	import { adminState } from '$lib/runes.svelte';
 
 	interface Props {
 		voters: Voters[] | null;
@@ -16,6 +17,9 @@
 	}
 
 	const { voters, user, updateVoterForm }: Props = $props();
+
+	let openEdit = $state(false);
+	let openDelete = $state(false);
 </script>
 
 {#if voters?.length && user}
@@ -47,18 +51,36 @@
 								<span class="sr-only">Toggle menu</span>
 							</Button>
 						</DropdownMenu.Trigger>
-						<DropdownMenu.Content align="end">
-							<DropdownMenu.Label>Actions</DropdownMenu.Label>
 
-							<div class="grid gap-[5px] p-[10px]">
-								<EditVoter {voterInfo} {user} {updateVoterForm} />
-								<DeleteVoter {voterInfo} />
-							</div>
+						<DropdownMenu.Content align="start">
+							<DropdownMenu.Label>Actions</DropdownMenu.Label>
+							<DropdownMenu.Separator />
+							<DropdownMenu.Item
+								class="cursor-pointer"
+								onclick={() => {
+									adminState.setSelectedVoter(voterInfo);
+									openEdit = true;
+								}}
+							>
+								Edit
+							</DropdownMenu.Item>
+							<DropdownMenu.Item
+								class="cursor-pointer"
+								onclick={() => {
+									adminState.setSelectedVoter(voterInfo);
+									openDelete = true;
+								}}
+							>
+								Delete
+							</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
 				</div>
 			</div>
 		{/each}
+		<!--Workaround might be more performant-->
+		<EditVoter bind:openEdit {updateVoterForm} {user} />
+		<DeleteVoter bind:openDelete />
 	</div>
 {:else}
 	<div class="mt-[10dvh] p-[20px]">

@@ -1,20 +1,19 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { ResultModel, Voters } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
+	import { adminState } from '$lib/runes.svelte';
 
 	interface Props {
-		voterInfo: Voters;
+		openDelete: boolean;
 	}
 
-	const { voterInfo }: Props = $props();
+	let { openDelete = $bindable() }: Props = $props();
 
-	let open = $state(false);
 	let deleteLoader = $state(false);
 	const deleteVoter: SubmitFunction = () => {
 		deleteLoader = true;
@@ -28,7 +27,7 @@
 				case 200:
 					toast.success('', { description: msg });
 					deleteLoader = false;
-					open = false;
+					openDelete = false;
 					break;
 
 				case 401:
@@ -41,10 +40,7 @@
 	};
 </script>
 
-<Button variant="destructive" class="flex w-full justify-start" onclick={() => (open = true)}>
-	Delete
-</Button>
-<AlertDialog.Root bind:open>
+<AlertDialog.Root bind:open={openDelete}>
 	<AlertDialog.Content>
 		<AlertDialog.Header>
 			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
@@ -54,10 +50,12 @@
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel disabled={deleteLoader}>Cancel</AlertDialog.Cancel>
+			<AlertDialog.Cancel disabled={deleteLoader} onclick={() => (openDelete = false)}
+				>Cancel</AlertDialog.Cancel
+			>
 
 			<form method="post" action="?/deleteVoter" use:enhance={deleteVoter}>
-				<input name="voterId" type="hidden" value={voterInfo.voter_id} />
+				<input name="voterId" type="hidden" value={adminState.getSelectedVoter()?.voter_id} />
 				<Button disabled={deleteLoader} type="submit">
 					{#if deleteLoader}
 						<LoaderCircle class="animate-spin" />

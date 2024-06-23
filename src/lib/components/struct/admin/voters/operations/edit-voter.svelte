@@ -2,7 +2,6 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { updateVoterSchema, type UpdateVoterSchema } from '$lib/schema';
-	import type { Voters } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import { toast } from 'svelte-sonner';
 	import { superForm, type Infer, type SuperValidated } from 'sveltekit-superforms';
@@ -10,22 +9,21 @@
 	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { LoaderCircle, X } from 'lucide-svelte';
+	import { adminState } from '$lib/runes.svelte';
 
 	interface Prop {
-		voterInfo: Voters;
 		user: User;
 		updateVoterForm: SuperValidated<Infer<UpdateVoterSchema>>;
+		openEdit: boolean;
 	}
 
-	let { voterInfo, user, updateVoterForm }: Prop = $props();
+	let { user, updateVoterForm, openEdit = $bindable() }: Prop = $props();
 
 	const form = superForm(updateVoterForm, {
 		validators: zodClient(updateVoterSchema)
 	});
 
 	const { form: formData, enhance, submitting, message } = form;
-
-	let open = $state(false);
 
 	$effect(() => {
 		if ($message) {
@@ -40,7 +38,7 @@
 							onClick: () => {}
 						}
 					});
-					open = false;
+					openEdit = false;
 					break;
 				case 401:
 					toast.error('', {
@@ -56,20 +54,19 @@
 	});
 </script>
 
-<Button variant="secondary" class="flex w-full justify-start" onclick={() => (open = true)}>
-	Edit
-</Button>
-<AlertDialog.Root bind:open>
+<AlertDialog.Root bind:open={openEdit}>
 	<AlertDialog.Content>
 		<button
-			onclick={() => (open = false)}
+			onclick={() => (openEdit = false)}
 			class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
 		>
 			<X />
 		</button>
 
 		<AlertDialog.Header>
-			<AlertDialog.Title>Edit {voterInfo.display_name} Information</AlertDialog.Title>
+			<AlertDialog.Title
+				>Edit {adminState.getSelectedVoter()?.display_name} Information</AlertDialog.Title
+			>
 			<AlertDialog.Description></AlertDialog.Description>
 		</AlertDialog.Header>
 
@@ -77,7 +74,12 @@
 			<div class="h-[70dvh] overflow-auto p-[10px] sm:h-fit">
 				<Form.Field {form} name="voterId">
 					<Form.Control let:attrs>
-						<Input tabindex={1} type="hidden" {...attrs} value={voterInfo.voter_id} />
+						<Input
+							tabindex={1}
+							type="hidden"
+							{...attrs}
+							value={adminState.getSelectedVoter()?.voter_id}
+						/>
 					</Form.Control>
 				</Form.Field>
 

@@ -1,3 +1,5 @@
+import type { Voters } from './types';
+
 class RouteState {
 	private activeRoute = $state('');
 	private themeState = $state<'light' | 'dark'>('light');
@@ -25,3 +27,17 @@ class RouteState {
 }
 
 export const routeState = new RouteState();
+
+class AdminState {
+	private selectedVoter = $state<Voters | null>(null);
+
+	getSelectedVoter() {
+		return this.selectedVoter;
+	}
+
+	setSelectedVoter(v: Voters | null) {
+		this.selectedVoter = v;
+	}
+}
+
+export const adminState = new AdminState();

@@ -9,8 +9,6 @@
 	onMount(() => {
 		routeState.setActiveRoute('/admin/voters');
 	});
-
-	$effect(() => console.log(data.voters.data));
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
