@@ -4,14 +4,14 @@
 	import { Rabbit, Ellipsis, UserRound } from 'lucide-svelte';
 	import EditVoter from './operations/edit-voter.svelte';
 	import DeleteVoter from './operations/delete-voter.svelte';
-	import type { Voters } from '$lib/types';
+	import type { Voter } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateVoterSchema } from '$lib/schema';
 	import { adminState } from '$lib/runes.svelte';
 
 	interface Props {
-		voters: Voters[] | null;
+		voters: Voter[] | null;
 		user: User | null;
 		updateVoterForm: SuperValidated<Infer<UpdateVoterSchema>>;
 	}

@@ -3,12 +3,12 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Ellipsis, FlagTriangleRight, Cat } from 'lucide-svelte';
 	import DeletePosition from './operations/delete-position.svelte';
-	import type { Positions } from '$lib/types';
+	import type { Position } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import { adminState } from '$lib/runes.svelte';
 
 	interface Props {
-		positions: Positions[] | null;
+		positions: Position[] | null;
 		user: User | null;
 	}
 

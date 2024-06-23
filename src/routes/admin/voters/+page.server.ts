@@ -4,14 +4,14 @@ import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createVoterSchema, updateVoterSchema } from '$lib/schema';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
-import type { Voters } from '$lib/types';
+import type { Voter } from '$lib/types';
 
 export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 	return {
 		voters: (await supabase
 			.from('voter_list_tb')
 			.select('*')
-			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Voters[]>,
+			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Voter[]>,
 		createVoterForm: await superValidate(zod(createVoterSchema), { id: crypto.randomUUID() }),
 		updateVoterForm: await superValidate(zod(updateVoterSchema), { id: crypto.randomUUID() })
 	};

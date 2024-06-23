@@ -11,11 +11,11 @@
 	import { LoaderCircle, Rabbit, X } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
 	import * as Select from '$lib/components/ui/select';
-	import type { Positions } from '$lib/types';
+	import type { Position } from '$lib/types';
 
 	interface PropType {
 		createCandidateForm: SuperValidated<Infer<CreateCandidateSchema>>;
-		positions: Positions[] | null;
+		positions: Position[] | null;
 		user: User | null;
 	}
 
@@ -157,7 +157,7 @@
 					{#if $submitting}
 						<LoaderCircle class="animate-spin" />
 					{:else}
-						Create Voter
+						Add Candidate
 					{/if}
 				</Form.Button>
 			</div>
