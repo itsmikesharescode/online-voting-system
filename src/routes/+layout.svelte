@@ -4,7 +4,6 @@
 	import Footer from '$lib/components/general/footer.svelte';
 	import { onMount } from 'svelte';
 	import { goto, invalidate } from '$app/navigation';
-	import { toast } from 'svelte-sonner';
 
 	const { children, data: clientData } = $props();
 

@@ -9,7 +9,6 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { toast } from 'svelte-sonner';
 	import type { ResultModel } from '$lib/types';
-	import { goto } from '$app/navigation';
 
 	interface PropType {
 		user: User | null;
@@ -76,7 +75,7 @@
 </script>
 
 <nav
-	class="sticky top-0 z-10 flex items-center justify-between border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:static md:justify-end lg:px-[2rem]"
+	class="sticky top-0 z-20 flex items-center justify-between border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:static md:justify-end lg:px-[2rem]"
 >
 	<button onclick={() => (showMenu = true)} class="md:hidden"><Menu /></button>
 
@@ -122,7 +121,7 @@
 	<!--Mobile-->
 	{#if showMenu}
 		<div
-			class="fixed bottom-0 left-0 right-0 top-0 z-10 flex items-center justify-center bg-secondary md:hidden"
+			class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center bg-secondary md:hidden"
 		>
 			<button onclick={() => (showMenu = false)} class="fixed right-0 top-0 m-[10px] p-[10px]">
 				<X />

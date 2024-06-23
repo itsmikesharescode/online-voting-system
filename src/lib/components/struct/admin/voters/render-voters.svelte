@@ -25,7 +25,7 @@
 {#if voters?.length && user}
 	<div class="grid gap-[10px]">
 		<div
-			class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:grid-cols-[42.5%,42.5%,5%] lg:sticky lg:grid-cols-[37.5%,37.5%,15%,10%]"
+			class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:sticky md:grid-cols-[42.5%,42.5%,5%] lg:grid-cols-[37.5%,37.5%,15%,10%]"
 		>
 			<p class="">Voter Name</p>
 			<p class="hidden md:block">Email</p>

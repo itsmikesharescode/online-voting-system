@@ -10,7 +10,7 @@
 
 <div class="grid gap-[10px]">
 	<div
-		class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:grid-cols-[61%,21%,5%] lg:sticky lg:grid-cols-[75%,15%,8%]"
+		class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:sticky md:grid-cols-[61%,21%,5%] lg:grid-cols-[75%,15%,8%]"
 	>
 		<p class="">Candidate Name</p>
 		<p class="hidden md:block">Created At</p>
