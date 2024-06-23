@@ -61,6 +61,29 @@ export const createVoterSchema = z
 			});
 		}
 	});
+export const updateVoterSchema = z
+	.object({
+		adminId: z.string(),
+		displayName: z
+			.string()
+			.min(4, { message: 'Must enter a valid display name.' })
+			.max(25, { message: 'Max char is 25.' }),
+		email: z
+			.string()
+			.email({ message: 'Must enter a valid email.' })
+			.max(40, { message: 'Max char is 40.' }),
+		password: z.string().min(6, { message: 'Must choose a strong password.' }),
+		confirmPassword: z.string()
+	})
+	.superRefine(({ password, confirmPassword }, ctx) => {
+		if (password !== confirmPassword) {
+			ctx.addIssue({
+				code: 'custom',
+				message: 'Password and Confirm password must match.',
+				path: ['confirmPassword']
+			});
+		}
+	});
 
 export const createPositionSchema = z.object({
 	adminId: z.string(),
@@ -82,5 +105,7 @@ export const createCandidateSchema = z.object({
 });
 
 export type CreateVoterSchema = typeof createVoterSchema;
+export type UpdateVoterSchema = typeof updateVoterSchema;
+
 export type CreatePositionSchema = typeof createPositionSchema;
 export type CreateCandidateSchema = typeof createCandidateSchema;
