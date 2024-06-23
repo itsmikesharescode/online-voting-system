@@ -50,7 +50,9 @@ const supabase: Handle = async ({ event, resolve }) => {
 			return { session: null, user: null };
 		}
 
-		return { session, user };
+		delete session.user;
+
+		return { session: Object.assign({}, session, { user }), user };
 	};
 
 	return resolve(event, {
@@ -66,30 +68,35 @@ const authGuard: Handle = async ({ event, resolve }) => {
 	event.locals.user = user;
 
 	if (
-		(!event.locals.session && event.url.pathname.startsWith('/voter')) ||
-		(!event.locals.session && event.url.pathname.startsWith('/admin'))
+		(!event.locals.user && event.url.pathname.startsWith('/voter')) ||
+		(!event.locals.user && event.url.pathname.startsWith('/admin'))
 	) {
 		redirect(303, '/');
 	}
 
-	if (event.locals.session && event.url.pathname === '/admin') {
+	if (event.locals.user && event.url.pathname === '/admin') {
 		const {
-			user: {
-				user_metadata: { role }
-			}
-		} = event.locals.session;
+			user_metadata: { role }
+		} = event.locals.user;
 
 		if (role === 'voter') redirect(301, '/voter');
 	}
 
-	if (event.locals.session && event.url.pathname === '/voter') {
+	if (event.locals.user && event.url.pathname === '/voter') {
 		const {
-			user: {
-				user_metadata: { role }
-			}
-		} = event.locals.session;
+			user_metadata: { role }
+		} = event.locals.user;
 
 		if (role === 'admin') redirect(301, '/admin');
+	}
+
+	if (event.locals.user && event.url.pathname === '/') {
+		const {
+			user_metadata: { role }
+		} = event.locals.user;
+
+		if (role === 'voter') redirect(301, '/voter');
+		else if (role === 'admin') redirect(301, '/admin');
 	}
 
 	return resolve(event);

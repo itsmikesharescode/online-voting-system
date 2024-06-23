@@ -4,18 +4,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { forgotPwdSchema, loginSchema, registerSchema } from '$lib/schema';
 import { fail, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals: { safeGetSession } }) => {
-	const session = await safeGetSession();
-
-	if (session.user) {
-		const {
-			user_metadata: { role }
-		} = session.user;
-
-		if (role === 'voter') redirect(302, '/voter');
-		else if (role === 'admin') redirect(302, '/admin');
-	}
-
+export const load: PageServerLoad = async () => {
 	return {
 		loginForm: await superValidate(zod(loginSchema), { id: crypto.randomUUID() }),
 		registerForm: await superValidate(zod(registerSchema), { id: crypto.randomUUID() }),
