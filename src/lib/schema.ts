@@ -63,6 +63,7 @@ export const createVoterSchema = z
 	});
 export const updateVoterSchema = z
 	.object({
+		voterId: z.string(),
 		adminId: z.string(),
 		displayName: z
 			.string()

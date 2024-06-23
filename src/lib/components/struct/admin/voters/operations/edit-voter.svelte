@@ -9,7 +9,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
-	import { LoaderCircle } from 'lucide-svelte';
+	import { LoaderCircle, X } from 'lucide-svelte';
 
 	interface Prop {
 		voterInfo: Voters;
@@ -17,15 +17,15 @@
 		updateVoterForm: SuperValidated<Infer<UpdateVoterSchema>>;
 	}
 
-	const { voterInfo, user, updateVoterForm }: Prop = $props();
-
-	let open = $state(false);
+	let { voterInfo, user, updateVoterForm }: Prop = $props();
 
 	const form = superForm(updateVoterForm, {
 		validators: zodClient(updateVoterSchema)
 	});
 
 	const { form: formData, enhance, submitting, message } = form;
+
+	let open = $state(false);
 
 	$effect(() => {
 		if ($message) {
@@ -61,6 +61,13 @@
 </Button>
 <AlertDialog.Root bind:open>
 	<AlertDialog.Content>
+		<button
+			onclick={() => (open = false)}
+			class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+		>
+			<X />
+		</button>
+
 		<AlertDialog.Header>
 			<AlertDialog.Title>Edit {voterInfo.display_name} Information</AlertDialog.Title>
 			<AlertDialog.Description></AlertDialog.Description>
@@ -68,9 +75,15 @@
 
 		<form method="POST" action="?/updateVoter" use:enhance class="grid gap-[10px]">
 			<div class="h-[70dvh] overflow-auto p-[10px] sm:h-fit">
+				<Form.Field {form} name="voterId">
+					<Form.Control let:attrs>
+						<Input tabindex={1} type="hidden" {...attrs} value={voterInfo.voter_id} />
+					</Form.Control>
+				</Form.Field>
+
 				<Form.Field {form} name="adminId">
 					<Form.Control let:attrs>
-						<Input type="hidden" {...attrs} value={user?.id} />
+						<Input tabindex={1} type="hidden" {...attrs} value={user?.id} />
 					</Form.Control>
 				</Form.Field>
 

@@ -46,13 +46,27 @@ export const actions: Actions = {
 	},
 
 	updateVoter: async (event) => {
+		const {
+			locals: { supabaseAdmin }
+		} = event;
+
 		const form = await superValidate(event, zod(updateVoterSchema));
 
 		if (!form.valid) return fail(401, { form });
 
-		console.log(form.data);
+		const {
+			data: { user },
+			error
+		} = await supabaseAdmin.auth.admin.updateUserById(form.data.voterId, {
+			email: form.data.email,
+			password: form.data.password,
+			user_metadata: {
+				displayName: form.data.displayName
+			}
+		});
 
-		return { form };
+		if (error) return message(form, { status: 401, msg: error.message });
+		else if (user) return message(form, { status: 200, msg: 'Voter info has been updated.' });
 	},
 
 	logout: async ({ locals: { supabase } }) => {

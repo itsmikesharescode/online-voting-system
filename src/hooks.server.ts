@@ -49,7 +49,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 			// JWT validation has failed
 			return { session: null, user: null };
 		}
-
+		// work around for supabase token console spammer
 		delete session.user;
 
 		return { session: Object.assign({}, session, { user }), user };
@@ -103,6 +103,8 @@ const authGuard: Handle = async ({ event, resolve }) => {
 };
 
 const workers: Handle = async ({ event, resolve }) => {
+	// image uploads here
+	// cloudflare or vercel
 	return resolve(event);
 };
 
