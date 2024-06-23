@@ -42,8 +42,8 @@
 						<DropdownMenu.Label>Actions</DropdownMenu.Label>
 
 						<div class="grid gap-[5px] p-[10px]">
-							<DeletePosition />
 							<EditPosition />
+							<DeletePosition />
 						</div>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
