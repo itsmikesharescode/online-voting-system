@@ -7,6 +7,7 @@
 	import EditPosition from './operations/edit-position.svelte';
 	import type { Positions } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
+	import { adminState } from '$lib/runes.svelte';
 
 	interface Props {
 		positions: Positions[] | null;
@@ -14,6 +15,9 @@
 	}
 
 	const { positions, user }: Props = $props();
+
+	let openEdit = $state(false);
+	let openDelete = $state(false);
 </script>
 
 <div class="grid gap-[10px]">
@@ -52,8 +56,24 @@
 						<DropdownMenu.Content align="start">
 							<DropdownMenu.Label>Actions</DropdownMenu.Label>
 							<DropdownMenu.Separator />
-							<DropdownMenu.Item class="cursor-pointer">Edit</DropdownMenu.Item>
-							<DropdownMenu.Item class="cursor-pointer">Delete</DropdownMenu.Item>
+							<DropdownMenu.Item
+								class="cursor-pointer"
+								onclick={() => {
+									adminState.setSelectedPosition(positionInfo);
+									openEdit = true;
+								}}
+							>
+								Edit
+							</DropdownMenu.Item>
+							<DropdownMenu.Item
+								class="cursor-pointer"
+								onclick={() => {
+									adminState.setSelectedPosition(positionInfo);
+									openDelete = true;
+								}}
+							>
+								Delete
+							</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
 				</div>

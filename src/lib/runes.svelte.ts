@@ -1,4 +1,4 @@
-import type { Voters } from './types';
+import type { Positions, Voters } from './types';
 
 class RouteState {
 	private activeRoute = $state('');
@@ -30,6 +30,7 @@ export const routeState = new RouteState();
 
 class AdminState {
 	private selectedVoter = $state<Voters | null>(null);
+	private selectedPosition = $state<Positions | null>(null);
 
 	getSelectedVoter() {
 		return this.selectedVoter;
@@ -37,6 +38,14 @@ class AdminState {
 
 	setSelectedVoter(v: Voters | null) {
 		this.selectedVoter = v;
+	}
+
+	getSelectedPosition() {
+		return this.selectedPosition;
+	}
+
+	setSelectedPosition(p: Positions | null) {
+		this.selectedPosition = p;
 	}
 }
 
