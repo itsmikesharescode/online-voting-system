@@ -141,7 +141,7 @@
 						borderColor: getColor(),
 						data: convertToTimestamp(chartValues3),
 						tension: 0.4,
-						pointBackgroundColor: '',
+						pointBackgroundColor: getColor(),
 						pointRadius: 5
 					},
 
@@ -150,7 +150,7 @@
 						borderColor: getColor(),
 						data: convertToTimestamp(chartValues4),
 						tension: 0.4,
-						pointBackgroundColor: '',
+						pointBackgroundColor: getColor(),
 						pointRadius: 5
 					}
 				]
@@ -233,6 +233,12 @@
 			chartInstance.data.datasets[1].borderColor = getColor();
 			chartInstance.data.datasets[2].borderColor = getColor();
 			chartInstance.data.datasets[3].borderColor = getColor();
+
+			chartInstance.data.datasets[0].pointBackgroundColor = getColor();
+			chartInstance.data.datasets[1].pointBackgroundColor = getColor();
+			chartInstance.data.datasets[2].pointBackgroundColor = getColor();
+			chartInstance.data.datasets[3].pointBackgroundColor = getColor();
+
 			chartInstance.update();
 		}
 	});
