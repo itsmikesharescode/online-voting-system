@@ -2,19 +2,25 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Cat, Ellipsis, UserRound } from 'lucide-svelte';
-	import type { Candidate } from '$lib/types';
+	import type { Candidate, Position } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import CandidateDetails from './operations/candidate-details.svelte';
 	import { adminState } from '$lib/runes.svelte';
+	import EditCandidate from './operations/edit-candidate.svelte';
+	import type { Infer, SuperValidated } from 'sveltekit-superforms';
+	import type { UpdateCandidateSchema } from '$lib/schema';
 
 	interface Props {
 		candidates: Candidate[] | null;
 		user: User | null;
+		positions: Position[] | null;
+		updateCandidateForm: SuperValidated<Infer<UpdateCandidateSchema>>;
 	}
 
-	const { candidates, user }: Props = $props();
+	const { candidates, user, positions, updateCandidateForm }: Props = $props();
 
 	let openDetails = $state(false);
+	let openEdit = $state(false);
 </script>
 
 <div class="grid gap-[10px]">
@@ -56,7 +62,15 @@
 							>
 								Details
 							</DropdownMenu.Item>
-							<DropdownMenu.Item class="cursor-pointer">Edit</DropdownMenu.Item>
+							<DropdownMenu.Item
+								class="cursor-pointer"
+								onclick={() => {
+									adminState.setSelectedCandidate(candidateInfo);
+									openEdit = true;
+								}}
+							>
+								Edit
+							</DropdownMenu.Item>
 							<DropdownMenu.Item class="cursor-pointer">Delete</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
@@ -64,6 +78,7 @@
 			</div>
 		{/each}
 		<CandidateDetails bind:openDetails />
+		<EditCandidate {updateCandidateForm} {positions} bind:openEdit />
 	{:else}
 		<div class="mt-[10dvh] p-[20px]">
 			<Cat class="mx-auto h-[150px] w-[150px] text-muted-foreground" />

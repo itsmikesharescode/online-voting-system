@@ -19,6 +19,11 @@
 	/>
 
 	<div class="mt-[20px]">
-		<RenderCandidates candidates={data.candidates.data} user={data.user} />
+		<RenderCandidates
+			candidates={data.candidates.data}
+			user={data.user}
+			positions={data.positions.data}
+			updateCandidateForm={data.updateCandidateForm}
+		/>
 	</div>
 </div>
