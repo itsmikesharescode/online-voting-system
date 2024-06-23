@@ -12,6 +12,7 @@
 	import * as Select from '$lib/components/ui/select';
 	import type { Position } from '$lib/types';
 	import { adminState } from '$lib/runes.svelte';
+	import { onMount } from 'svelte';
 
 	interface PropType {
 		updateCandidateForm: SuperValidated<Infer<UpdateCandidateSchema>>;
@@ -60,9 +61,12 @@
 		value: $formData.selectedPosition
 	});
 
-	$formData.displayName = adminState.getSelectedCandidate()?.display_name ?? '';
-	$formData.motto = adminState.getSelectedCandidate()?.motto ?? '';
-	$formData.selectedPosition = adminState.getSelectedCandidate()?.position_json.position_name ?? '';
+	$effect(() => {
+		$formData.displayName = adminState.getSelectedCandidate()?.display_name ?? '';
+		$formData.motto = adminState.getSelectedCandidate()?.motto ?? '';
+		$formData.selectedPosition =
+			adminState.getSelectedCandidate()?.position_json.position_name ?? '';
+	});
 </script>
 
 <AlertDialog.Root bind:open={openEdit}>
@@ -82,6 +86,12 @@
 
 		<form method="POST" action="?/updateCandidate" use:enhance class="grid gap-[10px]">
 			<div class="h-[70dvh] overflow-auto p-[10px] sm:h-fit">
+				<Form.Field {form} name="candidateId">
+					<Form.Control let:attrs>
+						<Input type="hidden" {...attrs} value={adminState.getSelectedCandidate()?.id} />
+					</Form.Control>
+				</Form.Field>
+
 				<Form.Field {form} name="adminId">
 					<Form.Control let:attrs>
 						<Input type="hidden" {...attrs} value={adminState.getSelectedCandidate()?.admin_id} />

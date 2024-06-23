@@ -59,6 +59,22 @@ export const actions: Actions = {
 		if (!form.valid) return fail(401, { form });
 
 		const selectedPosition = JSON.parse(form.data.selectedPosition) as Position;
+
+		const { error } = await supabase
+			.from('candidate_list_tb')
+			.update([
+				{
+					admin_id: form.data.adminId,
+					display_name: form.data.displayName,
+					motto: form.data.motto,
+					position_id: selectedPosition.id,
+					position_json: selectedPosition
+				}
+			])
+			.match({ admin_id: form.data.adminId, id: form.data.candidateId });
+
+		if (error) return message(form, { status: 401, msg: error.message });
+		else return message(form, { status: 200, msg: 'Updated a candidate.' });
 	},
 
 	logout: async ({ locals: { supabase } }) => {
