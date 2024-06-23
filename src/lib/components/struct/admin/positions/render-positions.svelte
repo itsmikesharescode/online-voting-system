@@ -48,13 +48,12 @@
 								<span class="sr-only">Toggle menu</span>
 							</Button>
 						</DropdownMenu.Trigger>
-						<DropdownMenu.Content align="end">
-							<DropdownMenu.Label>Actions</DropdownMenu.Label>
 
-							<div class="grid gap-[5px] p-[10px]">
-								<EditPosition />
-								<DeletePosition />
-							</div>
+						<DropdownMenu.Content align="start">
+							<DropdownMenu.Label>Actions</DropdownMenu.Label>
+							<DropdownMenu.Separator />
+							<DropdownMenu.Item class="cursor-pointer">Edit</DropdownMenu.Item>
+							<DropdownMenu.Item class="cursor-pointer">Delete</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
 				</div>
