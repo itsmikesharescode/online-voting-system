@@ -1,4 +1,4 @@
-import type { Positions, Voters } from './types';
+import type { Candidate, Position, Voter } from './types';
 
 class RouteState {
 	private activeRoute = $state('');
@@ -14,11 +14,6 @@ class RouteState {
 
 	getThemeState() {
 		return this.themeState;
-		/* if (this.themeState === 'light') {
-			return 'rgb(255, 255, 255)';
-		} else {
-			return 'rgb(0,0,0)';
-		} */
 	}
 
 	setThemeState(t: 'light' | 'dark') {
@@ -29,14 +24,15 @@ class RouteState {
 export const routeState = new RouteState();
 
 class AdminState {
-	private selectedVoter = $state<Voters | null>(null);
-	private selectedPosition = $state<Positions | null>(null);
+	private selectedVoter = $state<Voter | null>(null);
+	private selectedPosition = $state<Position | null>(null);
+	private selectedCandidate = $state<Candidate | null>(null);
 
 	getSelectedVoter() {
 		return this.selectedVoter;
 	}
 
-	setSelectedVoter(v: Voters | null) {
+	setSelectedVoter(v: Voter | null) {
 		this.selectedVoter = v;
 	}
 
@@ -44,8 +40,16 @@ class AdminState {
 		return this.selectedPosition;
 	}
 
-	setSelectedPosition(p: Positions | null) {
+	setSelectedPosition(p: Position | null) {
 		this.selectedPosition = p;
+	}
+
+	getSelectedCandidate() {
+		return this.selectedCandidate;
+	}
+
+	setSelectedCandidate(c: Candidate | null) {
+		this.selectedCandidate = c;
 	}
 }
 
