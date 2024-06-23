@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import type { ResultModel, Voters } from '$lib/types';
+	import type { ResultModel } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';

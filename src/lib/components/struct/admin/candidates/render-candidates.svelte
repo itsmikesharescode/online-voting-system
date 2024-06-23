@@ -9,6 +9,7 @@
 	import EditCandidate from './operations/edit-candidate.svelte';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateCandidateSchema } from '$lib/schema';
+	import DeleteCandidate from './operations/delete-candidate.svelte';
 
 	interface Props {
 		candidates: Candidate[] | null;
@@ -21,17 +22,17 @@
 
 	let openDetails = $state(false);
 	let openEdit = $state(false);
+	let openDelete = $state(false);
 </script>
 
 <div class="grid gap-[10px]">
-	<div
-		class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:sticky md:grid-cols-[61%,21%,5%] lg:grid-cols-[75%,15%,8%]"
-	>
-		<p class="">Candidate Name</p>
-		<p class="hidden md:block">Created At</p>
-	</div>
-
 	{#if candidates?.length && user}
+		<div
+			class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:sticky md:grid-cols-[61%,21%,5%] lg:grid-cols-[75%,15%,8%]"
+		>
+			<p class="">Candidate Name</p>
+			<p class="hidden md:block">Created At</p>
+		</div>
 		{#each candidates as candidateInfo}
 			<div
 				class=" grid grid-cols-[90%,8%] items-center gap-[2%] p-[10px] md:grid-cols-[61%,21%,5%] lg:grid-cols-[75%,15%,8%]"
@@ -71,7 +72,15 @@
 							>
 								Edit
 							</DropdownMenu.Item>
-							<DropdownMenu.Item class="cursor-pointer">Delete</DropdownMenu.Item>
+							<DropdownMenu.Item
+								class="cursor-pointer"
+								onclick={() => {
+									adminState.setSelectedCandidate(candidateInfo);
+									openDelete = true;
+								}}
+							>
+								Delete
+							</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
 				</div>
@@ -79,6 +88,7 @@
 		{/each}
 		<CandidateDetails bind:openDetails />
 		<EditCandidate {updateCandidateForm} {positions} bind:openEdit />
+		<DeleteCandidate bind:openDelete />
 	{:else}
 		<div class="mt-[10dvh] p-[20px]">
 			<Cat class="mx-auto h-[150px] w-[150px] text-muted-foreground" />

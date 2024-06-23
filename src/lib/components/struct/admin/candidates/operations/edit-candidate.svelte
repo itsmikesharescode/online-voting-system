@@ -12,7 +12,6 @@
 	import * as Select from '$lib/components/ui/select';
 	import type { Position } from '$lib/types';
 	import { adminState } from '$lib/runes.svelte';
-	import { onMount } from 'svelte';
 
 	interface PropType {
 		updateCandidateForm: SuperValidated<Infer<UpdateCandidateSchema>>;
