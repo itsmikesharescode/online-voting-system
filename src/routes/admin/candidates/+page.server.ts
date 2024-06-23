@@ -21,12 +21,26 @@ export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 export const actions: Actions = {
 	createCandidate: async (event) => {
 		const {
-			locals: { supabaseAdmin }
+			locals: { supabase }
 		} = event;
 
 		const form = await superValidate(event, zod(createCandidateSchema));
-
 		if (!form.valid) return fail(401, { form });
+
+		const selectedPosition = JSON.parse(form.data.selectedPosition) as Positions;
+
+		const { error } = await supabase.from('candidate_list_tb').insert([
+			{
+				admin_id: form.data.adminId,
+				display_name: form.data.displayName,
+				motto: form.data.motto,
+				position_id: selectedPosition.id,
+				position_json: selectedPosition
+			}
+		]);
+
+		if (error) return message(form, { status: 401, msg: error.message });
+		else return message(form, { status: 200, msg: 'Added a candidate.' });
 	},
 
 	logout: async ({ locals: { supabase } }) => {

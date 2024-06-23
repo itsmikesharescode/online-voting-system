@@ -80,7 +80,7 @@
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 
-		<form method="POST" action="?/createVoter" use:enhance class="grid gap-[10px]">
+		<form method="POST" action="?/createCandidate" use:enhance class="grid gap-[10px]">
 			<div class="h-[70dvh] overflow-auto p-[10px] sm:h-fit">
 				<Form.Field {form} name="adminId">
 					<Form.Control let:attrs>
@@ -97,15 +97,15 @@
 								v && ($formData.selectedPosition = v.value);
 							}}
 						>
-							<Select.Trigger class="w-full">
-								<Select.Value placeholder="" />
+							<Select.Trigger {...attrs} class="w-full">
+								<Select.Value placeholder="Select Position" />
 							</Select.Trigger>
 							<Select.Content>
 								{#if positions?.length}
 									{#each positions as position}
-										<Select.Item value={JSON.stringify(position)}
-											>{position.position_name}</Select.Item
-										>
+										<Select.Item value={position.position_name}>
+											{position.position_name}
+										</Select.Item>
 									{/each}
 								{:else}
 									<div class=" flex flex-col items-center justify-center p-[20px]">
@@ -121,6 +121,13 @@
 								{/if}
 							</Select.Content>
 						</Select.Root>
+						<input
+							hidden
+							value={JSON.stringify(
+								positions?.filter((v) => v.position_name === $formData.selectedPosition)[0]
+							)}
+							name={attrs.name}
+						/>
 					</Form.Control>
 					<Form.Description>Select the position.</Form.Description>
 					<Form.FieldErrors />
