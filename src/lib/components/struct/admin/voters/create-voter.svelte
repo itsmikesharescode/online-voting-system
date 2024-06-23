@@ -9,7 +9,6 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { LoaderCircle, X } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
-	import { invalidateAll } from '$app/navigation';
 
 	interface PropType {
 		createVoterForm: SuperValidated<Infer<CreateVoterSchema>>;

@@ -6,13 +6,16 @@
 	import DeleteVoter from './operations/delete-voter.svelte';
 	import type { Voters } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
+	import type { Infer, SuperValidated } from 'sveltekit-superforms';
+	import type { UpdateVoterSchema } from '$lib/schema';
 
 	interface Props {
 		voters: Voters[] | null;
 		user: User | null;
+		updateVoterForm: SuperValidated<Infer<UpdateVoterSchema>>;
 	}
 
-	const { voters, user }: Props = $props();
+	const { voters, user, updateVoterForm }: Props = $props();
 </script>
 
 {#if voters?.length && user}
@@ -48,7 +51,7 @@
 							<DropdownMenu.Label>Actions</DropdownMenu.Label>
 
 							<div class="grid gap-[5px] p-[10px]">
-								<EditVoter {voterInfo} {user} />
+								<EditVoter {voterInfo} {user} {updateVoterForm} />
 								<DeleteVoter />
 							</div>
 						</DropdownMenu.Content>

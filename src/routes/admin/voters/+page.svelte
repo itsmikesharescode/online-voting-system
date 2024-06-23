@@ -17,6 +17,10 @@
 	<CreateVoter createVoterForm={data.createVoterForm} user={data.user} />
 
 	<div class="mt-[20px]">
-		<RenderVoters voters={data.voters.data} user={data.user} />
+		<RenderVoters
+			voters={data.voters.data}
+			user={data.user}
+			updateVoterForm={data.updateVoterForm}
+		/>
 	</div>
 </div>

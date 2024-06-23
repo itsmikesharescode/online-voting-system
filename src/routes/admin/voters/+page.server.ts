@@ -2,7 +2,7 @@ import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { createVoterSchema } from '$lib/schema';
+import { createVoterSchema, updateVoterSchema } from '$lib/schema';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 import type { Voters } from '$lib/types';
 
@@ -12,7 +12,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
 			.from('voter_list_tb')
 			.select('*')
 			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Voters[]>,
-		createVoterForm: await superValidate(zod(createVoterSchema), { id: crypto.randomUUID() })
+		createVoterForm: await superValidate(zod(createVoterSchema), { id: crypto.randomUUID() }),
+		updateVoterForm: await superValidate(zod(updateVoterSchema), { id: crypto.randomUUID() })
 	};
 };
 
@@ -42,6 +43,16 @@ export const actions: Actions = {
 
 		if (error) return message(form, { status: 401, msg: error.message });
 		else if (user) return message(form, { status: 200, msg: 'Account Created.' });
+	},
+
+	updateVoter: async (event) => {
+		const form = await superValidate(event, zod(updateVoterSchema));
+
+		if (!form.valid) return fail(401, { form });
+
+		console.log(form.data);
+
+		return { form };
 	},
 
 	logout: async ({ locals: { supabase } }) => {
