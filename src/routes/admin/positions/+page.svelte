@@ -15,6 +15,6 @@
 	<CreatePosition createPositionForm={data.createPositionForm} user={data.user} />
 
 	<div class="mt-[20px]">
-		<RenderPositions />
+		<RenderPositions positions={data.positions.data} user={data.user} />
 	</div>
 </div>
