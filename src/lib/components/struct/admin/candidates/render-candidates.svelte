@@ -5,6 +5,7 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import DeleteCandidate from './operations/delete-candidate.svelte';
 	import EditCandidate from './operations/edit-candidate.svelte';
+	import ViewCandidate from './operations/view-candidate.svelte';
 </script>
 
 <div class="grid gap-[10px]">
@@ -40,6 +41,7 @@
 						<DropdownMenu.Label>Actions</DropdownMenu.Label>
 
 						<div class="grid gap-[5px] p-[10px]">
+							<ViewCandidate />
 							<EditCandidate />
 							<DeleteCandidate />
 						</div>
