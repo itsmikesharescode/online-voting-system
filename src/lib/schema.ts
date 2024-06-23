@@ -68,5 +68,18 @@ export const createPositionSchema = z.object({
 	maxVote: z.number().refine((v) => v > 0, { message: 'Max vote must be greater than 1.' })
 });
 
+export const createCandidateSchema = z.object({
+	adminId: z.string(),
+	selectedPosition: z.string().min(3, { message: 'Must select an available position.' }),
+	displayName: z
+		.string()
+		.min(4, { message: 'Must enter a valid display name.' })
+		.max(25, { message: 'Max char is 25.' }),
+	motto: z
+		.string()
+		.min(5, { message: 'Minimum of 5 char.' })
+		.max(250, { message: 'Max char is 250.' })
+});
+
 export type CreateVoterSchema = typeof createVoterSchema;
 export type CreatePositionSchema = typeof createPositionSchema;
