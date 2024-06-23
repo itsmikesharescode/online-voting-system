@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Ellipsis, UserRound } from 'lucide-svelte';
+	import { Rabbit, Ellipsis, UserRound } from 'lucide-svelte';
 	import EditVoter from './operations/edit-voter.svelte';
 	import DeleteVoter from './operations/delete-voter.svelte';
 	import type { Voters } from '$lib/types';
@@ -84,6 +84,7 @@
 	</div>
 {:else}
 	<div class="mt-[10dvh] p-[20px]">
+		<Rabbit class="mx-auto h-[150px] w-[150px] text-muted-foreground" />
 		<p class="text-center text-muted-foreground">There is no voters. Create now!</p>
 	</div>
 {/if}

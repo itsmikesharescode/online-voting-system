@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Ellipsis, FlagTriangleRight } from 'lucide-svelte';
+	import { Ellipsis, FlagTriangleRight, Cat } from 'lucide-svelte';
 	import DeletePosition from './operations/delete-position.svelte';
 	import type { Positions } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
@@ -18,15 +18,15 @@
 </script>
 
 <div class="grid gap-[10px]">
-	<div
-		class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:sticky md:grid-cols-[61%,21%,5%] lg:grid-cols-[37.5%,37.5%,15%,10%]"
-	>
-		<p class="">Position Name</p>
-		<p class="hidden text-center md:block">Max Vote</p>
-		<p class="hidden lg:block">Created At</p>
-	</div>
-
 	{#if positions?.length && user}
+		<div
+			class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:sticky md:grid-cols-[61%,21%,5%] lg:grid-cols-[37.5%,37.5%,15%,10%]"
+		>
+			<p class="">Position Name</p>
+			<p class="hidden text-center md:block">Max Vote</p>
+			<p class="hidden lg:block">Created At</p>
+		</div>
+
 		{#each positions as positionInfo}
 			<div
 				class=" grid grid-cols-[90%,8%] items-center gap-[2%] p-[10px] md:grid-cols-[61%,21%,5%] lg:grid-cols-[37.5%,37.5%,15%,8%]"
@@ -71,6 +71,7 @@
 		{/each}
 	{:else}
 		<div class="mt-[10dvh] p-[20px]">
+			<Cat class="mx-auto h-[150px] w-[150px] text-muted-foreground" />
 			<p class="text-center text-muted-foreground">There is no positions. Create now!</p>
 		</div>
 	{/if}
