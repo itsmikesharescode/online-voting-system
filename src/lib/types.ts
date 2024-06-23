@@ -11,3 +11,10 @@ export type Voters = {
 	email: string;
 	admin_id: string;
 };
+
+export type Positions = {
+	id: number;
+	created_at: string;
+	max_vote: number;
+	position_name: string;
+};
