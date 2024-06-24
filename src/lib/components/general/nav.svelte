@@ -9,6 +9,7 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { toast } from 'svelte-sonner';
 	import type { ResultModel } from '$lib/types';
+	import { page } from '$app/stores';
 
 	interface PropType {
 		user: User | null;
@@ -49,80 +50,58 @@
 </script>
 
 <nav
-	class="sticky top-0 z-20 flex items-center justify-between border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:static md:justify-end lg:px-[2rem]"
+	class="sticky top-0 z-20 flex items-center border-b-[1px] border-slate-700
+	{$page.url.pathname === '/voting-process'
+		? 'justify-between px-[10px] '
+		: 'p-[10px] md:justify-end '} 
+	backdrop-blur-lg md:static lg:px-[2rem]"
 >
-	<button onclick={() => (showMenu = true)} class="md:hidden"><Menu /></button>
+	{#if $page.url.pathname !== '/voting-process'}
+		<button onclick={() => (showMenu = true)} class="md:hidden"><Menu /></button>
 
-	<div class="flex items-center gap-[10px]">
-		<p>{user?.user_metadata.displayName}</p>
+		<div class="flex items-center gap-[10px]">
+			<p>{user?.user_metadata.displayName}</p>
 
-		<Avatar.Root>
-			<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-			<Avatar.Fallback>CN</Avatar.Fallback>
-		</Avatar.Root>
-	</div>
-</nav>
+			<Avatar.Root>
+				<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
+				<Avatar.Fallback>CN</Avatar.Fallback>
+			</Avatar.Root>
+		</div>
+	{:else}
+		<div class="flex items-center gap-[10px]">
+			<Avatar.Root>
+				<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
+				<Avatar.Fallback>CN</Avatar.Fallback>
+			</Avatar.Root>
+			<p>{user?.user_metadata.displayName}</p>
+		</div>
 
-<div class="grid md:grid-cols-[300px,1fr]">
-	<!--Desktop-->
-	<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
-		<form method="post" action="?/logout" class="w-full" use:enhance={logout}>
+		<form method="post" action="?/logout" use:enhance={logout} class="">
 			<Button
 				disabled={logoutLoader}
 				type="submit"
-				class="relative my-[20px] flex w-full items-center gap-[5px]"
+				class="relative my-[20px] flex items-center gap-[5px] sm:w-[150px]"
 			>
 				{#if logoutLoader}
 					<LoaderCircle class="animate-spin" />
 				{:else}
 					<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
-					Log out
+					<p class="hidden sm:block">Log out</p>
 				{/if}
 			</Button>
 		</form>
-		{#each routeState.getSelections() as selection}
-			<a
-				href={selection.url}
-				class="rounded-r-full p-[1rem] hover:font-semibold
-				{routeState.getActiveRoute() === selection.url ? 'bg-secondary font-semibold' : ''} "
-				onclick={() => routeState.setActiveRoute(selection.url)}
-			>
-				{selection.title}
-			</a>
-		{/each}
-	</div>
+	{/if}
+</nav>
 
-	<!--Mobile-->
-	{#if showMenu}
-		<div
-			class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center bg-secondary md:hidden"
-		>
-			<button onclick={() => (showMenu = false)} class="fixed right-0 top-0 m-[10px] p-[10px]">
-				<X />
-			</button>
-
-			<div class="grid gap-[10px] p-[10px]">
-				{#each routeState.getSelections() as selection}
-					<a
-						href={selection.url}
-						class=" p-[10px]
-						{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
-					"
-						onclick={() => {
-							routeState.setActiveRoute(selection.url);
-							showMenu = false;
-						}}
-					>
-						{selection.title}
-					</a>
-				{/each}
-			</div>
-
-			<form method="post" action="?/logout" use:enhance={logout} class="absolute bottom-0 m-[1rem]">
+<div class="grid md:grid-cols-[300px,1fr]">
+	{#if $page.url.pathname !== '/voting-process'}
+		<!--Desktop-->
+		<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
+			<form method="post" action="?/logout" class="w-full" use:enhance={logout}>
 				<Button
 					disabled={logoutLoader}
 					type="submit"
-					class="relative my-[20px] flex w-[150px] items-center gap-[5px]"
+					class="relative my-[20px] flex w-full items-center gap-[5px]"
 				>
 					{#if logoutLoader}
 						<LoaderCircle class="animate-spin" />
@@ -132,7 +111,65 @@
 					{/if}
 				</Button>
 			</form>
+			{#each routeState.getSelections() as selection}
+				<a
+					href={selection.url}
+					class="rounded-r-full p-[1rem] hover:font-semibold
+			{routeState.getActiveRoute() === selection.url ? 'bg-secondary font-semibold' : ''} "
+					onclick={() => routeState.setActiveRoute(selection.url)}
+				>
+					{selection.title}
+				</a>
+			{/each}
 		</div>
+
+		<!--Mobile-->
+		{#if showMenu}
+			<div
+				class="fixed bottom-0 left-0 right-0 top-0 z-20 flex items-center justify-center bg-secondary md:hidden"
+			>
+				<button onclick={() => (showMenu = false)} class="fixed right-0 top-0 m-[10px] p-[10px]">
+					<X />
+				</button>
+
+				<div class="grid gap-[10px] p-[10px]">
+					{#each routeState.getSelections() as selection}
+						<a
+							href={selection.url}
+							class=" p-[10px]
+					{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
+				"
+							onclick={() => {
+								routeState.setActiveRoute(selection.url);
+								showMenu = false;
+							}}
+						>
+							{selection.title}
+						</a>
+					{/each}
+				</div>
+
+				<form
+					method="post"
+					action="?/logout"
+					use:enhance={logout}
+					class="absolute bottom-0 m-[1rem]"
+				>
+					<Button
+						disabled={logoutLoader}
+						type="submit"
+						class="relative my-[20px] flex w-[150px] items-center gap-[5px]"
+					>
+						{#if logoutLoader}
+							<LoaderCircle class="animate-spin" />
+						{:else}
+							<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
+							Log out
+						{/if}
+					</Button>
+				</form>
+			</div>
+		{/if}
 	{/if}
 
 	{@render child()}
