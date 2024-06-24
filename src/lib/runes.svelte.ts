@@ -1,5 +1,5 @@
 import type { User } from '@supabase/supabase-js';
-import type { Candidate, Position, Voter } from './types';
+import type { Candidate, LiveResult, Position, Voter } from './types';
 
 interface Route {
 	title: string;
@@ -110,3 +110,21 @@ class AdminState {
 }
 
 export const adminState = new AdminState();
+
+class VoterState {
+	private ballotContainer = $state<Candidate[]>([]);
+
+	setBallot(b: Candidate[]) {
+		this.ballotContainer = b;
+	}
+
+	getBallot() {
+		return this.ballotContainer;
+	}
+
+	pushBallot(b: Candidate) {
+		this.ballotContainer.push(b);
+	}
+}
+
+export const voterState = new VoterState();

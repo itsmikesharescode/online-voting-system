@@ -3,7 +3,6 @@
 	import ForgotPassword from '$lib/components/struct/static/forgot-password.svelte';
 	import Login from '$lib/components/struct/static/login.svelte';
 	import Register from '$lib/components/struct/static/register.svelte';
-
 	import Sparkles from '$lib/components/ui/Sparkles/Sparkles.svelte';
 
 	const { data } = $props();

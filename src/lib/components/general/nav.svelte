@@ -92,9 +92,8 @@
 		</form>
 	{/if}
 </nav>
-
-<div class="grid md:grid-cols-[300px,1fr]">
-	{#if $page.url.pathname !== '/voting-process'}
+{#if $page.url.pathname !== '/voting-process'}
+	<div class="grid md:grid-cols-[300px,1fr]">
 		<!--Desktop-->
 		<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
 			<form method="post" action="?/logout" class="w-full" use:enhance={logout}>
@@ -170,7 +169,9 @@
 				</form>
 			</div>
 		{/if}
-	{/if}
 
-	{@render child()}
-</div>
+		{@render child()}
+	</div>
+{/if}
+
+{@render child()}
