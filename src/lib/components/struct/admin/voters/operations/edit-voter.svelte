@@ -52,6 +52,11 @@
 			}
 		}
 	});
+
+	$effect(() => {
+		$formData.displayName = adminState.getSelectedVoter()?.display_name ?? '';
+		$formData.email = adminState.getSelectedVoter()?.email ?? '';
+	});
 </script>
 
 <AlertDialog.Root bind:open={openEdit}>
@@ -109,7 +114,7 @@
 
 				<Form.Field {form} name="password">
 					<Form.Control let:attrs>
-						<Form.Label>Password</Form.Label>
+						<Form.Label>New Password</Form.Label>
 						<Input type="password" {...attrs} bind:value={$formData.password} />
 					</Form.Control>
 					<Form.Description>Enter the password.</Form.Description>
@@ -118,7 +123,7 @@
 
 				<Form.Field {form} name="confirmPassword">
 					<Form.Control let:attrs>
-						<Form.Label>Confirm Password</Form.Label>
+						<Form.Label>Confirm New Password</Form.Label>
 						<Input type="password" {...attrs} bind:value={$formData.confirmPassword} />
 					</Form.Control>
 					<Form.Description>Confirm the password.</Form.Description>

@@ -67,24 +67,32 @@ const authGuard: Handle = async ({ event, resolve }) => {
 	event.locals.session = session;
 	event.locals.user = user;
 
-	if (user) {
-		// for voter
-		if (event.url.pathname.startsWith('/voter')) {
+	// for root
+	if (event.url.pathname === '/') {
+		if (user) {
 			const { role } = user.user_metadata;
 			if (role === 'admin') redirect(301, '/admin');
+			else if (role === 'voter') redirect(301, '/voter');
 		}
-		// for admin
-		if (event.url.pathname.startsWith('/admin')) {
+	}
+
+	// for voter
+	if (event.url.pathname.startsWith('/voter')) {
+		if (user) {
+			const { role } = user.user_metadata;
+			if (role === 'admin') redirect(301, '/admin');
+		} else {
+			redirect(303, '/');
+		}
+	}
+	// for admin
+	if (event.url.pathname.startsWith('/admin')) {
+		if (user) {
 			const { role } = user.user_metadata;
 			if (role === 'voter') redirect(301, '/voter');
+		} else {
+			redirect(303, '/');
 		}
-	} else redirect(303, '/');
-
-	// for root
-	if (user && event.url.pathname === '/') {
-		const { role } = user.user_metadata;
-		if (role === 'admin') redirect(301, '/admin');
-		else if (role === 'voter') redirect(301, '/voter');
 	}
 
 	return resolve(event);

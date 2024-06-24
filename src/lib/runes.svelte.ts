@@ -70,7 +70,7 @@ class RouteState {
 
 					{
 						title: 'Ballot',
-						url: '/voter'
+						url: '/voter/ballot'
 					}
 				];
 		} else this.selections = [];

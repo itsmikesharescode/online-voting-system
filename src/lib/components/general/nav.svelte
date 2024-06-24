@@ -102,7 +102,7 @@
 			</button>
 
 			<div class="grid gap-[10px] p-[10px]">
-				{#each adminSelections as selection}
+				{#each routeState.getSelections() as selection}
 					<a
 						href={selection.url}
 						class=" p-[10px]
