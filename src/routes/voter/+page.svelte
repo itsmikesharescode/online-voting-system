@@ -1,7 +1,20 @@
 <script lang="ts">
 	import { routeState } from '$lib/runes.svelte';
+	import ResultCard from '$lib/components/struct/voter/result/result-card.svelte';
+
+	const { data } = $props();
 
 	routeState.setActiveRoute('/voter');
 </script>
 
-<div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]"></div>
+<div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
+	<div class="grid gap-[5px] lg:grid-cols-2">
+		{#if data.results.data?.length}
+			{#each data.results.data as result}
+				<ResultCard {result} />
+			{/each}
+		{:else}
+			<p>No live results atm.</p>
+		{/if}
+	</div>
+</div>
