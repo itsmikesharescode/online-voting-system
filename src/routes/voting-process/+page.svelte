@@ -17,7 +17,9 @@
 		{/if}
 	</div>
 
-	<div class="fixed bottom-0 right-0 m-[2rem]">
-		<ViewBallot />
-	</div>
+	{#if voterState.getVotes().length}
+		<div class="fixed bottom-0 right-0 m-[2rem]">
+			<ViewBallot />
+		</div>
+	{/if}
 </div>
