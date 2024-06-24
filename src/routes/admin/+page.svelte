@@ -6,7 +6,6 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => {
-		routeState.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
 		routeState.setActiveRoute('/admin');
 	});
 </script>
