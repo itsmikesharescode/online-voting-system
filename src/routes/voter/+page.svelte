@@ -1,4 +1,4 @@
 <script lang="ts">
 </script>
 
-this is boter
+<div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]"></div>

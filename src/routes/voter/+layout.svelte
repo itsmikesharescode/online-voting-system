@@ -4,4 +4,8 @@
 	const { data, children } = $props();
 </script>
 
-<Nav {children} user={data.user} />
+{#snippet child()}
+	{@render children()}
+{/snippet}
+
+<Nav {child} user={data.user} />

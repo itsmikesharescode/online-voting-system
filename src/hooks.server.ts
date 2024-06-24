@@ -67,36 +67,24 @@ const authGuard: Handle = async ({ event, resolve }) => {
 	event.locals.session = session;
 	event.locals.user = user;
 
-	if (
-		(!event.locals.user && event.url.pathname.startsWith('/voter')) ||
-		(!event.locals.user && event.url.pathname.startsWith('/admin'))
-	) {
-		redirect(303, '/');
-	}
+	if (user) {
+		// for voter
+		if (event.url.pathname.startsWith('/voter')) {
+			const { role } = user.user_metadata;
+			if (role === 'admin') redirect(301, '/admin');
+		}
+		// for admin
+		if (event.url.pathname.startsWith('/admin')) {
+			const { role } = user.user_metadata;
+			if (role === 'voter') redirect(301, '/voter');
+		}
+	} else redirect(303, '/');
 
-	if (event.locals.user && event.url.pathname === '/admin') {
-		const {
-			user_metadata: { role }
-		} = event.locals.user;
-
-		if (role === 'voter') redirect(301, '/voter');
-	}
-
-	if (event.locals.user && event.url.pathname === '/voter') {
-		const {
-			user_metadata: { role }
-		} = event.locals.user;
-
+	// for root
+	if (user && event.url.pathname === '/') {
+		const { role } = user.user_metadata;
 		if (role === 'admin') redirect(301, '/admin');
-	}
-
-	if (event.locals.user && event.url.pathname === '/') {
-		const {
-			user_metadata: { role }
-		} = event.locals.user;
-
-		if (role === 'voter') redirect(301, '/voter');
-		else if (role === 'admin') redirect(301, '/admin');
+		else if (role === 'voter') redirect(301, '/voter');
 	}
 
 	return resolve(event);
