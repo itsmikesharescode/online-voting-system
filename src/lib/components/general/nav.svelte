@@ -17,33 +17,7 @@
 
 	const { user, child }: PropType = $props();
 
-	const adminSelections = [
-		{
-			title: 'Dashboard',
-			url: '/admin'
-		},
-
-		{
-			title: 'Result',
-			url: '/admin/result'
-		},
-
-		{
-			title: 'Voters',
-			url: '/admin/voters'
-		},
-
-		{
-			title: 'Positions',
-			url: '/admin/positions'
-		},
-
-		{
-			title: 'Candidates',
-			url: '/admin/candidates'
-		}
-	];
-	const userSelections = ['Ballot', 'Live Result'];
+	routeState.setSelections(user);
 
 	let showMenu = $state(false);
 
@@ -106,7 +80,7 @@
 				{/if}
 			</Button>
 		</form>
-		{#each adminSelections as selection}
+		{#each routeState.getSelections() as selection}
 			<a
 				href={selection.url}
 				class="rounded-r-full p-[1rem] hover:font-semibold

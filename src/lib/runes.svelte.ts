@@ -1,8 +1,15 @@
+import type { User } from '@supabase/supabase-js';
 import type { Candidate, Position, Voter } from './types';
+
+interface Route {
+	title: string;
+	url: string;
+}
 
 class RouteState {
 	private activeRoute = $state('');
 	private themeState = $state<'light' | 'dark'>('light');
+	private selections = $state<Route[]>([]);
 
 	getActiveRoute() {
 		return this.activeRoute;
@@ -18,6 +25,55 @@ class RouteState {
 
 	setThemeState(t: 'light' | 'dark') {
 		this.themeState = t;
+	}
+
+	getSelections() {
+		return this.selections;
+	}
+
+	setSelections(u: User | null) {
+		if (u) {
+			const { role } = u.user_metadata;
+			if (role === 'admin')
+				this.selections = [
+					{
+						title: 'Dashboard',
+						url: '/admin'
+					},
+
+					{
+						title: 'Result',
+						url: '/admin/result'
+					},
+
+					{
+						title: 'Voters',
+						url: '/admin/voters'
+					},
+
+					{
+						title: 'Positions',
+						url: '/admin/positions'
+					},
+
+					{
+						title: 'Candidates',
+						url: '/admin/candidates'
+					}
+				];
+			else if (role === 'voter')
+				this.selections = [
+					{
+						title: 'Result',
+						url: '/voter'
+					},
+
+					{
+						title: 'Ballot',
+						url: '/voter'
+					}
+				];
+		} else this.selections = [];
 	}
 }
 
