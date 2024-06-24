@@ -42,7 +42,8 @@ export const actions: Actions = {
 				display_name: form.data.displayName,
 				motto: form.data.motto,
 				position_id: selectedPosition.id,
-				position_json: selectedPosition
+				position_json: selectedPosition,
+				vote_count: 0
 			}
 		]);
 

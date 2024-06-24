@@ -27,4 +27,14 @@ export type Candidate = {
 	display_name: string;
 	motto: string;
 	position_json: Position;
+	vote_count: number;
 };
+
+//custom types
+export interface LiveResult {
+	id: number;
+	created_at: string;
+	max_vote: number;
+	position_name: string;
+	candidate_list_tb: Candidate[];
+}
