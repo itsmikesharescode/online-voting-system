@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
-	import type { LiveResult } from '$lib/types';
+	import type { Candidate, LiveResult } from '$lib/types';
 	import BarChart from './bar-chart.svelte';
 	import { UserRound } from 'lucide-svelte';
 	import { voterState } from '$lib/runes.svelte';
@@ -10,6 +10,21 @@
 	}
 
 	const { result }: Props = $props();
+
+	function canInsert(candidate: Candidate): boolean {
+		const positionVotes = voterState.getVotesByPosition(candidate.position_id);
+		return positionVotes < result.max_vote;
+	}
+
+	function vote(candidate: Candidate) {
+		if (canInsert(candidate)) {
+			voterState.setVotes(candidate);
+		}
+	}
+
+	function checkIfExist(b: Candidate) {
+		return voterState.getVotes().includes(b);
+	}
 </script>
 
 <div class="flex h-fit flex-col gap-[10px] rounded-lg border-[1px] border-slate-700 p-[1rem]">
@@ -21,9 +36,6 @@
 		Max Vote: {result.max_vote}
 	</h4>
 
-	<!-- <div class="h-[20dvh]">
-		<BarChart />
-	</div> -->
 	{#if result.candidate_list_tb.length}
 		<div class="flex flex-col gap-[10px]">
 			<div class="grid grid-cols-[70%,30%]">
@@ -41,12 +53,19 @@
 						</div>
 
 						<div class="">
-							<Button
-								size="sm"
-								onclick={() => {
-									voterState.pushBallot(candidate);
-								}}>Vote</Button
-							>
+							{#if checkIfExist(candidate)}
+								<Button
+									size="sm"
+									onclick={() => {
+										voterState.removeVote(candidate);
+										console.log(voterState.getVotes());
+									}}>Unvote</Button
+								>
+							{:else if !canInsert(candidate)}
+								<Button disabled={true} size="sm">Vote</Button>
+							{:else}
+								<Button size="sm" onclick={() => vote(candidate)}>Vote</Button>
+							{/if}
 						</div>
 					</div>
 				{/each}

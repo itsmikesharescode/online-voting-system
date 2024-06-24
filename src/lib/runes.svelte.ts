@@ -114,16 +114,22 @@ export const adminState = new AdminState();
 class VoterState {
 	private ballotContainer = $state<Candidate[]>([]);
 
-	setBallot(b: Candidate[]) {
-		this.ballotContainer = b;
-	}
-
-	getBallot() {
+	getVotes() {
 		return this.ballotContainer;
 	}
 
-	pushBallot(b: Candidate) {
-		this.ballotContainer.push(b);
+	getVotesByPosition(position_id: string): number {
+		return this.getVotes().filter((candidate) => candidate.position_id === position_id).length;
+	}
+
+	setVotes(newCandidate: Candidate) {
+		this.ballotContainer.push(newCandidate);
+	}
+
+	removeVote(candidateToRemove: Candidate) {
+		this.ballotContainer = this.ballotContainer.filter(
+			(candidate) => candidate.id !== candidateToRemove.id
+		);
 	}
 }
 

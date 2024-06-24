@@ -1,5 +1,8 @@
 <script lang="ts">
+	import ViewBallot from '$lib/components/struct/voter/voting-process/view-ballot.svelte';
 	import VotingCard from '$lib/components/struct/voter/voting-process/voting-card.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { voterState } from '$lib/runes.svelte';
 	const { data } = $props();
 </script>
 
@@ -12,5 +15,9 @@
 		{:else}
 			<p>No live results atm.</p>
 		{/if}
+	</div>
+
+	<div class="fixed bottom-0 right-0 m-[2rem]">
+		<ViewBallot />
 	</div>
 </div>
