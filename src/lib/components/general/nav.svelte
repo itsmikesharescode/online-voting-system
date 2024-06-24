@@ -173,5 +173,3 @@
 		{@render child()}
 	</div>
 {/if}
-
-{@render child()}
