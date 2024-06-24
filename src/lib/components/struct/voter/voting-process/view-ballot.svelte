@@ -59,8 +59,11 @@
 
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<Button onclick={() => alert('Comming soon im lazy this is just a side troll project')}
-				>Submit Vote</Button
+			<Button
+				onclick={() =>
+					alert(
+						'Lazy coding!! want to get this prototype pm me for decent price! good for capstone :D!!!'
+					)}>Submit Vote</Button
 			>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>

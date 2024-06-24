@@ -72,7 +72,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 		if (user) {
 			const { role } = user.user_metadata;
 			if (role === 'admin') redirect(301, '/admin');
-			else if (role === 'voter') redirect(301, '/voter');
+			else if (role === 'voter') redirect(301, '/voting-process');
 		}
 	}
 
@@ -85,6 +85,16 @@ const authGuard: Handle = async ({ event, resolve }) => {
 			redirect(303, '/');
 		}
 	}
+
+	if (event.url.pathname.startsWith('/voting-process')) {
+		if (user) {
+			const { role } = user.user_metadata;
+			if (role === 'admin') redirect(301, '/admin');
+		} else {
+			redirect(303, '/');
+		}
+	}
+
 	// for admin
 	if (event.url.pathname.startsWith('/admin')) {
 		if (user) {
