@@ -24,8 +24,8 @@
 		},
 
 		{
-			title: 'Live Result',
-			url: '/admin/live-result'
+			title: 'Result',
+			url: '/admin/result'
 		},
 
 		{

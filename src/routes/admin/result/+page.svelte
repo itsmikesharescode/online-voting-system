@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ResultCard from '$lib/components/struct/admin/live_result/result-card.svelte';
+	import ResultCard from '$lib/components/struct/admin/result/result-card.svelte';
 
 	const { data } = $props();
 </script>

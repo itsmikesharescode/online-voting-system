@@ -20,7 +20,7 @@
 <div class="grid gap-[10px]">
 	{#if positions?.length && user}
 		<div
-			class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] backdrop-blur-lg md:sticky md:grid-cols-[61%,21%,5%] lg:grid-cols-[37.5%,37.5%,15%,10%]"
+			class="top-0 z-10 grid grid-cols-[90%,8%] gap-[2%] border-b-[1px] border-slate-700 p-[10px] font-semibold backdrop-blur-lg md:sticky md:grid-cols-[61%,21%,5%] lg:grid-cols-[37.5%,37.5%,15%,10%]"
 		>
 			<p class="">Position Name</p>
 			<p class="hidden text-center md:block">Max Vote</p>
