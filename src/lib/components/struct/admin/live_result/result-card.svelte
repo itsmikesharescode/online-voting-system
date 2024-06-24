@@ -34,7 +34,7 @@
 				</span>
 			</div>
 
-			<div class="flex max-h-[40dvh] flex-col gap-[10px] overflow-auto">
+			<div class="flex h-[40dvh] flex-col gap-[10px] overflow-auto">
 				{#each result.candidate_list_tb as candidate}
 					<div class="grid grid-cols-[70%,30%]">
 						<div class="flex items-center gap-[5px]">
@@ -50,7 +50,7 @@
 			</div>
 		</div>
 	{:else}
-		<div class="flex justify-center">
+		<div class="flex h-[40dvh] items-center justify-center">
 			<p class="leading-7 text-muted-foreground">No candidate atm</p>
 		</div>
 	{/if}
