@@ -38,3 +38,11 @@ export interface LiveResult {
 	position_name: string;
 	candidate_list_tb: Candidate[];
 }
+
+export interface Voted {
+	voter_id: string;
+	created_at: string;
+	admin_id: string;
+	display_name: string;
+	voted_json: Candidate[];
+}

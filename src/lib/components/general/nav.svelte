@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { User } from '@supabase/supabase-js';
-	import * as Avatar from '$lib/components/ui/avatar/index.js';
 	import type { Snippet } from 'svelte';
 	import Button from '../ui/button/button.svelte';
-	import { LogOut, Menu, X, LoaderCircle } from 'lucide-svelte';
+	import { LogOut, Menu, X, LoaderCircle, CircleUser } from 'lucide-svelte';
 	import { routeState } from '$lib/runes.svelte';
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -53,7 +52,7 @@
 	class="sticky top-0 z-20 flex items-center border-b-[1px] border-slate-700
 	{$page.url.pathname === '/voting-process'
 		? 'justify-between px-[10px] '
-		: 'p-[10px] md:justify-end '} 
+		: 'justify-between p-[10px] md:justify-end '} 
 	backdrop-blur-lg md:static lg:px-[2rem]"
 >
 	{#if $page.url.pathname !== '/voting-process'}
@@ -62,17 +61,11 @@
 		<div class="flex items-center gap-[10px]">
 			<p>{user?.user_metadata.displayName}</p>
 
-			<Avatar.Root>
-				<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-				<Avatar.Fallback>CN</Avatar.Fallback>
-			</Avatar.Root>
+			<CircleUser class="h-[30px] w-[30px]" />
 		</div>
 	{:else}
 		<div class="flex items-center gap-[10px]">
-			<Avatar.Root>
-				<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-				<Avatar.Fallback>CN</Avatar.Fallback>
-			</Avatar.Root>
+			<CircleUser class="h-[30px] w-[30px]" />
 			<p>{user?.user_metadata.displayName}</p>
 		</div>
 
