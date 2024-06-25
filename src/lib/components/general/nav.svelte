@@ -92,7 +92,9 @@
 		</form>
 	{/if}
 </nav>
-{#if $page.url.pathname !== '/voting-process'}
+{#if $page.url.pathname === '/voting-process'}
+	{@render child()}
+{:else}
 	<div class="grid md:grid-cols-[300px,1fr]">
 		<!--Desktop-->
 		<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
@@ -114,7 +116,7 @@
 				<a
 					href={selection.url}
 					class="rounded-r-full p-[1rem] hover:font-semibold
-			{routeState.getActiveRoute() === selection.url ? 'bg-secondary font-semibold' : ''} "
+		{routeState.getActiveRoute() === selection.url ? 'bg-secondary font-semibold' : ''} "
 					onclick={() => routeState.setActiveRoute(selection.url)}
 				>
 					{selection.title}
@@ -136,8 +138,8 @@
 						<a
 							href={selection.url}
 							class=" p-[10px]
-					{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
-				"
+				{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
+			"
 							onclick={() => {
 								routeState.setActiveRoute(selection.url);
 								showMenu = false;

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import ViewBallot from '$lib/components/struct/voter/voting-process/view-ballot.svelte';
 	import VotingCard from '$lib/components/struct/voter/voting-process/voting-card.svelte';
-	import Button from '$lib/components/ui/button/button.svelte';
 	import { voterState } from '$lib/runes.svelte';
+
 	const { data } = $props();
 </script>
 
