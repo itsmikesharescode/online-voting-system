@@ -2,8 +2,8 @@
 	import { routeState } from '$lib/runes.svelte';
 	import DetailsCard from '$lib/components/struct/admin/root/details-card.svelte';
 	import { UserCheck, NotebookText } from 'lucide-svelte';
+	import BarChart from '$lib/components/struct/admin/root/bar-chart.svelte';
 	import LineChart from '$lib/components/struct/admin/root/line-chart.svelte';
-	import { onMount } from 'svelte';
 
 	const { data } = $props();
 
@@ -19,9 +19,23 @@
 {/snippet}
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
-	<div class="">
+	<div class="grid sm:grid-cols-2">
 		<div class="flex h-[50dvh] items-center">
-			<LineChart />
+			<BarChart
+				totalVoter={data.totalVoter.count}
+				totalVoted={data.totalVoted.count}
+				totalPositions={data.totalVoted.count}
+				totalCandidates={data.totalCandidates.count}
+			/>
+		</div>
+
+		<div class="flex h-[50dvh] items-center">
+			<LineChart
+				totalVoter={data.totalVoter.count}
+				totalVoted={data.totalVoted.count}
+				totalPositions={data.totalVoted.count}
+				totalCandidates={data.totalCandidates.count}
+			/>
 		</div>
 	</div>
 
