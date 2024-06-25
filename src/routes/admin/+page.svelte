@@ -5,9 +5,9 @@
 	import LineChart from '$lib/components/struct/admin/root/line-chart.svelte';
 	import { onMount } from 'svelte';
 
-	onMount(() => {
-		routeState.setActiveRoute('/admin');
-	});
+	const { data } = $props();
+
+	routeState.setActiveRoute('/admin');
 </script>
 
 {#snippet userCheck()}
@@ -26,9 +26,17 @@
 	</div>
 
 	<div class="mt-[20px] grid gap-[10px] md:grid-cols-2 lg:grid-cols-4">
-		<DetailsCard title="Total Voter" icon={userCheck} value={30} />
-		<DetailsCard title="Total Voted" icon={userCheck} value={30} />
-		<DetailsCard title="Total Positions" icon={noteBookText} value={30} />
-		<DetailsCard title="Total Candidates" icon={noteBookText} value={30} />
+		<DetailsCard title="Total Voter" icon={userCheck} value={data.totalVoter.count ?? 0} />
+		<DetailsCard title="Total Voted" icon={userCheck} value={data.totalVoted.count ?? 0} />
+		<DetailsCard
+			title="Total Positions"
+			icon={noteBookText}
+			value={data.totalPositions.count ?? 0}
+		/>
+		<DetailsCard
+			title="Total Candidates"
+			icon={noteBookText}
+			value={data.totalCandidates.count ?? 0}
+		/>
 	</div>
 </div>

@@ -19,7 +19,9 @@
 		</Card.Title>
 	</Card.Header>
 	<Card.Content class="grid gap-[20px]">
-		<h1 class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">30</h1>
+		<h1 class="scroll-m-20 text-center text-4xl font-extrabold tracking-tight lg:text-5xl">
+			{value}
+		</h1>
 
 		<Card.Description>+10 Today</Card.Description>
 	</Card.Content>
