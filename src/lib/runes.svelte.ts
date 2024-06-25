@@ -131,6 +131,10 @@ class VoterState {
 			(candidate) => candidate.id !== candidateToRemove.id
 		);
 	}
+
+	resetVote() {
+		this.ballotContainer = [];
+	}
 }
 
 export const voterState = new VoterState();

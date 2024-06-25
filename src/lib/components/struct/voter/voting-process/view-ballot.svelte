@@ -2,7 +2,7 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { voterState } from '$lib/runes.svelte';
-	import type { Candidate, ResultModel } from '$lib/types';
+	import type { ResultModel } from '$lib/types';
 	import * as Card from '$lib/components/ui/card';
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -11,6 +11,7 @@
 	import type { User } from '@supabase/supabase-js';
 	import { goto } from '$app/navigation';
 	import { transformCandidates } from '$lib/helpers';
+	import { LoaderCircle } from 'lucide-svelte';
 
 	interface Props {
 		user: User | null;
@@ -22,7 +23,9 @@
 
 	let open = $state(false);
 
+	let submitLoader = $state(false);
 	const insertVote: SubmitFunction = () => {
+		submitLoader = true;
 		return async ({ result, update }) => {
 			const {
 				status,
@@ -32,11 +35,13 @@
 			switch (status) {
 				case 200:
 					toast.success('', { description: msg });
+					voterState.resetVote();
 					goto('/voter', { invalidateAll: true });
 					break;
 
 				case 401:
 					toast.error('', { description: msg });
+					submitLoader = false;
 					break;
 			}
 			await update();
@@ -69,7 +74,7 @@
 		</div>
 
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+			<AlertDialog.Cancel disabled={submitLoader}>Cancel</AlertDialog.Cancel>
 			{#if user}
 				<form method="post" action="?/insertVote" use:enhance={insertVote}>
 					<input
@@ -82,7 +87,13 @@
 							votes: voterState.getVotes()
 						})}
 					/>
-					<Button type="submit">Submit Vote</Button>
+					<Button disabled={submitLoader} type="submit">
+						{#if submitLoader}
+							<LoaderCircle class="animate-spin" />
+						{:else}
+							Submit Vote
+						{/if}
+					</Button>
 				</form>
 			{/if}
 		</AlertDialog.Footer>
