@@ -2,13 +2,10 @@
 	import { routeState } from '$lib/runes.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import { transformCandidates } from '$lib/helpers';
-	import Button from '$lib/components/ui/button/button.svelte';
 	import CandidateDetails from '$lib/components/struct/voter/ballot/candidate-details.svelte';
 	routeState.setActiveRoute('/voter/ballot');
 
 	const { data } = $props();
-
-	$effect(() => console.log(data.votedRef));
 </script>
 
 {#if data.votedRef.data}

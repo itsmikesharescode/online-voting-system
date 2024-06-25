@@ -1,17 +1,22 @@
-import { fail, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createPositionSchema } from '$lib/schema';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
-import type { Positions } from '$lib/types';
+import type { Position } from '$lib/types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
+	/* setHeaders({
+		'Cache-Control': 'private, max-age=10, stale-while-revalidate=600',
+		Vary: 'Cookie, Authorization'
+	}); */
+
 	return {
 		positions: (await supabase
 			.from('position_list_tb')
 			.select('*')
-			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Positions[]>,
+			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Position[]>,
 		createPositionForm: await superValidate(zod(createPositionSchema), { id: crypto.randomUUID() })
 	};
 };
@@ -33,7 +38,15 @@ export const actions: Actions = {
 		});
 
 		if (error) return message(form, { status: 401, msg: error.message });
-		else return message(form, { status: 200, msg: 'Position created.' });
+		else {
+			event.setHeaders({
+				'Cache-Control': 'no-store, max-age=0',
+				Pragma: 'no-cache',
+				Expires: '0'
+			});
+
+			return message(form, { status: 200, msg: 'Position created.' });
+		}
 	},
 
 	deletePositon: async ({ locals: { supabase }, request }) => {

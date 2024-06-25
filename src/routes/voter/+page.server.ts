@@ -4,10 +4,10 @@ import type { LiveResult } from '$lib/types';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 
 export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
-	setHeaders({
+	/* setHeaders({
 		'Cache-Control': 'private, max-age=60, stale-while-revalidate=600',
 		Vary: 'Cookie, Authorization'
-	});
+	}); */
 
 	return {
 		results: (await supabase

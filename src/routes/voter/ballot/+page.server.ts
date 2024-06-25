@@ -5,7 +5,7 @@ import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 
 export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
 	setHeaders({
-		'Cache-Control': 'private, max-age=60, stale-while-revalidate=600',
+		'Cache-Control': 'private, max-age=36000, stale-while-revalidate=36000',
 		Vary: 'Cookie, Authorization'
 	});
 

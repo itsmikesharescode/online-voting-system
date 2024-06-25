@@ -1,7 +1,12 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
+	/* setHeaders({
+		'Cache-Control': 'private, max-age=60, stale-while-revalidate=600',
+		Vary: 'Cookie, Authorization'
+	}); */
+
 	return {
 		totalVoter: await supabase
 			.from('voter_list_tb')

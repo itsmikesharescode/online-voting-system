@@ -66,9 +66,8 @@
 					</DropdownMenu.Root>
 				</div>
 			</div>
-
-			<DeletePosition bind:openDelete />
 		{/each}
+		<DeletePosition bind:openDelete />
 	{:else}
 		<div class="mt-[10dvh] p-[20px]">
 			<Cat class="mx-auto h-[150px] w-[150px] text-muted-foreground" />
