@@ -81,6 +81,17 @@ const authGuard: Handle = async ({ event, resolve }) => {
 		if (user) {
 			const { role } = user.user_metadata;
 			if (role === 'admin') redirect(301, '/admin');
+
+			const { data, error } = await event.locals.supabase
+				.from('voted_list_tb')
+				.select('*')
+				.match({
+					voter_id: user?.id,
+					admin_id: user?.user_metadata.adminId
+				})
+				.single();
+
+			if (!data) redirect(303, '/voting-process');
 		} else {
 			redirect(303, '/');
 		}
@@ -100,7 +111,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 				})
 				.single();
 
-			if (Object.keys(data).length) redirect(303, '/voter');
+			if (data) redirect(303, '/voter');
 		} else {
 			redirect(303, '/');
 		}

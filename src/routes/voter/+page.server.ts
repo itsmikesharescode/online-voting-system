@@ -1,4 +1,4 @@
-import type { Actions } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { LiveResult } from '$lib/types';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
