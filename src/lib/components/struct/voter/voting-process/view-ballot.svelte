@@ -2,8 +2,22 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { voterState } from '$lib/runes.svelte';
-	import type { Candidate } from '$lib/types';
+	import type { Candidate, ResultModel } from '$lib/types';
 	import * as Card from '$lib/components/ui/card';
+	import { enhance } from '$app/forms';
+	import type { SubmitFunction } from '@sveltejs/kit';
+
+	import { toast } from 'svelte-sonner';
+	import type { User } from '@supabase/supabase-js';
+	import { goto } from '$app/navigation';
+
+	interface Props {
+		user: User | null;
+	}
+
+	const { user }: Props = $props();
+
+	user?.user_metadata.displayName;
 
 	type BallotType = {
 		position_name: string;
@@ -31,6 +45,27 @@
 
 		return Object.values(positionMap);
 	}
+
+	const insertVote: SubmitFunction = () => {
+		return async ({ result, update }) => {
+			const {
+				status,
+				data: { msg }
+			} = result as ResultModel<{ msg: string }>;
+
+			switch (status) {
+				case 200:
+					toast.success('', { description: msg });
+					goto('/voter', { invalidateAll: true });
+					break;
+
+				case 401:
+					toast.error('', { description: msg });
+					break;
+			}
+			await update();
+		};
+	};
 </script>
 
 <Button onclick={() => (open = true)}>View Button</Button>
@@ -59,12 +94,21 @@
 
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<Button
-				onclick={() =>
-					alert(
-						'Lazy coding!! want to get this prototype pm me for decent price! good for capstone :D!!!'
-					)}>Submit Vote</Button
-			>
+			{#if user}
+				<form method="post" action="?/insertVote" use:enhance={insertVote}>
+					<input
+						name="serialVotes"
+						hidden
+						value={JSON.stringify({
+							displayName: user.user_metadata.displayName,
+							voterId: user.id,
+							adminId: user.user_metadata.adminId,
+							votes: voterState.getVotes()
+						})}
+					/>
+					<Button type="submit">Submit Vote</Button>
+				</form>
+			{/if}
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>

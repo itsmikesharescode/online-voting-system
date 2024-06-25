@@ -40,6 +40,7 @@
     "@internationalized/date": "^3.5.4",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.43.5",
+    "@types/node": "^20.14.8",
     "bits-ui": "^0.21.10",
     "chart.js": "^4.4.3",
     "chartjs-adapter-date-fns": "^3.0.0",

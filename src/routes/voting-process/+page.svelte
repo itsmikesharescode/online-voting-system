@@ -19,7 +19,7 @@
 
 	{#if voterState.getVotes().length}
 		<div class="fixed bottom-0 right-0 m-[2rem]">
-			<ViewBallot />
+			<ViewBallot user={data.user} />
 		</div>
 	{/if}
 </div>
