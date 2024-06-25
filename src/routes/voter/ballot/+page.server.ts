@@ -3,7 +3,12 @@ import type { PageServerLoad } from './$types';
 import type { Voted } from '$lib/types';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 
-export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
+export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
+	setHeaders({
+		'Cache-Control': 'private, max-age=60, stale-while-revalidate=600',
+		Vary: 'Cookie, Authorization'
+	});
+
 	return {
 		votedRef: (await supabase
 			.from('voted_list_tb')
