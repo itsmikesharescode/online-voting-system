@@ -33,6 +33,21 @@ export const forgotPwdSchema = z.object({
 	email: z.string().email({ message: 'Must enter a valid email.' })
 });
 
+export const updatePwdSchema = z
+	.object({
+		newPwd: z.string().min(6, { message: 'Must choose a strong password.' }),
+		confirmNewPwd: z.string()
+	})
+	.superRefine(({ newPwd, confirmNewPwd }, ctx) => {
+		if (newPwd !== confirmNewPwd) {
+			ctx.addIssue({
+				code: 'custom',
+				message: 'Password and Confirm password must match.',
+				path: ['confirmNewPwd']
+			});
+		}
+	});
+
 export type LoginSchema = typeof loginSchema;
 export type RegisterSchema = typeof registerSchema;
 export type ForgotPwdSchema = typeof forgotPwdSchema;

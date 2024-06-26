@@ -82,6 +82,19 @@ const authGuard: Handle = async ({ event, resolve }) => {
 		}
 	}
 
+	// for update password
+	if (event.url.pathname === '/update-password') {
+		const {
+			data: { user: tokenUser },
+			error
+		} = await event.locals.supabase.auth.verifyOtp({
+			token_hash: event.url.searchParams.get('q') ?? '',
+			type: 'email'
+		});
+
+		if (!tokenUser) redirect(301, '/');
+	}
+
 	// for voter
 	if (event.url.pathname.startsWith('/voter')) {
 		if (user) {

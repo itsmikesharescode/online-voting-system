@@ -58,7 +58,6 @@
 									size="sm"
 									onclick={() => {
 										voterState.removeVote(candidate);
-										console.log(voterState.getVotes());
 									}}>Unvote</Button
 								>
 							{:else if !canInsert(candidate)}

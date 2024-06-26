@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import { goto, invalidate } from '$app/navigation';
 	import Spinner from '$lib/components/general/spinner.svelte';
+	import { page } from '$app/stores';
 
 	const { children, data: clientData } = $props();
 
@@ -17,9 +18,10 @@
 				 * Queue this as a task so the navigation won't prevent the
 				 * triggering function from completing
 				 */
-				setTimeout(() => {
-					goto('/', { invalidateAll: true });
-				});
+				/* if ($page.url.pathname !== '/update-password')
+					setTimeout(() => {
+						goto('/', { invalidateAll: true });
+					}); */
 			}
 			if (newSession?.expires_at !== session?.expires_at) {
 				invalidate('supabase:auth');
