@@ -61,11 +61,11 @@
 
 				scales: {
 					x: {
-						display: false,
+						display: true,
 						offset: true
 					},
 					y: {
-						display: false,
+						display: true,
 						offset: true
 					}
 				},
