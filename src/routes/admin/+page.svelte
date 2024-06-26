@@ -2,8 +2,8 @@
 	import { routeState } from '$lib/runes.svelte';
 	import DetailsCard from '$lib/components/struct/admin/root/details-card.svelte';
 	import { UserCheck, NotebookText } from 'lucide-svelte';
-	import BarChart from '$lib/components/struct/admin/root/bar-chart.svelte';
-	import LineChart from '$lib/components/struct/admin/root/line-chart.svelte';
+	import BarChart from '$lib/components/general/bar-chart.svelte';
+	import LineChart from '$lib/components/general/line-chart.svelte';
 
 	const { data } = $props();
 

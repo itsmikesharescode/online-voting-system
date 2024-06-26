@@ -3,25 +3,20 @@
 	import Chart from 'chart.js/auto';
 
 	import { routeState } from '$lib/runes.svelte';
+	import type { Candidate } from '$lib/types';
+
+	interface Props {
+		position: string;
+		candidates: Candidate[];
+	}
+
+	const { position, candidates }: Props = $props();
 
 	let chartCanvas: HTMLCanvasElement | undefined = $state(undefined);
 	let chartInstance: Chart | null = $state(null);
 
-	const chartValues: number[] = [10, 20, 30, 4, 59, 29, 20, 5, 5, 3, 66, 22, 7];
-	const chartLabels: string[] = [
-		'Mike',
-		'Peter',
-		'John',
-		'Miks',
-		'Ruby',
-		'Peter',
-		'Kevin',
-		'Juls',
-		'Joyce',
-		'Tigrel',
-		'Miya',
-		'Lesley'
-	];
+	const chartValues: number[] = candidates.map((v) => v.vote_count);
+	const chartLabels: string[] = candidates.map((v) => v.display_name);
 
 	onMount(async () => {
 		if (typeof window !== 'undefined') {
@@ -38,29 +33,34 @@
 		if (!ctx) return;
 
 		chartInstance = new Chart(ctx, {
-			type: 'bar',
+			type: 'line',
 
 			data: {
 				labels: chartLabels,
 				datasets: [
 					{
-						label: 'Senators Graph',
+						label: `${position} Graph`,
 						backgroundColor: getColor(),
-						data: chartValues
+						data: chartValues,
+						borderColor: getColor(),
+						fill: false
 					}
 				]
 			},
 			options: {
 				responsive: true,
 				maintainAspectRatio: false,
-
+				interaction: {
+					intersect: false,
+					mode: 'index'
+				},
 				scales: {
 					x: {
-						display: false,
+						display: true,
 						offset: true
 					},
 					y: {
-						display: false,
+						display: true,
 						offset: true
 					}
 				},

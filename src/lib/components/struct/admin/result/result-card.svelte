@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { LiveResult } from '$lib/types';
-	import BarChart from './bar-chart.svelte';
+
 	import { UserRound } from 'lucide-svelte';
+	import DynamicBarChart from './dynamic-bar-chart.svelte';
 
 	interface Props {
 		result: LiveResult;
@@ -19,9 +20,9 @@
 		Max Vote: {result.max_vote}
 	</h4>
 
-	<!-- <div class="h-[20dvh]">
-		<BarChart />
-	</div> -->
+	<div class="h-[20dvh]">
+		<DynamicBarChart position={result.position_name} candidates={result.candidate_list_tb} />
+	</div>
 	{#if result.candidate_list_tb.length}
 		<div class="flex flex-col gap-[10px]">
 			<div class="grid grid-cols-[70%,30%]">
