@@ -1,11 +1,12 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import jwt from 'jsonwebtoken';
 
-export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
-	/* setHeaders({
+export const load: PageServerLoad = async ({ locals: { supabase, user, session }, setHeaders }) => {
+	setHeaders({
 		'Cache-Control': 'private, max-age=60, stale-while-revalidate=600',
 		Vary: 'Cookie, Authorization'
-	}); */
+	});
 
 	return {
 		totalVoter: await supabase

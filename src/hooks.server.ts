@@ -1,9 +1,13 @@
 import { createServerClient } from '@supabase/ssr';
+import type { Session, User } from '@supabase/supabase-js';
 import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
+import jwt from 'jsonwebtoken';
+import type { SupabaseJwt } from '$lib/types';
 
 const sKey = import.meta.env.VITE_SB_KEY;
 const sUrl = import.meta.env.VITE_SB_URL;
+const jwtSecret = import.meta.env.VITE_JWT_KEY;
 const sAdminKey = import.meta.env.VITE_SB_ADMIN_KEY;
 
 const supabase: Handle = async ({ event, resolve }) => {
@@ -40,6 +44,8 @@ const supabase: Handle = async ({ event, resolve }) => {
 		if (!session) {
 			return { session: null, user: null };
 		}
+
+		const fakeSession = session;
 
 		const {
 			data: { user },
