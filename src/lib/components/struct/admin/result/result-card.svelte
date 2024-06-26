@@ -2,7 +2,7 @@
 	import type { LiveResult } from '$lib/types';
 
 	import { UserRound } from 'lucide-svelte';
-	import DynamicBarChart from './dynamic-bar-chart.svelte';
+	import DynamicBarChart from '$lib/components/general/dynamic-bar-chart.svelte';
 
 	interface Props {
 		result: LiveResult;

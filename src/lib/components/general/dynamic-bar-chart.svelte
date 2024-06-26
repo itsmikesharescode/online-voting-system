@@ -76,6 +76,7 @@
 	$effect(() => {
 		if (chartInstance) {
 			chartInstance.data.datasets[0].backgroundColor = getColor();
+			chartInstance.data.datasets[0].borderColor = getColor();
 			chartInstance.update();
 		}
 	});
