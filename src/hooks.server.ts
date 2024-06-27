@@ -22,7 +22,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 		}
 	});
 
-	event.locals.supabaseAdmin = createServerClient(sUrl, sKey, {
+	event.locals.supabaseAdmin = createServerClient(sUrl, sAdminKey, {
 		cookies: {
 			getAll: () => event.cookies.getAll(),
 			setAll: (cookies) => {
