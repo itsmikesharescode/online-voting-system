@@ -47,6 +47,8 @@
 			await update();
 		};
 	};
+
+	console.log(user);
 </script>
 
 <Button onclick={() => (open = true)}>View Button</Button>
@@ -87,7 +89,7 @@
 							votes: voterState.getVotes()
 						})}
 					/>
-					<Button disabled={submitLoader} type="submit">
+					<Button disabled={submitLoader} type="submit" class="w-full">
 						{#if submitLoader}
 							<LoaderCircle class="animate-spin" />
 						{:else}
