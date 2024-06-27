@@ -8,28 +8,6 @@
 	import { page } from '$app/stores';
 
 	const { children, data: clientData } = $props();
-
-	onMount(() => {
-		const { supabase, session } = clientData;
-
-		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
-			if (!newSession) {
-				/**
-				 * Queue this as a task so the navigation won't prevent the
-				 * triggering function from completing
-				 */
-				/* if ($page.url.pathname !== '/update-password')
-					setTimeout(() => {
-						goto('/', { invalidateAll: true });
-					}); */
-			}
-			if (newSession?.expires_at !== session?.expires_at) {
-				invalidate('supabase:auth');
-			}
-		});
-
-		return () => data.subscription.unsubscribe();
-	});
 </script>
 
 <Spinner />

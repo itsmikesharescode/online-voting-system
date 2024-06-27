@@ -12,7 +12,10 @@
 
 	const { data } = $props();
 
-	const form = superForm(data.updatePwdForm, { validators: zodClient(updatePwdSchema) });
+	const form = superForm(data.updatePwdForm, {
+		validators: zodClient(updatePwdSchema),
+		invalidateAll: false
+	});
 
 	const { form: formData, enhance, submitting, message } = form;
 
@@ -84,6 +87,11 @@
 					{/if}
 				</Form.Button>
 			</form>
+
+			<p class="text-center text-sm leading-7 text-muted-foreground">
+				<b class="border-b-[1px] border-slate-700">Note:</b> Reloading this page will lose your chance
+				to update your password.
+			</p>
 		</div>
 	</div>
 

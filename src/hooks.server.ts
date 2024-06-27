@@ -1,9 +1,9 @@
-import { createServerClient } from '@supabase/ssr';
-import type { Session, User } from '@supabase/supabase-js';
+import type { SupabaseJwt } from '$lib/types';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import type { Session } from '@supabase/supabase-js';
 import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import jwt from 'jsonwebtoken';
-import type { SupabaseJwt } from '$lib/types';
 
 const sKey = import.meta.env.VITE_SB_KEY;
 const sUrl = import.meta.env.VITE_SB_URL;
@@ -13,52 +13,59 @@ const sAdminKey = import.meta.env.VITE_SB_ADMIN_KEY;
 const supabase: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createServerClient(sUrl, sKey, {
 		cookies: {
-			get: (key) => event.cookies.get(key),
-
-			set: (key, value, options) => {
-				event.cookies.set(key, value, { ...options, path: '/' });
-			},
-			remove: (key, options) => {
-				event.cookies.delete(key, { ...options, path: '/' });
+			getAll: () => event.cookies.getAll(),
+			setAll: (cookies) => {
+				cookies.forEach(({ name, value, options }) => {
+					event.cookies.set(name, value, { ...options, path: '/' });
+				});
 			}
 		}
 	});
 
-	event.locals.supabaseAdmin = createServerClient(sUrl, sAdminKey, {
+	event.locals.supabaseAdmin = createServerClient(sUrl, sKey, {
 		cookies: {
-			get: (key) => event.cookies.get(key),
-
-			set: (key, value, options) => {
-				event.cookies.set(key, value, { ...options, path: '/' });
-			},
-			remove: (key, options) => {
-				event.cookies.delete(key, { ...options, path: '/' });
+			getAll: () => event.cookies.getAll(),
+			setAll: (cookies) => {
+				cookies.forEach(({ name, value, options }) => {
+					event.cookies.set(name, value, { ...options, path: '/' });
+				});
 			}
 		}
 	});
 
-	event.locals.safeGetSession = async () => {
+	event.locals.getSession = async () => {
 		const {
 			data: { session }
 		} = await event.locals.supabase.auth.getSession();
-		if (!session) {
+
+		if (!session) return { session: null, user: null };
+
+		try {
+			const decoded = jwt.verify(session.access_token, jwtSecret) as SupabaseJwt;
+
+			const validated_session: Session = {
+				access_token: session.access_token,
+				refresh_token: session.refresh_token,
+				expires_at: decoded.exp,
+				expires_in: decoded.exp - Math.round(Date.now() / 1000),
+				token_type: 'bearer',
+				user: {
+					app_metadata: decoded.app_metadata ?? {},
+					aud: 'authenticated',
+					created_at: '',
+					id: decoded.sub,
+					user_metadata: {
+						displayName: decoded.user_metadata?.disyplayName,
+						role: decoded.user_metadata?.role,
+						adminId: decoded.user_metadata?.adminId
+					}
+				}
+			};
+
+			return { session: validated_session, user: validated_session.user };
+		} catch (err) {
 			return { session: null, user: null };
 		}
-
-		const fakeSession = session;
-
-		const {
-			data: { user },
-			error
-		} = await event.locals.supabase.auth.getUser();
-		if (error) {
-			// JWT validation has failed
-			return { session: null, user: null };
-		}
-		// work around for supabase token console spammer
-		delete session.user;
-
-		return { session: Object.assign({}, session, { user }), user };
 	};
 
 	return resolve(event, {
@@ -69,7 +76,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 };
 
 const authGuard: Handle = async ({ event, resolve }) => {
-	const { session, user } = await event.locals.safeGetSession();
+	const { session, user } = await event.locals.getSession();
 	event.locals.session = session;
 	event.locals.user = user;
 
@@ -80,19 +87,6 @@ const authGuard: Handle = async ({ event, resolve }) => {
 			if (role === 'admin') redirect(301, '/admin');
 			else if (role === 'voter') redirect(301, '/voting-process');
 		}
-	}
-
-	// for update password
-	if (event.url.pathname === '/update-password') {
-		const {
-			data: { user: tokenUser },
-			error
-		} = await event.locals.supabase.auth.verifyOtp({
-			token_hash: event.url.searchParams.get('q') ?? '',
-			type: 'email'
-		});
-
-		if (!tokenUser) redirect(301, '/');
 	}
 
 	// for voter
@@ -149,10 +143,4 @@ const authGuard: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-const workers: Handle = async ({ event, resolve }) => {
-	// image uploads here
-	// cloudflare or vercel
-	return resolve(event);
-};
-
-export const handle: Handle = sequence(supabase, authGuard, workers);
+export const handle: Handle = sequence(supabase, authGuard);

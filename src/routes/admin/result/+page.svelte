@@ -1,7 +1,10 @@
 <script lang="ts">
 	import ResultCard from '$lib/components/struct/admin/result/result-card.svelte';
+	import { routeState } from '$lib/runes.svelte.js';
 
 	const { data } = $props();
+
+	routeState.setActiveRoute('/admin/result');
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">

@@ -67,7 +67,9 @@ export const actions: Actions = {
 
 		if (!form.valid) return fail(401, { form });
 
-		const { error } = await supabase.auth.resetPasswordForEmail(form.data.email);
+		const { error } = await supabase.auth.resetPasswordForEmail(form.data.email, {
+			redirectTo: '/update-password'
+		});
 
 		if (error) return message(form, { status: 401, msg: error.message });
 

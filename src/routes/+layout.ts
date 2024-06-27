@@ -10,34 +10,18 @@ export const load: LayoutLoad = async ({ data, depends, fetch }) => {
 
 	const supabase = isBrowser()
 		? createBrowserClient(sUrl, sKey, {
-				global: {
-					fetch
-				},
-				cookies: {
-					get(key) {
-						const cookie = parse(document.cookie);
-						return cookie[key];
-					}
-				}
+				global: { fetch }
 			})
 		: createServerClient(sUrl, sKey, {
-				global: {
-					fetch
-				},
+				global: { fetch },
 				cookies: {
-					get() {
-						return JSON.stringify(data.session);
+					getAll() {
+						return data.cookies;
 					}
 				}
 			});
 
-	const {
-		data: { session }
-	} = await supabase.auth.getSession();
+	const session = isBrowser() ? (await supabase.auth.getSession()).data.session : data.session;
 
-	const {
-		data: { user }
-	} = await supabase.auth.getUser();
-
-	return { session, supabase, user };
+	return { supabase, session };
 };
