@@ -42,7 +42,6 @@ const supabase: Handle = async ({ event, resolve }) => {
 
 		try {
 			const decoded = jwt.verify(session.access_token, jwtSecret) as SupabaseJwt;
-
 			const validated_session: Session = {
 				access_token: session.access_token,
 				refresh_token: session.refresh_token,
@@ -54,11 +53,7 @@ const supabase: Handle = async ({ event, resolve }) => {
 					aud: 'authenticated',
 					created_at: '',
 					id: decoded.sub,
-					user_metadata: {
-						displayName: decoded.user_metadata?.disyplayName,
-						role: decoded.user_metadata?.role,
-						adminId: decoded.user_metadata?.adminId
-					}
+					user_metadata: decoded.user_metadata
 				}
 			};
 

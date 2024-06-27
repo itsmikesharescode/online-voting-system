@@ -1,4 +1,4 @@
-import type { User } from '@supabase/supabase-js';
+import type { User, UserMetadata } from '@supabase/supabase-js';
 
 export interface ResultModel<T> {
 	status: number;
@@ -70,9 +70,7 @@ export type SupabaseJwt = {
 	iss?: string;
 	jti?: string;
 	nbf?: string;
-	user_metadata?: {
-		[key: string]: any;
-	};
+	user_metadata: UserMetadata;
 };
 
 export type FakeSession = {
