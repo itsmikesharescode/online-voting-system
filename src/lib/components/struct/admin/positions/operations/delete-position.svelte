@@ -56,7 +56,7 @@
 
 			<form method="post" action="?/deletePositon" use:enhance={deletePositon}>
 				<input name="positionId" type="hidden" value={adminState.getSelectedPosition()?.id} />
-				<Button disabled={deleteLoader} type="submit">
+				<Button disabled={deleteLoader} type="submit" class="w-full">
 					{#if deleteLoader}
 						<LoaderCircle class="animate-spin" />
 					{:else}
