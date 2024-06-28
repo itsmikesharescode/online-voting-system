@@ -23,6 +23,6 @@
 </script>
 
 <Spinner />
-<Toaster />
+<Toaster richColors={true} />
 {@render children()}
 <Footer />
