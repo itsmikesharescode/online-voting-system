@@ -50,7 +50,7 @@
 						backgroundColor: getColor(),
 						borderColor: getColor(), // Added borderColor for line chart
 						data: chartValues,
-						fill: false // Optional: prevents the area under the line from being filled
+						fill: false // Optional: prevents the area under the line from being filled bla bla bla
 					}
 				]
 			},
@@ -77,9 +77,10 @@
 	}
 
 	$effect(() => {
+		//for reactive darkmode
 		if (chartInstance) {
 			chartInstance.data.datasets[0].backgroundColor = getColor();
-			chartInstance.data.datasets[0].borderColor = getColor(); // Update borderColor as well
+			chartInstance.data.datasets[0].borderColor = getColor();
 			chartInstance.update();
 		}
 	});
