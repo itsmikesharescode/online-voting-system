@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte';
 
-class PositionRoute {
+class PositionsRoute {
 	private positionsArray = $state<unknown>(null);
 	private activeIndex = $state<unknown>(null);
 
@@ -23,10 +23,10 @@ class PositionRoute {
 
 const position_route_key = Symbol('position_route');
 
-export const initPositionRoute = () => {
-	return setContext(position_route_key, new PositionRoute());
+export const initPositionsRoute = () => {
+	return setContext(position_route_key, new PositionsRoute());
 };
 
-export const fromPositionRoute = () => {
-	return getContext<ReturnType<typeof initPositionRoute>>(position_route_key);
+export const fromPositionsRoute = () => {
+	return getContext<ReturnType<typeof initPositionsRoute>>(position_route_key);
 };

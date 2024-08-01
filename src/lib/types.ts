@@ -80,3 +80,9 @@ export type FakeSession = {
 	refresh_token: string;
 	user?: User;
 };
+
+export interface AdminLoadType {
+	candidates: Candidate[] | null;
+	voters: Voter[] | null;
+	positions: Position[] | null;
+}

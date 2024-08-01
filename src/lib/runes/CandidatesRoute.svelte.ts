@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte';
 
-class CandidateRoute {
+class CandidatesRoute {
 	private candidatesArray = $state<unknown>(null);
 	private activeIndex = $state<unknown>(null);
 
@@ -24,9 +24,9 @@ class CandidateRoute {
 const candidates_route_key = Symbol('candidates_route');
 
 export const initCandidatesRoute = () => {
-	return setContext(candidates_route_key, new CandidateRoute());
+	return setContext(candidates_route_key, new CandidatesRoute());
 };
 
-export const fromCandidateRouteState = () => {
+export const fromCandidatesRouteState = () => {
 	return getContext<ReturnType<typeof initCandidatesRoute>>(candidates_route_key);
 };
