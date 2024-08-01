@@ -5,27 +5,27 @@
 		fromCandidatesRouteState,
 		initCandidatesRoute
 	} from '$lib/runes/CandidatesRoute.svelte.js';
-	import { fromLiveRouteState, initLiveRoute } from '$lib/runes/LiveResultsRoute.svelte.js';
-	import { fromPositionsRoute, initPositionsRoute } from '$lib/runes/PositionsRoute.svelte.js';
+	import { fromPositionsRouteState, initPositionsRoute } from '$lib/runes/PositionsRoute.svelte.js';
+	import { fromVotedRouteState, initVotedRoute } from '$lib/runes/VotedRoute.svelte.js';
 	import { fromVotersRouteState, initVotersRoute } from '$lib/runes/VotersRoute.svelte.js';
 	import { onMount } from 'svelte';
 
 	const { data, children } = $props();
 
-	initLiveRoute();
 	initVotersRoute();
+	initVotedRoute();
 	initPositionsRoute();
 	initCandidatesRoute();
 
-	const liveRoute = fromLiveRouteState();
 	const votersRoute = fromVotersRouteState();
-	const positionsRoute = fromPositionsRoute();
+	const votedRoute = fromVotedRouteState();
+	const positionsRoute = fromPositionsRouteState();
 	const candidatesRoute = fromCandidatesRouteState();
 
-	liveRoute.setLiveResult(data.adminLoad.data?.candidates);
-	votersRoute.setVotersArray(data.adminLoad.data?.voters);
-	positionsRoute.setPositionsArray(data.adminLoad.data?.positions);
-	candidatesRoute.setCandidateArray(data.adminLoad.data?.candidates);
+	votersRoute.setVotersArray(data.adminLoad.data?.voters ?? null);
+	votedRoute.setVotedArray(data.adminLoad.data?.voted_voters ?? null);
+	positionsRoute.setPositionsArray(data.adminLoad.data?.positions ?? null);
+	candidatesRoute.setCandidateArray(data.adminLoad.data?.candidates ?? null);
 
 	onMount(() => {
 		routeState.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');

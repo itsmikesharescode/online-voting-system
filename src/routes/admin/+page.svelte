@@ -4,10 +4,17 @@
 	import { UserCheck, NotebookText } from 'lucide-svelte';
 	import BarChart from '$lib/components/general/bar-chart.svelte';
 	import LineChart from '$lib/components/general/line-chart.svelte';
-
-	const { data } = $props();
+	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte.js';
+	import { fromVotedRouteState } from '$lib/runes/VotedRoute.svelte.js';
+	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte.js';
+	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte.js';
 
 	routeState.setActiveRoute('/admin');
+
+	const voterCount = fromVotersRouteState().getVotersArray()?.length;
+	const votedVotersCount = fromVotedRouteState().getVotedArray()?.length;
+	const positionsCount = fromPositionsRouteState().getPositionsArray()?.length;
+	const candidatesCount = fromCandidatesRouteState().getCandidateArray()?.length;
 </script>
 
 {#snippet userCheck()}
@@ -22,35 +29,27 @@
 	<div class="grid sm:grid-cols-2">
 		<div class="flex h-[50dvh] items-center">
 			<BarChart
-				totalVoter={data.totalVoter.count}
-				totalVoted={data.totalVoted.count}
-				totalPositions={data.totalVoted.count}
-				totalCandidates={data.totalCandidates.count}
+				totalVoter={voterCount ?? 0}
+				totalVoted={votedVotersCount ?? 0}
+				totalPositions={positionsCount ?? 0}
+				totalCandidates={candidatesCount ?? 0}
 			/>
 		</div>
 
 		<div class="flex h-[50dvh] items-center">
 			<LineChart
-				totalVoter={data.totalVoter.count}
-				totalVoted={data.totalVoted.count}
-				totalPositions={data.totalVoted.count}
-				totalCandidates={data.totalCandidates.count}
+				totalVoter={voterCount ?? 0}
+				totalVoted={votedVotersCount ?? 0}
+				totalPositions={positionsCount ?? 0}
+				totalCandidates={candidatesCount ?? 0}
 			/>
 		</div>
 	</div>
 
 	<div class="mt-[20px] grid gap-[10px] md:grid-cols-2 lg:grid-cols-4">
-		<DetailsCard title="Total Voter" icon={userCheck} value={data.totalVoter.count ?? 0} />
-		<DetailsCard title="Total Voted" icon={userCheck} value={data.totalVoted.count ?? 0} />
-		<DetailsCard
-			title="Total Positions"
-			icon={noteBookText}
-			value={data.totalPositions.count ?? 0}
-		/>
-		<DetailsCard
-			title="Total Candidates"
-			icon={noteBookText}
-			value={data.totalCandidates.count ?? 0}
-		/>
+		<DetailsCard title="Total Voter" icon={userCheck} value={voterCount ?? 0} />
+		<DetailsCard title="Total Voted" icon={userCheck} value={votedVotersCount ?? 0} />
+		<DetailsCard title="Total Positions" icon={noteBookText} value={positionsCount ?? 0} />
+		<DetailsCard title="Total Candidates" icon={noteBookText} value={candidatesCount ?? 0} />
 	</div>
 </div>

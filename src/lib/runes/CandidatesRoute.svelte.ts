@@ -1,10 +1,11 @@
+import type { Candidate } from '$lib/types';
 import { getContext, setContext } from 'svelte';
 
 class CandidatesRoute {
-	private candidatesArray = $state<unknown>(null);
-	private activeIndex = $state<unknown>(null);
+	private candidatesArray = $state<Candidate[] | null>(null);
+	private activeIndex = $state<Candidate | null>(null);
 
-	setCandidateArray = (param: unknown) => {
+	setCandidateArray = (param: Candidate[] | null) => {
 		this.candidatesArray = param;
 	};
 
@@ -12,7 +13,7 @@ class CandidatesRoute {
 		return this.candidatesArray;
 	};
 
-	setActiveIndex = (param: unknown) => {
+	setActiveIndex = (param: Candidate) => {
 		this.activeIndex = param;
 	};
 

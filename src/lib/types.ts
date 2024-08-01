@@ -84,5 +84,6 @@ export type FakeSession = {
 export interface AdminLoadType {
 	candidates: Candidate[] | null;
 	voters: Voter[] | null;
+	voted_voters: Voted[] | null;
 	positions: Position[] | null;
 }

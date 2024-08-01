@@ -1,10 +1,11 @@
+import type { Position } from '$lib/types';
 import { getContext, setContext } from 'svelte';
 
 class PositionsRoute {
-	private positionsArray = $state<unknown>(null);
-	private activeIndex = $state<unknown>(null);
+	private positionsArray = $state<Position[] | null>(null);
+	private activeIndex = $state<Position | null>(null);
 
-	setPositionsArray = (param: unknown) => {
+	setPositionsArray = (param: Position[] | null) => {
 		this.positionsArray = param;
 	};
 
@@ -12,7 +13,7 @@ class PositionsRoute {
 		return this.positionsArray;
 	};
 
-	setActiveIndex = (param: unknown) => {
+	setActiveIndex = (param: Position | null) => {
 		this.activeIndex = param;
 	};
 
@@ -27,6 +28,6 @@ export const initPositionsRoute = () => {
 	return setContext(position_route_key, new PositionsRoute());
 };
 
-export const fromPositionsRoute = () => {
+export const fromPositionsRouteState = () => {
 	return getContext<ReturnType<typeof initPositionsRoute>>(position_route_key);
 };
