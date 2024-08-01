@@ -105,7 +105,6 @@ export type CreateVoterSchema = typeof createVoterSchema;
 export type UpdateVoterSchema = typeof updateVoterSchema;
 
 export const createPositionSchema = z.object({
-	adminId: z.string(),
 	positionName: z.string().min(3, { message: 'Must enter a proper position name.' }),
 	maxVote: z.number().refine((v) => v > 0, { message: 'Max vote must be greater than 1.' })
 });

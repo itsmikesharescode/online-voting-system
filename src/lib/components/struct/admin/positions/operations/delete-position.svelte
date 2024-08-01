@@ -2,11 +2,12 @@
 	import { enhance } from '$app/forms';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import type { ResultModel } from '$lib/types';
+	import type { Position, ResultModel } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { adminState } from '$lib/runes.svelte';
+	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte';
 
 	interface Props {
 		openDelete: boolean;
@@ -14,28 +15,27 @@
 
 	let { openDelete = $bindable() }: Props = $props();
 
+	const positionsRoute = fromPositionsRouteState();
+
 	let deleteLoader = $state(false);
 	const deletePositon: SubmitFunction = () => {
 		deleteLoader = true;
 		return async ({ result, update }) => {
-			const {
-				status,
-				data: { msg }
-			} = result as ResultModel<{ msg: string }>;
+			const { status, data } = result as ResultModel<{ msg: string; data: Position[] }>;
 
 			switch (status) {
 				case 200:
-					toast.success('', { description: msg });
+					toast.success('', { description: data.msg });
+					positionsRoute.setPositionsArray(data.data);
 					deleteLoader = false;
 					openDelete = false;
 					break;
 
 				case 401:
-					toast.error('', { description: msg });
+					toast.error('', { description: data.msg });
 					deleteLoader = false;
 					break;
 			}
-			await update();
 		};
 	};
 </script>

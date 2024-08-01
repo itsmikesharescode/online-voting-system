@@ -9,7 +9,8 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { LoaderCircle, X } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
-	import { invalidateAll } from '$app/navigation';
+	import type { Position, ResultModel } from '$lib/types';
+	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte';
 
 	interface PropType {
 		createPositionForm: SuperValidated<Infer<CreatePositionSchema>>;
@@ -18,32 +19,30 @@
 
 	const { createPositionForm, user }: PropType = $props();
 
+	const positionsRoute = fromPositionsRouteState();
+
 	let open = $state(false);
-
 	const form = superForm(createPositionForm, {
-		validators: zodClient(createPositionSchema)
-	});
-
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status } = $message as { msg: string; status: number };
+		validators: zodClient(createPositionSchema),
+		invalidateAll: false,
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{ msg: string; data: Position[] }>;
 
 			switch (status) {
 				case 200:
-					toast.success('', {
-						description: msg,
+					toast.success('Create Position', {
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
 						}
 					});
+					positionsRoute.setPositionsArray(data.data);
 					open = false;
 					break;
 				case 401:
-					toast.error('', {
-						description: msg,
+					toast.error('Create Position', {
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
@@ -53,6 +52,8 @@
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting, message } = form;
 </script>
 
 <Button onclick={() => (open = true)}>Create Position</Button>
@@ -72,12 +73,6 @@
 
 		<form method="POST" action="?/createPosition" use:enhance class="grid gap-[10px]">
 			<div class="h-[70dvh] overflow-auto p-[10px] sm:h-fit">
-				<Form.Field {form} name="adminId">
-					<Form.Control let:attrs>
-						<Input type="hidden" {...attrs} value={user?.id} />
-					</Form.Control>
-				</Form.Field>
-
 				<Form.Field {form} name="positionName">
 					<Form.Control let:attrs>
 						<Form.Label>Position Name</Form.Label>
