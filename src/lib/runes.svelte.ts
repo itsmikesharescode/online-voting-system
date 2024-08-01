@@ -1,5 +1,4 @@
-import type { User } from '@supabase/supabase-js';
-import type { Candidate, LiveResult, Position, Voter } from './types';
+import type { Candidate } from './types';
 
 class VoterState {
 	private ballotContainer = $state<Candidate[]>([]);
