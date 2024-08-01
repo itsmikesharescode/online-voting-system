@@ -6,6 +6,7 @@
 	import type { Position } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import { adminState } from '$lib/runes.svelte';
+	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte';
 
 	interface Props {
 		positions: Position[] | null;
@@ -13,6 +14,8 @@
 	}
 
 	const { positions, user }: Props = $props();
+
+	const positionsRoute = fromPositionsRouteState();
 
 	let openDelete = $state(false);
 </script>
@@ -56,7 +59,7 @@
 							<DropdownMenu.Item
 								class="cursor-pointer"
 								onclick={() => {
-									adminState.setSelectedPosition(positionInfo);
+									positionsRoute.setActiveIndex(positionInfo);
 									openDelete = true;
 								}}
 							>

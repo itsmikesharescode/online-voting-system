@@ -6,7 +6,6 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import { adminState } from '$lib/runes.svelte';
 	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte';
 
 	interface Props {
@@ -45,7 +44,7 @@
 		<AlertDialog.Header>
 			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 			<AlertDialog.Description>
-				This action cannot be undone. This will permanently delete the position {adminState.getSelectedPosition()
+				This action cannot be undone. This will permanently delete the position {positionsRoute.getActiveIndex()
 					?.position_name}
 			</AlertDialog.Description>
 		</AlertDialog.Header>
@@ -55,7 +54,7 @@
 			</AlertDialog.Cancel>
 
 			<form method="post" action="?/deletePositon" use:enhance={deletePositon}>
-				<input name="positionId" type="hidden" value={adminState.getSelectedPosition()?.id} />
+				<input name="positionId" type="hidden" value={positionsRoute.getActiveIndex()?.id} />
 				<Button disabled={deleteLoader} type="submit" class="w-full">
 					{#if deleteLoader}
 						<LoaderCircle class="animate-spin" />

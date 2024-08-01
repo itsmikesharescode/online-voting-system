@@ -57,8 +57,8 @@
 	const { form: formData, enhance, submitting, message } = form;
 
 	$effect(() => {
-		$formData.displayName = adminState.getSelectedVoter()?.display_name ?? '';
-		$formData.email = adminState.getSelectedVoter()?.email ?? '';
+		$formData.displayName = votersRoute.getActiveIndex()?.display_name ?? '';
+		$formData.email = votersRoute.getActiveIndex()?.email ?? '';
 	});
 </script>
 
@@ -73,7 +73,7 @@
 
 		<AlertDialog.Header>
 			<AlertDialog.Title
-				>Edit {adminState.getSelectedVoter()?.display_name} Information</AlertDialog.Title
+				>Edit {votersRoute.getActiveIndex()?.display_name} Information</AlertDialog.Title
 			>
 			<AlertDialog.Description></AlertDialog.Description>
 		</AlertDialog.Header>
@@ -86,7 +86,7 @@
 							tabindex={1}
 							type="hidden"
 							{...attrs}
-							value={adminState.getSelectedVoter()?.voter_id}
+							value={votersRoute.getActiveIndex()?.voter_id}
 						/>
 					</Form.Control>
 				</Form.Field>

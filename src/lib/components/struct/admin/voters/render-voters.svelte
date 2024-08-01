@@ -9,6 +9,7 @@
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateVoterSchema } from '$lib/schema';
 	import { adminState } from '$lib/runes.svelte';
+	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte';
 
 	interface Props {
 		voters: Voter[] | null;
@@ -17,6 +18,8 @@
 	}
 
 	const { voters, user, updateVoterForm }: Props = $props();
+
+	const votersRoute = fromVotersRouteState();
 
 	let openEdit = $state(false);
 	let openDelete = $state(false);
@@ -58,7 +61,7 @@
 							<DropdownMenu.Item
 								class="cursor-pointer"
 								onclick={() => {
-									adminState.setSelectedVoter(voterInfo);
+									votersRoute.setActiveIndex(voterInfo);
 									openEdit = true;
 								}}
 							>
@@ -67,7 +70,7 @@
 							<DropdownMenu.Item
 								class="cursor-pointer"
 								onclick={() => {
-									adminState.setSelectedVoter(voterInfo);
+									votersRoute.setActiveIndex(voterInfo);
 									openDelete = true;
 								}}
 							>

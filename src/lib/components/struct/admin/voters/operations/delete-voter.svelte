@@ -55,7 +55,7 @@
 			>
 
 			<form method="post" action="?/deleteVoter" use:enhance={deleteVoter}>
-				<input name="voterId" type="hidden" value={adminState.getSelectedVoter()?.voter_id} />
+				<input name="voterId" type="hidden" value={votersRoute.getActiveIndex()?.voter_id} />
 				<Button disabled={deleteLoader} type="submit" class="w-full">
 					{#if deleteLoader}
 						<LoaderCircle class="animate-spin" />
