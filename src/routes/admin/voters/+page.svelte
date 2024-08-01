@@ -2,13 +2,14 @@
 	import CreateVoter from '$lib/components/struct/admin/voters/create-voter.svelte';
 	import RenderVoters from '$lib/components/struct/admin/voters/render-voters.svelte';
 	import { routeState } from '$lib/runes.svelte.js';
+	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte.js';
 	import { onMount } from 'svelte';
 
 	const { data } = $props();
 
-	onMount(() => {
-		routeState.setActiveRoute('/admin/voters');
-	});
+	routeState.setActiveRoute('/admin/voters');
+
+	const votersRoute = fromVotersRouteState();
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
@@ -16,7 +17,7 @@
 
 	<div class="mt-[20px]">
 		<RenderVoters
-			voters={data.voters.data}
+			voters={votersRoute.getVotersArray()}
 			user={data.user}
 			updateVoterForm={data.updateVoterForm}
 		/>
