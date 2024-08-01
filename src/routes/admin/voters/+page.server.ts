@@ -3,6 +3,8 @@ import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createVoterSchema, updateVoterSchema } from '$lib/schema';
+import type { PostgrestSingleResponse } from '@supabase/supabase-js';
+import type { Voter } from '$lib/types';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -14,16 +16,16 @@ export const load: PageServerLoad = async () => {
 export const actions: Actions = {
 	createVoter: async (event) => {
 		const {
-			locals: { supabaseAdmin }
+			locals: { supabaseAdmin, user }
 		} = event;
 
 		const form = await superValidate(event, zod(createVoterSchema));
 
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
 		const {
-			data: { user },
-			error
+			data: { user: voter },
+			error: createErr
 		} = await supabaseAdmin.auth.admin.createUser({
 			email: form.data.email,
 			password: form.data.password,
@@ -35,8 +37,18 @@ export const actions: Actions = {
 			}
 		});
 
-		if (error) return message(form, { status: 401, msg: error.message });
-		else if (user) return message(form, { status: 200, msg: 'Account Created.' });
+		if (createErr) return fail(401, { form, msg: createErr.message });
+		else if (voter) {
+			const { data, error } = (await supabaseAdmin
+				.from('voter_list_tb')
+				.select()
+				.eq('admin_id', user?.id)
+				.order('created_at', { ascending: true })) as PostgrestSingleResponse<Voter[]>;
+
+			if (error) return fail(401, { form, msg: error.message });
+
+			return { form, msg: 'Voter created.', data };
+		}
 	},
 
 	updateVoter: async (event) => {

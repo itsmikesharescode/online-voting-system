@@ -9,6 +9,8 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { LoaderCircle, X } from 'lucide-svelte';
 	import type { User } from '@supabase/supabase-js';
+	import type { ResultModel, Voter } from '$lib/types';
+	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte';
 
 	interface PropType {
 		createVoterForm: SuperValidated<Infer<CreateVoterSchema>>;
@@ -17,32 +19,31 @@
 
 	const { createVoterForm, user }: PropType = $props();
 
+	const votersRoute = fromVotersRouteState();
+
 	let open = $state(false);
 
 	const form = superForm(createVoterForm, {
-		validators: zodClient(createVoterSchema)
-	});
-
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status } = $message as { msg: string; status: number };
+		validators: zodClient(createVoterSchema),
+		invalidateAll: false,
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{ msg: string; data: Voter[] }>;
 
 			switch (status) {
 				case 200:
-					toast.success('', {
-						description: msg,
+					toast.success('Create Voter', {
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
 						}
 					});
+					votersRoute.setVotersArray(data.data);
 					open = false;
 					break;
 				case 401:
-					toast.error('', {
-						description: msg,
+					toast.error('Create Voter', {
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
@@ -52,6 +53,8 @@
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <Button onclick={() => (open = true)}>Create Voter</Button>
