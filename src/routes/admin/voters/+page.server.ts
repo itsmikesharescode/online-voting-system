@@ -85,11 +85,20 @@ export const actions: Actions = {
 		}
 	},
 
-	deleteVoter: async ({ locals: { supabaseAdmin }, request }) => {
+	deleteVoter: async ({ locals: { supabaseAdmin, user }, request }) => {
 		const voterId = (await request.formData()).get('voterId') as string;
 
 		const { error } = await supabaseAdmin.auth.admin.deleteUser(voterId);
 		if (error) return fail(401, { msg: error.message });
-		else return { msg: `Voter has been deleted.` };
+		else {
+			const { data, error } = (await supabaseAdmin
+				.from('voter_list_tb')
+				.select()
+				.eq('admin_id', user?.id)
+				.order('created_at', { ascending: true })) as PostgrestSingleResponse<Voter[]>;
+
+			if (error) return fail(401, { msg: error.message });
+			return { msg: 'Voter has been deleted.', data };
+		}
 	}
 };
