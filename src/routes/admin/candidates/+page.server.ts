@@ -3,24 +3,10 @@ import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createCandidateSchema, updateCandidateSchema } from '$lib/schema';
-import type { PostgrestSingleResponse } from '@supabase/supabase-js';
-import type { Candidate, Position } from '$lib/types';
+import type { Position } from '$lib/types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
-	/* setHeaders({
-		'Cache-Control': 'private, max-age=60, stale-while-revalidate=600',
-		Vary: 'Cookie, Authorization'
-	}); */
-
+export const load: PageServerLoad = async () => {
 	return {
-		candidates: (await supabase
-			.from('candidate_list_tb')
-			.select('*')
-			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Candidate[]>,
-		positions: (await supabase
-			.from('position_list_tb')
-			.select('*')
-			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Position[]>,
 		createCandidateForm: await superValidate(zod(createCandidateSchema), {
 			id: crypto.randomUUID()
 		}),
