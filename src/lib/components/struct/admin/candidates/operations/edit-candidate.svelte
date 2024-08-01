@@ -10,8 +10,9 @@
 	import Textarea from '$lib/components/ui/textarea/textarea.svelte';
 	import { LoaderCircle, Rabbit, X } from 'lucide-svelte';
 	import * as Select from '$lib/components/ui/select';
-	import type { Position } from '$lib/types';
+	import type { Candidate, Position, ResultModel } from '$lib/types';
 	import { adminState } from '$lib/runes.svelte';
+	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte';
 
 	interface PropType {
 		updateCandidateForm: SuperValidated<Infer<UpdateCandidateSchema>>;
@@ -21,30 +22,29 @@
 
 	let { updateCandidateForm, positions, openEdit = $bindable() }: PropType = $props();
 
+	const candidateRoute = fromCandidatesRouteState();
+
 	const form = superForm(updateCandidateForm, {
-		validators: zodClient(updateCandidateSchema)
-	});
-
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status } = $message as { msg: string; status: number };
+		validators: zodClient(updateCandidateSchema),
+		invalidateAll: false,
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{ msg: string; data: Candidate[] }>;
 
 			switch (status) {
 				case 200:
 					toast.success('', {
-						description: msg,
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
 						}
 					});
+					candidateRoute.setCandidateArray(data.data);
 					openEdit = false;
 					break;
 				case 401:
 					toast.error('', {
-						description: msg,
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
@@ -54,6 +54,8 @@
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting, message } = form;
 
 	const selectedPositon = $derived({
 		label: $formData.selectedPosition,
@@ -88,12 +90,6 @@
 				<Form.Field {form} name="candidateId">
 					<Form.Control let:attrs>
 						<Input type="hidden" {...attrs} value={adminState.getSelectedCandidate()?.id} />
-					</Form.Control>
-				</Form.Field>
-
-				<Form.Field {form} name="adminId">
-					<Form.Control let:attrs>
-						<Input type="hidden" {...attrs} value={adminState.getSelectedCandidate()?.admin_id} />
 					</Form.Control>
 				</Form.Field>
 

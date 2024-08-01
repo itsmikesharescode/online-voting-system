@@ -45,25 +45,19 @@ export const actions: Actions = {
 		} = event;
 
 		const form = await superValidate(event, zod(updateCandidateSchema));
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
 		const selectedPosition = JSON.parse(form.data.selectedPosition) as Position;
 
-		const { error } = await supabase
-			.from('candidate_list_tb')
-			.update([
-				{
-					admin_id: form.data.adminId,
-					display_name: form.data.displayName,
-					motto: form.data.motto,
-					position_id: selectedPosition.id,
-					position_json: selectedPosition
-				}
-			])
-			.match({ admin_id: form.data.adminId, id: form.data.candidateId });
+		const { data, error } = (await supabase.rpc('update_candidate', {
+			display_name_client: form.data.displayName,
+			motto_client: form.data.motto,
+			candidate_id_client: Number(form.data.candidateId),
+			position_json_client: selectedPosition
+		})) as PostgrestSingleResponse<Candidate[]>;
 
-		if (error) return message(form, { status: 401, msg: error.message });
-		else return message(form, { status: 200, msg: 'Updated a candidate.' });
+		if (error) return fail(401, { form, msg: error.message });
+		return { form, msg: 'You have update the candidate', data };
 	},
 
 	deleteCandidate: async ({ locals: { supabase }, request }) => {

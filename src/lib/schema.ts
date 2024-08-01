@@ -125,7 +125,6 @@ export const createCandidateSchema = z.object({
 
 export const updateCandidateSchema = z.object({
 	candidateId: z.string(),
-	adminId: z.string(),
 	selectedPosition: z.string().min(3, { message: 'Must select an available position.' }),
 	displayName: z
 		.string()
