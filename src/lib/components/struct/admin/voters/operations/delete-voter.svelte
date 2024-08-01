@@ -6,7 +6,6 @@
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
-	import { adminState } from '$lib/runes.svelte';
 	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte';
 
 	interface Props {

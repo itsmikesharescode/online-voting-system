@@ -1,11 +1,10 @@
 <script lang="ts">
 	import CreateCandidate from '$lib/components/struct/admin/candidates/create-candidate.svelte';
 	import RenderCandidates from '$lib/components/struct/admin/candidates/render-candidates.svelte';
-	import { routeState } from '$lib/runes.svelte.js';
 	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte.js';
 	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte.js';
+	import { routeState } from '$lib/runes/Route.svelte.js';
 	import { userState } from '$lib/runes/userState.svelte.js';
-	import { onMount } from 'svelte';
 
 	const { data } = $props();
 
@@ -13,7 +12,8 @@
 	const candidatesRoute = fromCandidatesRouteState();
 	const positions = fromPositionsRouteState();
 
-	routeState.setActiveRoute('/admin/candidates');
+	const route = routeState();
+	route.setRoute('/admin/candidates');
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">

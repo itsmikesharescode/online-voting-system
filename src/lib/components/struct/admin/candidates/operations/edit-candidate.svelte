@@ -11,7 +11,6 @@
 	import { LoaderCircle, Rabbit, X } from 'lucide-svelte';
 	import * as Select from '$lib/components/ui/select';
 	import type { Candidate, Position, ResultModel } from '$lib/types';
-	import { adminState } from '$lib/runes.svelte';
 	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte';
 
 	interface PropType {
@@ -22,7 +21,7 @@
 
 	let { updateCandidateForm, positions, openEdit = $bindable() }: PropType = $props();
 
-	const candidateRoute = fromCandidatesRouteState();
+	const candidatesRoute = fromCandidatesRouteState();
 
 	const form = superForm(updateCandidateForm, {
 		validators: zodClient(updateCandidateSchema),
@@ -39,7 +38,7 @@
 							onClick: () => {}
 						}
 					});
-					candidateRoute.setCandidateArray(data.data);
+					candidatesRoute.setCandidateArray(data.data);
 					openEdit = false;
 					break;
 				case 401:
@@ -63,10 +62,10 @@
 	});
 
 	$effect(() => {
-		$formData.displayName = adminState.getSelectedCandidate()?.display_name ?? '';
-		$formData.motto = adminState.getSelectedCandidate()?.motto ?? '';
+		$formData.displayName = candidatesRoute.getActiveIndex()?.display_name ?? '';
+		$formData.motto = candidatesRoute.getActiveIndex()?.motto ?? '';
 		$formData.selectedPosition =
-			adminState.getSelectedCandidate()?.position_json.position_name ?? '';
+			candidatesRoute.getActiveIndex()?.position_json.position_name ?? '';
 	});
 </script>
 
@@ -81,7 +80,7 @@
 		<AlertDialog.Header>
 			<AlertDialog.Title>Edit Candidate</AlertDialog.Title>
 			<AlertDialog.Description>
-				This will edit candidate {adminState.getSelectedCandidate()?.display_name}
+				This will edit candidate {candidatesRoute.getActiveIndex()?.display_name}
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 
@@ -89,7 +88,7 @@
 			<div class="h-[70dvh] overflow-auto p-[10px] sm:h-fit">
 				<Form.Field {form} name="candidateId">
 					<Form.Control let:attrs>
-						<Input type="hidden" {...attrs} value={adminState.getSelectedCandidate()?.id} />
+						<Input type="hidden" {...attrs} value={candidatesRoute.getActiveIndex()?.id} />
 					</Form.Control>
 				</Form.Field>
 

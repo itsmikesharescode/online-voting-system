@@ -2,7 +2,9 @@
 	import { onMount } from 'svelte';
 	import Chart from 'chart.js/auto';
 
-	import { routeState } from '$lib/runes.svelte';
+	import { routeState } from '$lib/runes/Route.svelte';
+
+	const route = routeState();
 
 	let chartCanvas: HTMLCanvasElement | undefined = $state(undefined);
 	let chartInstance: Chart | null = $state(null);
@@ -70,7 +72,7 @@
 	}
 
 	function getColor() {
-		return routeState.getThemeState() === 'light' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)';
+		return route.getThemeState() === 'light' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)';
 	}
 
 	$effect(() => {

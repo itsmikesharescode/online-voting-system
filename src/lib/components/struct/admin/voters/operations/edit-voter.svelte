@@ -9,7 +9,6 @@
 	import * as Form from '$lib/components/ui/form';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { LoaderCircle, X } from 'lucide-svelte';
-	import { adminState } from '$lib/runes.svelte';
 	import type { ResultModel, Voter } from '$lib/types';
 	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte';
 

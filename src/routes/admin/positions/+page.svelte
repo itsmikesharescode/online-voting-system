@@ -1,17 +1,17 @@
 <script lang="ts">
 	import CreatePosition from '$lib/components/struct/admin/positions/create-position.svelte';
 	import RenderPositions from '$lib/components/struct/admin/positions/render-positions.svelte';
-	import { routeState } from '$lib/runes.svelte.js';
 	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte.js';
+	import { routeState } from '$lib/runes/Route.svelte.js';
 	import { userState } from '$lib/runes/userState.svelte.js';
-	import { onMount } from 'svelte';
 
 	const { data } = $props();
 
 	const user = userState();
 	const positionsRoute = fromPositionsRouteState();
 
-	routeState.setActiveRoute('/admin/positions');
+	const route = routeState();
+	route.setRoute('/admin/positions');
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">

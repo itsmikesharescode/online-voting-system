@@ -1,10 +1,11 @@
 <script lang="ts">
 	import ResultCard from '$lib/components/struct/admin/result/result-card.svelte';
-	import { routeState } from '$lib/runes.svelte.js';
 	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte';
 	import { fromLiveResultRouteState } from '$lib/runes/LiveResultRoute.svelte';
+	import { routeState } from '$lib/runes/Route.svelte';
 
-	routeState.setActiveRoute('/admin/result');
+	const route = routeState();
+	route.setRoute('/admin/result');
 
 	const results = fromLiveResultRouteState().getLiveResultArray();
 </script>

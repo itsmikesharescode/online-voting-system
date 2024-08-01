@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
-	import { adminState } from '$lib/runes.svelte';
+	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte';
 	import { X } from 'lucide-svelte';
 
 	interface Props {
@@ -8,6 +8,8 @@
 	}
 
 	let { openDetails = $bindable() }: Props = $props();
+
+	const candidatesRoute = fromCandidatesRouteState();
 </script>
 
 <AlertDialog.Root bind:open={openDetails}>
@@ -21,7 +23,7 @@
 		<AlertDialog.Header>
 			<AlertDialog.Title>Details</AlertDialog.Title>
 			<AlertDialog.Description>
-				This is the information for {adminState.getSelectedCandidate()?.display_name}.
+				This is the information for {candidatesRoute.getActiveIndex()?.display_name}.
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 
@@ -29,21 +31,21 @@
 			<div class="grid gap-[10px]">
 				<span>Display Name</span>
 				<p class="rounded-lg border-[1px] border-slate-700 p-[10px] text-muted-foreground">
-					{adminState.getSelectedCandidate()?.display_name}
+					{candidatesRoute.getActiveIndex()?.display_name}
 				</p>
 			</div>
 
 			<div class="grid gap-[10px]">
 				<span>Running for</span>
 				<p class="rounded-lg border-[1px] border-slate-700 p-[10px] text-muted-foreground">
-					{adminState.getSelectedCandidate()?.position_json.position_name}
+					{candidatesRoute.getActiveIndex()?.position_json.position_name}
 				</p>
 			</div>
 
 			<div class="flex flex-col gap-[10px]">
 				<p>Motto</p>
 				<p class="w-full rounded-lg border-[1px] border-slate-700 p-[10px] text-muted-foreground">
-					{adminState.getSelectedCandidate()?.motto}
+					{candidatesRoute.getActiveIndex()?.motto}
 				</p>
 			</div>
 		</div>

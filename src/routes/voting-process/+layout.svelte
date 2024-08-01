@@ -1,12 +1,12 @@
 <script lang="ts">
 	import Nav from '$lib/components/general/nav.svelte';
-	import { routeState } from '$lib/runes.svelte.js';
+	import { routeState } from '$lib/runes/Route.svelte.js';
 	import { onMount } from 'svelte';
 
 	const { data, children } = $props();
-
+	const route = routeState();
 	onMount(() => {
-		routeState.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
+		route.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
 	});
 </script>
 
@@ -14,4 +14,4 @@
 	{@render children()}
 {/snippet}
 
-<Nav user={data.user} {child} />
+<Nav {child} />

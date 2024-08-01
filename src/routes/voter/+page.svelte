@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { routeState } from '$lib/runes.svelte';
+	import { routeState } from '$lib/runes/Route.svelte.js';
 	import ResultCard from '$lib/components/struct/voter/result/result-card.svelte';
 
 	const { data } = $props();
-
-	routeState.setActiveRoute('/voter');
+	const route = routeState();
+	route.setRoute('/voter');
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">

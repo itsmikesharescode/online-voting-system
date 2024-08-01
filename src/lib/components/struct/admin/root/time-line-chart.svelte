@@ -3,8 +3,9 @@
 	import Chart from 'chart.js/auto';
 	import type { Plugin } from 'chart.js/auto';
 	import 'chartjs-adapter-date-fns';
+	import { routeState } from '$lib/runes/Route.svelte';
 
-	import { routeState } from '$lib/runes.svelte';
+	const route = routeState();
 
 	let chartCanvas: HTMLCanvasElement | undefined = $state(undefined);
 	let chartInstance: Chart<'line', { x: number; y: number }[], unknown> | null = $state(null);
@@ -208,7 +209,7 @@
 	}
 
 	function getColor() {
-		return routeState.getThemeState() === 'light' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)';
+		return route.getThemeState() === 'light' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)';
 	}
 
 	$effect(() => {

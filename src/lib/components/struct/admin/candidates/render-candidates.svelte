@@ -5,7 +5,6 @@
 	import type { Candidate, Position } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
 	import CandidateDetails from './operations/candidate-details.svelte';
-	import { adminState } from '$lib/runes.svelte';
 	import EditCandidate from './operations/edit-candidate.svelte';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateCandidateSchema } from '$lib/schema';

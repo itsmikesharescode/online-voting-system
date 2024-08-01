@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Nav from '$lib/components/general/nav.svelte';
-	import { routeState } from '$lib/runes.svelte.js';
+	import { routeState } from '$lib/runes/Route.svelte.js';
 	import {
 		fromCandidatesRouteState,
 		initCandidatesRoute
@@ -27,6 +27,7 @@
 	const votedRoute = fromVotedRouteState();
 	const positionsRoute = fromPositionsRouteState();
 	const candidatesRoute = fromCandidatesRouteState();
+	const route = routeState();
 
 	liveResultRoute.setLiveResultArray(data.adminLoad.data?.live_results ?? null);
 	votersRoute.setVotersArray(data.adminLoad.data?.voters ?? null);
@@ -35,7 +36,7 @@
 	candidatesRoute.setCandidateArray(data.adminLoad.data?.candidates ?? null);
 
 	onMount(() => {
-		routeState.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
+		route.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
 	});
 </script>
 

@@ -2,12 +2,14 @@
 	import { SunMoon, MoonStar } from 'lucide-svelte';
 	import { toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { routeState } from '$lib/runes.svelte';
+	import { routeState } from '$lib/runes/Route.svelte';
+
+	const route = routeState();
 
 	function handleClick() {
 		toggleMode();
 
-		routeState.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
+		route.setThemeState(localStorage.getItem('mode-watcher-mode') as 'light' | 'dark');
 	}
 </script>
 

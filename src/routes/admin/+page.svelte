@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { routeState } from '$lib/runes.svelte';
+	import { routeState } from '$lib/runes/Route.svelte';
 	import DetailsCard from '$lib/components/struct/admin/root/details-card.svelte';
 	import { UserCheck, NotebookText } from 'lucide-svelte';
 	import BarChart from '$lib/components/general/bar-chart.svelte';
@@ -9,7 +9,8 @@
 	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte.js';
 	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte.js';
 
-	routeState.setActiveRoute('/admin');
+	const route = routeState();
+	route.setRoute('/admin');
 
 	const voterCount = fromVotersRouteState().getVotersArray()?.length;
 	const votedVotersCount = fromVotedRouteState().getVotedArray()?.length;

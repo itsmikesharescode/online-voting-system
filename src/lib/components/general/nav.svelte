@@ -2,11 +2,11 @@
 	import type { Snippet } from 'svelte';
 	import Button from '../ui/button/button.svelte';
 	import { LogOut, Menu, X, LoaderCircle, CircleUser } from 'lucide-svelte';
-	import { routeState } from '$lib/runes.svelte';
 	import { toast } from 'svelte-sonner';
 	import { page } from '$app/stores';
 	import { userState } from '$lib/runes/userState.svelte';
 	import { goto } from '$app/navigation';
+	import { routeState } from '$lib/runes/Route.svelte';
 
 	interface PropType {
 		child: Snippet;
@@ -14,8 +14,10 @@
 
 	const { child }: PropType = $props();
 
+	const route = routeState();
+
 	const user = userState();
-	routeState.setSelections(user.getUser());
+	route.setSelections(user.getUser());
 
 	let showMenu = $state(false);
 
@@ -98,12 +100,12 @@
 				{/if}
 			</Button>
 
-			{#each routeState.getSelections() as selection}
+			{#each route.getSelections() as selection}
 				<a
 					href={selection.url}
 					class="rounded-r-full p-[1rem] hover:font-semibold
-		{routeState.getActiveRoute() === selection.url ? 'bg-secondary font-semibold' : ''} "
-					onclick={() => routeState.setActiveRoute(selection.url)}
+		{route.getRoute() === selection.url ? 'bg-secondary font-semibold' : ''} "
+					onclick={() => route.setRoute(selection.url)}
 				>
 					{selection.title}
 				</a>
@@ -120,14 +122,14 @@
 				</button>
 
 				<div class="grid gap-[10px] p-[10px]">
-					{#each routeState.getSelections() as selection}
+					{#each route.getSelections() as selection}
 						<a
 							href={selection.url}
 							class="p-[10px]
-							{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
+							{route.getRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
 							"
 							onclick={() => {
-								routeState.setActiveRoute(selection.url);
+								route.setRoute(selection.url);
 								showMenu = false;
 							}}
 						>

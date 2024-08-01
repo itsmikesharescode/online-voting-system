@@ -5,7 +5,6 @@
 	import DeletePosition from './operations/delete-position.svelte';
 	import type { Position } from '$lib/types';
 	import type { User } from '@supabase/supabase-js';
-	import { adminState } from '$lib/runes.svelte';
 	import { fromPositionsRouteState } from '$lib/runes/PositionsRoute.svelte';
 
 	interface Props {

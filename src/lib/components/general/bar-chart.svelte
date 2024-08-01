@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Chart from 'chart.js/auto';
+	import { routeState } from '$lib/runes/Route.svelte';
 
-	import { routeState } from '$lib/runes.svelte';
+	const route = routeState();
 
 	interface Props {
 		totalVoter: number | null;
@@ -75,7 +76,7 @@
 	}
 
 	function getColor() {
-		return routeState.getThemeState() === 'light' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)';
+		return route.getThemeState() === 'light' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)';
 	}
 
 	$effect(() => {

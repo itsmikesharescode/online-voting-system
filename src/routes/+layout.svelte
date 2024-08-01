@@ -7,10 +7,12 @@
 	import { onMount } from 'svelte';
 	import { invalidate } from '$app/navigation';
 	import { initUser, userState } from '$lib/runes/userState.svelte';
+	import { initRoute } from '$lib/runes/Route.svelte';
 
 	const { children, data: clientData } = $props();
 
 	initUser();
+	initRoute();
 	const user = userState();
 	user.setUser(clientData.user);
 

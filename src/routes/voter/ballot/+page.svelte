@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { routeState } from '$lib/runes.svelte';
+	import { routeState } from '$lib/runes/Route.svelte.js';
 	import * as Card from '$lib/components/ui/card';
 	import { transformCandidates } from '$lib/helpers';
 	import CandidateDetails from '$lib/components/struct/voter/ballot/candidate-details.svelte';
-	routeState.setActiveRoute('/voter/ballot');
+
+	const route = routeState();
+	route.setRoute('/voter/ballot');
 
 	const { data } = $props();
 </script>

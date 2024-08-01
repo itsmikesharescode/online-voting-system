@@ -8,7 +8,6 @@
 	import type { User } from '@supabase/supabase-js';
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateVoterSchema } from '$lib/schema';
-	import { adminState } from '$lib/runes.svelte';
 	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte';
 
 	interface Props {
