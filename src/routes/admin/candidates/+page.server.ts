@@ -81,13 +81,5 @@ export const actions: Actions = {
 
 		if (error) return fail(401, { msg: error.message });
 		else return { msg: 'Deleted a candidated.' };
-	},
-
-	logout: async ({ locals: { supabase } }) => {
-		const { error } = await supabase.auth.signOut();
-
-		return {
-			msg: 'Thank you come back again!'
-		};
 	}
 };

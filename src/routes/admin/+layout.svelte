@@ -43,4 +43,4 @@
 	{@render children()}
 {/snippet}
 
-<Nav user={data.user} {child} />
+<Nav {child} />

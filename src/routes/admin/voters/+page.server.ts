@@ -69,13 +69,5 @@ export const actions: Actions = {
 		const { error } = await supabaseAdmin.auth.admin.deleteUser(voterId);
 		if (error) return fail(401, { msg: error.message });
 		else return { msg: `Voter has been deleted.` };
-	},
-
-	logout: async ({ locals: { supabase } }) => {
-		const { error } = await supabase.auth.signOut();
-
-		return {
-			msg: 'Thank you come back again!'
-		};
 	}
 };

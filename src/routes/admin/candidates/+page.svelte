@@ -13,9 +13,7 @@
 	const candidatesRoute = fromCandidatesRouteState();
 	const positions = fromPositionsRouteState();
 
-	onMount(() => {
-		routeState.setActiveRoute('/admin/candidates');
-	});
+	routeState.setActiveRoute('/admin/candidates');
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">

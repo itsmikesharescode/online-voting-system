@@ -1,50 +1,44 @@
 <script lang="ts">
-	import type { User } from '@supabase/supabase-js';
 	import type { Snippet } from 'svelte';
 	import Button from '../ui/button/button.svelte';
 	import { LogOut, Menu, X, LoaderCircle, CircleUser } from 'lucide-svelte';
 	import { routeState } from '$lib/runes.svelte';
-	import { enhance } from '$app/forms';
-	import type { SubmitFunction } from '@sveltejs/kit';
 	import { toast } from 'svelte-sonner';
-	import type { ResultModel } from '$lib/types';
 	import { page } from '$app/stores';
+	import { userState } from '$lib/runes/userState.svelte';
+	import { goto } from '$app/navigation';
 
 	interface PropType {
-		user: User | null;
 		child: Snippet;
 	}
 
-	const { user, child }: PropType = $props();
+	const { child }: PropType = $props();
 
-	routeState.setSelections(user);
+	const user = userState();
+	routeState.setSelections(user.getUser());
 
 	let showMenu = $state(false);
 
-	// logout handler
 	let logoutLoader = $state(false);
-	const logout: SubmitFunction = () => {
+	const logoutHandler = async () => {
 		logoutLoader = true;
-		return async ({ result, update }) => {
-			const {
-				status,
-				data: { msg }
-			} = result as ResultModel<{ msg: string }>;
+		const res = await fetch('/logout-api', {
+			method: 'post',
+			headers: {
+				'content-typed': 'application/json'
+			},
+			body: JSON.stringify({
+				user: user.getUser()?.id
+			})
+		});
 
-			switch (status) {
-				case 200:
-					toast.success('', { description: msg });
-					logoutLoader = false;
-					break;
-
-				case 401:
-					toast.error('', { description: msg });
-					logoutLoader = false;
-
-					break;
-			}
-			await update();
-		};
+		const { msg } = await res.json();
+		if (res.status === 401) {
+			toast.error('Log out', { description: msg });
+			logoutLoader = false;
+		} else if (res.status === 200) {
+			goto('/');
+		}
 	};
 </script>
 
@@ -59,30 +53,29 @@
 		<button onclick={() => (showMenu = true)} class="md:hidden"><Menu /></button>
 
 		<div class="flex items-center gap-[10px]">
-			<p>{user?.user_metadata.displayName}</p>
+			<p>{user.getUser()?.user_metadata.displayName}</p>
 
 			<CircleUser class="h-[30px] w-[30px]" />
 		</div>
 	{:else}
 		<div class="flex items-center gap-[10px]">
 			<CircleUser class="h-[30px] w-[30px]" />
-			<p>{user?.user_metadata.displayName}</p>
+			<p>{user.getUser()?.user_metadata.displayName}</p>
 		</div>
 
-		<form method="post" action="?/logout" use:enhance={logout} class="">
-			<Button
-				disabled={logoutLoader}
-				type="submit"
-				class="relative my-[20px] flex items-center gap-[5px] sm:w-[150px]"
-			>
-				{#if logoutLoader}
-					<LoaderCircle class="animate-spin" />
-				{:else}
-					<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
-					<p class="hidden sm:block">Log out</p>
-				{/if}
-			</Button>
-		</form>
+		<Button
+			onclick={logoutHandler}
+			disabled={logoutLoader}
+			type="submit"
+			class="relative my-[20px] flex items-center gap-[5px] sm:w-[150px]"
+		>
+			{#if logoutLoader}
+				<LoaderCircle class="animate-spin" />
+			{:else}
+				<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
+				<p class="hidden sm:block">Log out</p>
+			{/if}
+		</Button>
 	{/if}
 </nav>
 {#if $page.url.pathname === '/voting-process'}
@@ -91,20 +84,20 @@
 	<div class="grid md:grid-cols-[300px,1fr]">
 		<!--Desktop-->
 		<div class="sticky top-0 hidden h-fit flex-col gap-[1rem] p-[1rem] md:flex">
-			<form method="post" action="?/logout" class="w-full" use:enhance={logout}>
-				<Button
-					disabled={logoutLoader}
-					type="submit"
-					class="relative my-[20px] flex w-full items-center gap-[5px]"
-				>
-					{#if logoutLoader}
-						<LoaderCircle class="animate-spin" />
-					{:else}
-						<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
-						Log out
-					{/if}
-				</Button>
-			</form>
+			<Button
+				onclick={logoutHandler}
+				disabled={logoutLoader}
+				type="submit"
+				class="relative my-[20px] flex w-full items-center gap-[5px]"
+			>
+				{#if logoutLoader}
+					<LoaderCircle class="animate-spin" />
+				{:else}
+					<LogOut class="absolute left-0 ml-[10px] w-[15px]" />
+					Log out
+				{/if}
+			</Button>
+
 			{#each routeState.getSelections() as selection}
 				<a
 					href={selection.url}
@@ -130,9 +123,9 @@
 					{#each routeState.getSelections() as selection}
 						<a
 							href={selection.url}
-							class=" p-[10px]
-				{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
-			"
+							class="p-[10px]
+							{routeState.getActiveRoute() === selection.url ? 'border-b-[1px] border-red-500 font-semibold' : ''}
+							"
 							onclick={() => {
 								routeState.setActiveRoute(selection.url);
 								showMenu = false;
@@ -143,13 +136,9 @@
 					{/each}
 				</div>
 
-				<form
-					method="post"
-					action="?/logout"
-					use:enhance={logout}
-					class="absolute bottom-0 m-[1rem]"
-				>
+				<div class="absolute bottom-0 m-[1rem]">
 					<Button
+						onclick={logoutHandler}
 						disabled={logoutLoader}
 						type="submit"
 						class="relative my-[20px] flex w-[150px] items-center gap-[5px]"
@@ -161,7 +150,7 @@
 							Log out
 						{/if}
 					</Button>
-				</form>
+				</div>
 			</div>
 		{/if}
 
