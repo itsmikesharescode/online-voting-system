@@ -1,22 +1,11 @@
-import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createPositionSchema } from '$lib/schema';
-import type { PostgrestSingleResponse } from '@supabase/supabase-js';
-import type { Position } from '$lib/types';
 
-export const load: PageServerLoad = async ({ locals: { supabase, user }, setHeaders }) => {
-	/* setHeaders({
-		'Cache-Control': 'private, max-age=10, stale-while-revalidate=600',
-		Vary: 'Cookie, Authorization'
-	}); */
-
+export const load: PageServerLoad = async () => {
 	return {
-		positions: (await supabase
-			.from('position_list_tb')
-			.select('*')
-			.eq('admin_id', user?.id)) as PostgrestSingleResponse<Position[]>,
 		createPositionForm: await superValidate(zod(createPositionSchema), { id: crypto.randomUUID() })
 	};
 };
