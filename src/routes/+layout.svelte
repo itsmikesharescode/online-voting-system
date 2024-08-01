@@ -6,8 +6,13 @@
 	import Spinner from '$lib/components/general/spinner.svelte';
 	import { onMount } from 'svelte';
 	import { invalidate } from '$app/navigation';
+	import { initUser, userState } from '$lib/runes/userState.svelte';
 
 	const { children, data: clientData } = $props();
+
+	initUser();
+	const user = userState();
+	user.setUser(clientData.user);
 
 	onMount(() => {
 		const {
