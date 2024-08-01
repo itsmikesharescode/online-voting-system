@@ -38,7 +38,7 @@ export interface LiveResult {
 	created_at: string;
 	max_vote: number;
 	position_name: string;
-	candidate_list_tb: Candidate[];
+	candidate_list_tb: Candidate[] | null;
 }
 
 export interface Voted {
@@ -82,6 +82,7 @@ export type FakeSession = {
 };
 
 export interface AdminLoadType {
+	live_results: LiveResult[] | null;
 	candidates: Candidate[] | null;
 	voters: Voter[] | null;
 	voted_voters: Voted[] | null;

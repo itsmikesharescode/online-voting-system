@@ -1,16 +1,18 @@
 <script lang="ts">
 	import ResultCard from '$lib/components/struct/admin/result/result-card.svelte';
 	import { routeState } from '$lib/runes.svelte.js';
-
-	const { data } = $props();
+	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte';
+	import { fromLiveResultRouteState } from '$lib/runes/LiveResultRoute.svelte';
 
 	routeState.setActiveRoute('/admin/result');
+
+	const results = fromLiveResultRouteState().getLiveResultArray();
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">
 	<div class="grid gap-[5px] lg:grid-cols-2">
-		{#if data.results.data?.length}
-			{#each data.results.data as result}
+		{#if results?.length}
+			{#each results ?? [] as result}
 				<ResultCard {result} />
 			{/each}
 		{:else}

@@ -21,9 +21,9 @@
 	</h4>
 
 	<div class="h-[20dvh]">
-		<DynamicBarChart position={result.position_name} candidates={result.candidate_list_tb} />
+		<DynamicBarChart position={result.position_name} candidates={result.candidate_list_tb ?? []} />
 	</div>
-	{#if result.candidate_list_tb.length}
+	{#if result.candidate_list_tb?.length}
 		<div class="flex flex-col gap-[10px]">
 			<div class="grid grid-cols-[70%,30%]">
 				<span>
@@ -36,7 +36,7 @@
 			</div>
 
 			<div class="flex h-[40dvh] flex-col gap-[10px] overflow-auto">
-				{#each result.candidate_list_tb as candidate}
+				{#each result.candidate_list_tb ?? [] as candidate}
 					<div class="grid grid-cols-[70%,30%]">
 						<div class="flex items-center gap-[5px]">
 							<UserRound class="h-[40px] w-[40px] rounded-full border-[1px] bg-secondary p-[5px]" />
