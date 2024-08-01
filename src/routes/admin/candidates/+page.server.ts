@@ -3,7 +3,8 @@ import type { PageServerLoad } from './$types';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createCandidateSchema, updateCandidateSchema } from '$lib/schema';
-import type { Position } from '$lib/types';
+import type { Candidate, Position } from '$lib/types';
+import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 
 export const load: PageServerLoad = async () => {
 	return {
@@ -23,23 +24,19 @@ export const actions: Actions = {
 		} = event;
 
 		const form = await superValidate(event, zod(createCandidateSchema));
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
 		const selectedPosition = JSON.parse(form.data.selectedPosition) as Position;
 
-		const { error } = await supabase.from('candidate_list_tb').insert([
-			{
-				admin_id: form.data.adminId,
-				display_name: form.data.displayName,
-				motto: form.data.motto,
-				position_id: selectedPosition.id,
-				position_json: selectedPosition,
-				vote_count: 0
-			}
-		]);
+		const { data, error } = (await supabase.rpc('create_candidate', {
+			position_id_client: selectedPosition.id,
+			display_name_client: form.data.displayName,
+			motto_client_client: form.data.motto,
+			position_json_client: selectedPosition
+		})) as PostgrestSingleResponse<Candidate[]>;
 
-		if (error) return message(form, { status: 401, msg: error.message });
-		else return message(form, { status: 200, msg: 'Added a candidate.' });
+		if (error) return fail(401, { form, msg: error.message });
+		return { form, msg: 'You have created a candidate', data };
 	},
 
 	updateCandidate: async (event) => {

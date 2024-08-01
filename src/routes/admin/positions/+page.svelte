@@ -11,9 +11,7 @@
 	const user = userState();
 	const positionsRoute = fromPositionsRouteState();
 
-	onMount(() => {
-		routeState.setActiveRoute('/admin/positions');
-	});
+	routeState.setActiveRoute('/admin/positions');
 </script>
 
 <div class="min-h-screen border-slate-700 p-[1rem] md:border-l-[1px]">

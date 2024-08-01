@@ -112,7 +112,6 @@ export const createPositionSchema = z.object({
 export type CreatePositionSchema = typeof createPositionSchema;
 
 export const createCandidateSchema = z.object({
-	adminId: z.string(),
 	selectedPosition: z.string().min(3, { message: 'Must select an available position.' }),
 	displayName: z
 		.string()
