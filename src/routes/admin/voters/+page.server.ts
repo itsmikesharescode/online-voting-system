@@ -53,16 +53,16 @@ export const actions: Actions = {
 
 	updateVoter: async (event) => {
 		const {
-			locals: { supabaseAdmin }
+			locals: { supabaseAdmin, user }
 		} = event;
 
 		const form = await superValidate(event, zod(updateVoterSchema));
 
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
 		const {
-			data: { user },
-			error
+			data: { user: voter },
+			error: updateErr
 		} = await supabaseAdmin.auth.admin.updateUserById(form.data.voterId, {
 			email: form.data.email,
 			password: form.data.password,
@@ -71,8 +71,18 @@ export const actions: Actions = {
 			}
 		});
 
-		if (error) return message(form, { status: 401, msg: error.message });
-		else if (user) return message(form, { status: 200, msg: 'Voter info has been updated.' });
+		if (updateErr) return fail(401, { form, msg: updateErr.message });
+		else if (voter) {
+			const { data, error } = (await supabaseAdmin
+				.from('voter_list_tb')
+				.select()
+				.eq('admin_id', user?.id)
+				.order('created_at', { ascending: true })) as PostgrestSingleResponse<Voter[]>;
+
+			if (error) return fail(401, { form, msg: error.message });
+
+			return { form, msg: 'Voter info updated.', data };
+		}
 	},
 
 	deleteVoter: async ({ locals: { supabaseAdmin }, request }) => {

@@ -10,6 +10,8 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { LoaderCircle, X } from 'lucide-svelte';
 	import { adminState } from '$lib/runes.svelte';
+	import type { ResultModel, Voter } from '$lib/types';
+	import { fromVotersRouteState } from '$lib/runes/VotersRoute.svelte';
 
 	interface Prop {
 		user: User;
@@ -19,30 +21,29 @@
 
 	let { user, updateVoterForm, openEdit = $bindable() }: Prop = $props();
 
+	const votersRoute = fromVotersRouteState();
+
 	const form = superForm(updateVoterForm, {
-		validators: zodClient(updateVoterSchema)
-	});
-
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status } = $message as { msg: string; status: number };
+		validators: zodClient(updateVoterSchema),
+		invalidateAll: false,
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{ msg: string; data: Voter[] }>;
 
 			switch (status) {
 				case 200:
 					toast.success('', {
-						description: msg,
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
 						}
 					});
+					votersRoute.setVotersArray(data.data);
 					openEdit = false;
 					break;
 				case 401:
 					toast.error('', {
-						description: msg,
+						description: data.msg,
 						action: {
 							label: 'Undo',
 							onClick: () => {}
@@ -52,6 +53,8 @@
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting, message } = form;
 
 	$effect(() => {
 		$formData.displayName = adminState.getSelectedVoter()?.display_name ?? '';
