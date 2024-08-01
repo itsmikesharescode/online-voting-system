@@ -62,15 +62,12 @@ export const actions: Actions = {
 
 	deleteCandidate: async ({ locals: { supabase }, request }) => {
 		const formData = await request.formData();
-		const adminId = formData.get('adminId') as string;
 		const candidateId = formData.get('candidateId') as string;
-
-		const { error } = await supabase
-			.from('candidate_list_tb')
-			.delete()
-			.match({ admin_id: adminId, id: candidateId });
+		const { data, error } = (await supabase.rpc('delete_candidate', {
+			candidate_id_client: Number(candidateId)
+		})) as PostgrestSingleResponse<Candidate[]>;
 
 		if (error) return fail(401, { msg: error.message });
-		else return { msg: 'Deleted a candidated.' };
+		return { msg: 'You have delete a candidate', data };
 	}
 };

@@ -10,6 +10,7 @@
 	import type { Infer, SuperValidated } from 'sveltekit-superforms';
 	import type { UpdateCandidateSchema } from '$lib/schema';
 	import DeleteCandidate from './operations/delete-candidate.svelte';
+	import { fromCandidatesRouteState } from '$lib/runes/CandidatesRoute.svelte';
 
 	interface Props {
 		candidates: Candidate[] | null;
@@ -19,6 +20,8 @@
 	}
 
 	const { candidates, user, positions, updateCandidateForm }: Props = $props();
+
+	const candidateRoute = fromCandidatesRouteState();
 
 	let openDetails = $state(false);
 	let openEdit = $state(false);
@@ -60,7 +63,7 @@
 							<DropdownMenu.Item
 								class="cursor-pointer"
 								onclick={() => {
-									adminState.setSelectedCandidate(candidateInfo);
+									candidateRoute.setActiveIndex(candidateInfo);
 									openDetails = true;
 								}}
 							>
@@ -69,7 +72,7 @@
 							<DropdownMenu.Item
 								class="cursor-pointer"
 								onclick={() => {
-									adminState.setSelectedCandidate(candidateInfo);
+									candidateRoute.setActiveIndex(candidateInfo);
 									openEdit = true;
 								}}
 							>
@@ -78,7 +81,7 @@
 							<DropdownMenu.Item
 								class="cursor-pointer"
 								onclick={() => {
-									adminState.setSelectedCandidate(candidateInfo);
+									candidateRoute.setActiveIndex(candidateInfo);
 									openDelete = true;
 								}}
 							>
