@@ -3,6 +3,7 @@
 This is an [Online Voting System](https://mike-voting-sys.vercel.app/) [`SasS`](https://www.techtarget.com/searchcloudcomputing/definition/Software-as-a-Service) project created with:
 
 - [`Svelte 5`](https://svelte-5-preview.vercel.app/docs/introduction)
+- [`SvelteKit`](https://kit.svelte.dev/)
 - [`Typescript`](https://www.typescriptlang.org/)
 - [`Tailwind CSS`](https://tailwindcss.com/)
 - [`ShadCN Svelte`](https://ui.shadcn.com/)
