@@ -24,6 +24,7 @@
 	let open = $state(false);
 	const form = superForm(createPositionForm, {
 		validators: zodClient(createPositionSchema),
+		id: crypto.randomUUID(),
 		invalidateAll: false,
 		onUpdate({ result }) {
 			const { status, data } = result as ResultModel<{ msg: string; data: Position[] }>;

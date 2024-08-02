@@ -8,7 +8,7 @@ import type { Position } from '$lib/types';
 
 export const load: PageServerLoad = async () => {
 	return {
-		createPositionForm: await superValidate(zod(createPositionSchema), { id: crypto.randomUUID() })
+		createPositionForm: await superValidate(zod(createPositionSchema))
 	};
 };
 
