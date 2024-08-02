@@ -8,6 +8,10 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { toast } from 'svelte-sonner';
 	import { LoaderCircle } from 'lucide-svelte';
+	import type { ResultModel } from '$lib/types';
+	import type { User } from '@supabase/supabase-js';
+	import { userState } from '$lib/runes/userState.svelte';
+	import { goto } from '$app/navigation';
 
 	interface PropType {
 		loginForm: SuperValidated<Infer<LoginSchema>>;
@@ -15,27 +19,35 @@
 
 	const { loginForm }: PropType = $props();
 
-	const form = superForm(loginForm, { validators: zodClient(loginSchema) });
+	const user = userState();
 
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status } = $message as { msg: string; status: number };
-
+	const form = superForm(loginForm, {
+		validators: zodClient(loginSchema),
+		invalidateAll: false,
+		id: crypto.randomUUID(),
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{
+				msg: string;
+				user: User;
+				role: 'admin' | 'voter';
+			}>;
 			switch (status) {
+				case 200:
+					toast.success('Log in', { description: data.msg });
+					user.setUser(data.user);
+
+					if (data.role === 'admin') goto('/admin', { invalidateAll: false });
+					else if (data.role === 'voter') goto('/voter');
+
+					break;
 				case 401:
-					toast.error('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
+					toast.error('Log in', { description: data.msg });
 					break;
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <div class="mx-auto grid w-[300px] gap-[20px] sm:w-[350px]">

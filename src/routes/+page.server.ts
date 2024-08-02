@@ -6,7 +6,7 @@ import { fail, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async () => {
 	return {
-		loginForm: await superValidate(zod(loginSchema), { id: crypto.randomUUID() }),
+		loginForm: await superValidate(zod(loginSchema)),
 		registerForm: await superValidate(zod(registerSchema), { id: crypto.randomUUID() }),
 		forgotPwdForm: await superValidate(zod(forgotPwdSchema), { id: crypto.randomUUID() })
 	};
@@ -14,25 +14,20 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	login: async (event) => {
-		const {
-			locals: { supabase }
-		} = event;
+		const { supabase } = event.locals;
 
 		const form = await superValidate(event, zod(loginSchema));
 
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
-		const {
-			data: { user },
-			error
-		} = await supabase.auth.signInWithPassword({
+		const { data, error } = await supabase.auth.signInWithPassword({
 			email: form.data.email,
 			password: form.data.password
 		});
 
-		if (error) return message(form, { status: 401, msg: error.message });
-		else if (user) return message(form, { status: 200, msg: 'Welcome back.' });
-		else return message(form, { status: 401, msg: 'Server error.' });
+		if (error) return fail(401, { form, msg: error.message });
+		else if (data.user)
+			return { form, msg: 'Welcome back!', user: data.user, role: data.user.user_metadata.role };
 	},
 
 	register: async (event) => {

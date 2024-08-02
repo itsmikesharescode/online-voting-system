@@ -1,6 +1,6 @@
 import { fail, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { message, superValidate } from 'sveltekit-superforms';
+import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { createVoterSchema, updateVoterSchema } from '$lib/schema';
 import type { PostgrestSingleResponse } from '@supabase/supabase-js';
@@ -8,8 +8,8 @@ import type { Voter } from '$lib/types';
 
 export const load: PageServerLoad = async () => {
 	return {
-		createVoterForm: await superValidate(zod(createVoterSchema), { id: crypto.randomUUID() }),
-		updateVoterForm: await superValidate(zod(updateVoterSchema), { id: crypto.randomUUID() })
+		createVoterForm: await superValidate(zod(createVoterSchema)),
+		updateVoterForm: await superValidate(zod(updateVoterSchema))
 	};
 };
 
