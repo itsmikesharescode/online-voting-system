@@ -8,12 +8,8 @@ import type { PostgrestSingleResponse } from '@supabase/supabase-js';
 
 export const load: PageServerLoad = async () => {
 	return {
-		createCandidateForm: await superValidate(zod(createCandidateSchema), {
-			id: crypto.randomUUID()
-		}),
-		updateCandidateForm: await superValidate(zod(updateCandidateSchema), {
-			id: crypto.randomUUID()
-		})
+		createCandidateForm: await superValidate(zod(createCandidateSchema)),
+		updateCandidateForm: await superValidate(zod(updateCandidateSchema))
 	};
 };
 

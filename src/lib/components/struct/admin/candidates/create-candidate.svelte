@@ -28,6 +28,7 @@
 
 	const form = superForm(createCandidateForm, {
 		validators: zodClient(createCandidateSchema),
+		id: crypto.randomUUID(),
 		invalidateAll: false,
 		onUpdate({ result }) {
 			const { status, data } = result as ResultModel<{ msg: string; data: Candidate[] }>;

@@ -25,6 +25,7 @@
 
 	const form = superForm(updateCandidateForm, {
 		validators: zodClient(updateCandidateSchema),
+		id: crypto.randomUUID(),
 		invalidateAll: false,
 		onUpdate({ result }) {
 			const { status, data } = result as ResultModel<{ msg: string; data: Candidate[] }>;
