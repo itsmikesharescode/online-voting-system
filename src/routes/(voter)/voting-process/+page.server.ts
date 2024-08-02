@@ -34,15 +34,5 @@ export const actions: Actions = {
 
 		if (error) return fail(401, { msg: error.message });
 		else return { msg: 'You have successfully voted.' };
-	},
-
-	logout: async ({ locals: { supabase } }) => {
-		const { error } = await supabase.auth.signOut();
-
-		if (error) return fail(401, { msg: error.message });
-
-		return {
-			msg: 'Thank you come back again!'
-		};
 	}
 };

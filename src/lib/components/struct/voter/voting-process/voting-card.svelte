@@ -36,7 +36,7 @@
 		Max Vote: {result.max_vote}
 	</h4>
 
-	{#if result.candidate_list_tb.length}
+	{#if result.candidate_list_tb?.length}
 		<div class="flex flex-col gap-[10px]">
 			<div class="grid grid-cols-[70%,30%]">
 				<span>

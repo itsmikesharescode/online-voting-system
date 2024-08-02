@@ -6,20 +6,13 @@
 	import * as Card from '$lib/components/ui/card';
 	import { enhance } from '$app/forms';
 	import type { SubmitFunction } from '@sveltejs/kit';
-
 	import { toast } from 'svelte-sonner';
-	import type { User } from '@supabase/supabase-js';
 	import { goto } from '$app/navigation';
 	import { transformCandidates } from '$lib/helpers';
 	import { LoaderCircle } from 'lucide-svelte';
+	import { userState } from '$lib/runes/userState.svelte';
 
-	interface Props {
-		user: User | null;
-	}
-
-	const { user }: Props = $props();
-
-	user?.user_metadata.displayName;
+	const user = userState();
 
 	let open = $state(false);
 
@@ -47,8 +40,6 @@
 			await update();
 		};
 	};
-
-	console.log(user);
 </script>
 
 <Button onclick={() => (open = true)}>View Button</Button>
@@ -83,9 +74,9 @@
 						name="serialVotes"
 						hidden
 						value={JSON.stringify({
-							displayName: user.user_metadata.displayName,
-							voterId: user.id,
-							adminId: user.user_metadata.adminId,
+							displayName: user.getUser()?.user_metadata.displayName,
+							voterId: user.getUser()?.id,
+							adminId: user.getUser()?.user_metadata.adminId,
 							votes: voterState.getVotes()
 						})}
 					/>
