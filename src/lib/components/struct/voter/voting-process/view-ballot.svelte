@@ -16,7 +16,7 @@
 	const user = userState();
 	const votingProcessRoute = fromVotingProcessRouteState();
 
-	let open = $state(true);
+	let open = $state(false);
 
 	let submitLoader = $state(false);
 	const insertVote: SubmitFunction = () => {
@@ -61,7 +61,7 @@
 				<div class="grid gap-[10px] p-[10px]">
 					<p class="text-xl font-semibold">{position.position_name}</p>
 					{#each position.candidate_list_tb as candidate}
-						<div class="grid grid-cols-[15px,1fr] items-center text-muted-foreground">
+						<div class="grid grid-cols-[15px,1fr] items-center gap-[5px] text-muted-foreground">
 							<Check class="h-[15px] w-[15px] " />
 							<p class="">{candidate.display_name}</p>
 						</div>
