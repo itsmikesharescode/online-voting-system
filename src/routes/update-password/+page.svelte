@@ -8,43 +8,40 @@
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
+	import type { ResultModel } from '$lib/types.js';
+	import { userState } from '$lib/runes/userState.svelte.js';
+	import type { User } from '@supabase/supabase-js';
 
 	const { data } = $props();
 
+	const user = userState();
+
 	const form = superForm(data.updatePwdForm, {
 		validators: zodClient(updatePwdSchema),
-		invalidateAll: false
-	});
-
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status, url } = $message as { msg: string; status: number; url: string };
+		invalidateAll: false,
+		id: crypto.randomUUID(),
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{
+				msg: string;
+				user: User;
+				role: 'admin' | 'voter';
+			}>;
 
 			switch (status) {
 				case 200:
-					toast.success('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
-					goto(url);
+					toast.success('Update Password', { description: data.msg });
+					if (data.role === 'admin') goto('/admin', { invalidateAll: false });
+					else if (data.role === 'voter') goto('/voter', { invalidateAll: false });
+					user.setUser(data.user);
 					break;
 				case 401:
-					toast.error('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
+					toast.error('Update Password', { description: data.msg });
 					break;
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting, message } = form;
 </script>
 
 <div class="grid md:grid-cols-2">

@@ -4,7 +4,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { forgotPwdSchema, loginSchema, registerSchema } from '$lib/schema';
 import { fail } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { supabase } }) => {
 	return {
 		loginForm: await superValidate(zod(loginSchema)),
 		registerForm: await superValidate(zod(registerSchema)),
@@ -56,15 +56,14 @@ export const actions: Actions = {
 
 	forgotPwd: async (event) => {
 		const {
-			locals: { supabase }
+			locals: { supabase },
+			url
 		} = event;
 		const form = await superValidate(event, zod(forgotPwdSchema));
 
 		if (!form.valid) return fail(400, { form });
 
-		const { error } = await supabase.auth.resetPasswordForEmail(form.data.email, {
-			redirectTo: '/update-password'
-		});
+		const { error } = await supabase.auth.resetPasswordForEmail(form.data.email);
 
 		if (error) return fail(401, { form, msg: error.message });
 		return {

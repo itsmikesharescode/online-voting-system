@@ -1,5 +1,5 @@
 import type { SupabaseJwt } from '$lib/types';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { createServerClient } from '@supabase/ssr';
 import type { Session } from '@supabase/supabase-js';
 import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';

@@ -35,10 +35,8 @@
 				case 200:
 					toast.success('Log in', { description: data.msg });
 					user.setUser(data.user);
-
 					if (data.role === 'admin') goto('/admin', { invalidateAll: false });
-					else if (data.role === 'voter') goto('/voter');
-
+					else if (data.role === 'voter') goto('/voter', { invalidateAll: false });
 					break;
 				case 401:
 					toast.error('Log in', { description: data.msg });

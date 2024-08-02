@@ -5,18 +5,24 @@ import { updatePwdSchema } from '$lib/schema';
 import { fail, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, url }) => {
-	try {
-		const {
-			data: { user },
-			error
-		} = await supabase.auth.exchangeCodeForSession(url.searchParams.get('code') ?? '');
+	const { data, error } = await supabase.auth.verifyOtp({
+		token_hash: url.searchParams.get('token') ?? '',
+		type: 'email'
+	});
 
+	if (error) redirect(303, `/?error=${error.message.split(' ').join('-')}`);
+
+	if (data.user) {
 		return {
-			updatePwdForm: await superValidate(zod(updatePwdSchema), { id: crypto.randomUUID() })
+			user: data.user,
+			role: data.user.user_metadata,
+			updatePwdForm: await superValidate(zod(updatePwdSchema))
 		};
-	} catch (error) {}
-
-	redirect(303, '/?error=not-legal');
+	} else {
+		return {
+			updatePwdForm: await superValidate(zod(updatePwdSchema))
+		};
+	}
 };
 
 export const actions: Actions = {
@@ -25,7 +31,7 @@ export const actions: Actions = {
 
 		const form = await superValidate(event, zod(updatePwdSchema));
 
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
 		const {
 			data: { user },
@@ -34,16 +40,11 @@ export const actions: Actions = {
 			password: form.data.newPwd
 		});
 
-		if (error) return message(form, { status: 401, msg: error.message });
+		if (error) return fail(401, { form, msg: error.message });
 		else if (user) {
 			const { role } = user.user_metadata;
 
-			let url = '';
-
-			if (role === 'admin') url = '/admin';
-			else if (role === 'role') url = '/voter';
-
-			return message(form, { status: 200, msg: 'Password updated.', url });
+			return { form, msg: 'Password update', role, user };
 		}
 	}
 };
