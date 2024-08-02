@@ -1,4 +1,4 @@
-import type { LiveResult } from '$lib/types';
+import type { Candidate, LiveResult } from '$lib/types';
 import { getContext, setContext } from 'svelte';
 
 class VotingProcessRoute {
@@ -10,6 +10,23 @@ class VotingProcessRoute {
 
 	getLiveResultArr = () => {
 		return this.liveResultArr;
+	};
+
+	private castedVotes = $state<Candidate[]>([]);
+
+	setCastedVotes = (param: Candidate[]) => {
+		this.castedVotes = param;
+	};
+
+	getCastedVotes = () => {
+		return this.castedVotes;
+	};
+
+	castVote = (param: Candidate) => {
+		const votesCopy = this.castedVotes.map((item) => item.id);
+		if (votesCopy.includes(param.id)) {
+			this.castedVotes = this.castedVotes.filter((item) => item.id !== param.id);
+		} else this.castedVotes.push(param);
 	};
 }
 

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { fromVotingProcessRouteState } from '$lib/runes/VotingProcessRoute.svelte';
 	import type { Candidate, LiveResult } from '$lib/types';
 	import BarChart from './bar-chart.svelte';
-	import { UserRound } from 'lucide-svelte';
-	import { voterState } from '$lib/runes.svelte';
+	import { UserRound, Vote, Undo } from 'lucide-svelte';
 
 	interface Props {
 		result: LiveResult;
@@ -11,20 +11,25 @@
 
 	const { result }: Props = $props();
 
-	function canInsert(candidate: Candidate): boolean {
-		const positionVotes = voterState.getVotesByPosition(candidate.position_id);
-		return positionVotes < result.max_vote;
-	}
+	const votingProcessRoute = fromVotingProcessRouteState();
 
-	function vote(candidate: Candidate) {
-		if (canInsert(candidate)) {
-			voterState.setVotes(candidate);
-		}
-	}
+	// client side checker but not reliant database checks is a must
+	const isVoted = (candidate: Candidate) => {
+		const votesCopy = votingProcessRoute.getCastedVotes().map((item) => item.id);
 
-	function checkIfExist(b: Candidate) {
-		return voterState.getVotes().includes(b);
-	}
+		return votesCopy.includes(candidate.id);
+	};
+
+	const isMaxVote = () => {
+		const votesCopyArr = votingProcessRoute.getCastedVotes();
+		const maxVote = result.max_vote;
+
+		const filtered = result.candidate_list_tb?.filter((item) => {
+			return votesCopyArr.some((innerItem) => item.id === innerItem.id);
+		});
+
+		return maxVote === filtered?.length;
+	};
 </script>
 
 <div class="flex h-fit flex-col gap-[10px] rounded-lg border-[1px] border-slate-700 p-[1rem]">
@@ -53,18 +58,23 @@
 						</div>
 
 						<div class="">
-							{#if checkIfExist(candidate)}
-								<Button
-									size="sm"
-									onclick={() => {
-										voterState.removeVote(candidate);
-									}}>Unvote</Button
-								>
-							{:else if !canInsert(candidate)}
-								<Button disabled={true} size="sm">Vote</Button>
-							{:else}
-								<Button size="sm" onclick={() => vote(candidate)}>Vote</Button>
-							{/if}
+							<Button
+								disabled={isMaxVote()}
+								variant={isVoted(candidate) ? 'destructive' : 'default'}
+								class="flex items-center gap-[5px]"
+								onclick={() => {
+									votingProcessRoute.castVote(candidate);
+									console.log(votingProcessRoute.getCastedVotes());
+								}}
+							>
+								{#if isVoted(candidate)}
+									<Undo class="h-[15px] w-[15px]" />
+									Unvote
+								{:else}
+									<Vote class="h-[15px] w-[15px]" />
+									Vote
+								{/if}
+							</Button>
 						</div>
 					</div>
 				{/each}
