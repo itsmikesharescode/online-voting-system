@@ -1,11 +1,12 @@
 # Hello Weirdo 👋!
 
 This is an [Online Voting System](https://mike-voting-sys.vercel.app/) project created with:
-[`svelte 5`](https://svelte-5-preview.vercel.app/docs/introduction)
-[`Typescript`](https://www.typescriptlang.org/)
-[`Tailwind CSS`](https://tailwindcss.com/)
-['ShadCN Svelte'](https://ui.shadcn.com/)
-[`Supabase`](https://supabase.com/)
+
+- [`svelte 5`](https://svelte-5-preview.vercel.app/docs/introduction)
+- [`Typescript`](https://www.typescriptlang.org/)
+- [`Tailwind CSS`](https://tailwindcss.com/)
+- [`ShadCN Svelte`](https://ui.shadcn.com/)
+- [`Supabase`](https://supabase.com/)
 
 ## About me
 
