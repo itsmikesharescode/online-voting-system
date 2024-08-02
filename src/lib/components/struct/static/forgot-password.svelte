@@ -8,6 +8,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
+	import type { ResultModel } from '$lib/types';
 
 	interface PropType {
 		forgotPwdForm: SuperValidated<Infer<ForgotPwdSchema>>;
@@ -15,37 +16,25 @@
 
 	const { forgotPwdForm }: PropType = $props();
 
-	const form = superForm(forgotPwdForm, { validators: zodClient(forgotPwdSchema) });
-
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status } = $message as { msg: string; status: number };
+	const form = superForm(forgotPwdForm, {
+		validators: zodClient(forgotPwdSchema),
+		id: crypto.randomUUID(),
+		invalidateAll: false,
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{ msg: string }>;
 
 			switch (status) {
 				case 200:
-					toast.success('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
-
+					toast.success('Forgot Password', { description: data.msg });
 					break;
 				case 401:
-					toast.error('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
+					toast.error('Forgot Password', { description: data.msg });
 					break;
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting, message } = form;
 </script>
 
 <div class="mx-auto grid w-[300px] gap-[20px] sm:w-[350px]">

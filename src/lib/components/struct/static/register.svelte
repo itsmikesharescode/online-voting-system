@@ -8,6 +8,10 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { toast } from 'svelte-sonner';
 	import { LoaderCircle } from 'lucide-svelte';
+	import type { ResultModel } from '$lib/types';
+	import type { User } from '@supabase/supabase-js';
+	import { userState } from '$lib/runes/userState.svelte';
+	import { goto } from '$app/navigation';
 
 	interface PropType {
 		registerForm: SuperValidated<Infer<RegisterSchema>>;
@@ -15,27 +19,32 @@
 
 	const { registerForm }: PropType = $props();
 
-	const form = superForm(registerForm, { validators: zodClient(registerSchema) });
+	const user = userState();
 
-	const { form: formData, enhance, submitting, message } = form;
-
-	$effect(() => {
-		if ($message) {
-			const { msg, status } = $message as { msg: string; status: number };
+	const form = superForm(registerForm, {
+		validators: zodClient(registerSchema),
+		id: crypto.randomUUID(),
+		invalidateAll: false,
+		onUpdate({ result }) {
+			const { status, data } = result as ResultModel<{
+				msg: string;
+				user: User;
+			}>;
 
 			switch (status) {
+				case 200:
+					toast.success('Create Account', { description: data.msg });
+					user.setUser(data.user);
+					goto('/admin', { invalidateAll: false });
+					break;
 				case 401:
-					toast.error('', {
-						description: msg,
-						action: {
-							label: 'Undo',
-							onClick: () => {}
-						}
-					});
+					toast.error('Create Account', { description: data.msg });
 					break;
 			}
 		}
 	});
+
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <div class="mx-auto grid w-[300px] gap-[20px] sm:w-[350px]">

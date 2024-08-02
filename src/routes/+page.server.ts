@@ -7,8 +7,8 @@ import { fail, redirect } from '@sveltejs/kit';
 export const load: PageServerLoad = async () => {
 	return {
 		loginForm: await superValidate(zod(loginSchema)),
-		registerForm: await superValidate(zod(registerSchema), { id: crypto.randomUUID() }),
-		forgotPwdForm: await superValidate(zod(forgotPwdSchema), { id: crypto.randomUUID() })
+		registerForm: await superValidate(zod(registerSchema)),
+		forgotPwdForm: await superValidate(zod(forgotPwdSchema))
 	};
 };
 
@@ -37,7 +37,7 @@ export const actions: Actions = {
 
 		const form = await superValidate(event, zod(registerSchema));
 
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
 		const { data, error } = await supabase.auth.signUp({
 			email: form.data.email,
@@ -50,8 +50,8 @@ export const actions: Actions = {
 			}
 		});
 
-		if (error) return message(form, { status: 401, msg: error.message });
-		else return message(form, { status: 200, msg: 'Account created.' });
+		if (error) return fail(401, { form, msg: error.message });
+		else if (data.user) return { form, msg: 'Account created.', user: data.user };
 	},
 
 	forgotPwd: async (event) => {
@@ -60,17 +60,16 @@ export const actions: Actions = {
 		} = event;
 		const form = await superValidate(event, zod(forgotPwdSchema));
 
-		if (!form.valid) return fail(401, { form });
+		if (!form.valid) return fail(400, { form });
 
 		const { error } = await supabase.auth.resetPasswordForEmail(form.data.email, {
 			redirectTo: '/update-password'
 		});
 
-		if (error) return message(form, { status: 401, msg: error.message });
-
-		return message(form, {
-			status: 200,
+		if (error) return fail(401, { form, msg: error.message });
+		return {
+			form,
 			msg: `An email containing a password reset link had been sent to ${form.data.email}.`
-		});
+		};
 	}
 };
