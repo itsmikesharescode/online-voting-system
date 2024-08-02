@@ -1,8 +1,8 @@
 # Hello Weirdo 👋!
 
-This is an [Online Voting System](https://mike-voting-sys.vercel.app/) project created with:
+This is an [Online Voting System](https://mike-voting-sys.vercel.app/) [`SasS`](https://www.techtarget.com/searchcloudcomputing/definition/Software-as-a-Service) project created with:
 
-- [`svelte 5`](https://svelte-5-preview.vercel.app/docs/introduction)
+- [`Svelte 5`](https://svelte-5-preview.vercel.app/docs/introduction)
 - [`Typescript`](https://www.typescriptlang.org/)
 - [`Tailwind CSS`](https://tailwindcss.com/)
 - [`ShadCN Svelte`](https://ui.shadcn.com/)
