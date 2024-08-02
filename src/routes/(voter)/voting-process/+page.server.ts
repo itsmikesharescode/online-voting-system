@@ -8,7 +8,8 @@ export const load: PageServerLoad = async ({ locals: { supabase, user }, setHead
 		results: (await supabase
 			.from('position_list_tb')
 			.select('*, candidate_list_tb(*)')
-			.eq('admin_id', user?.user_metadata.adminId)) as PostgrestSingleResponse<LiveResult[]>
+			.eq('admin_id', user?.user_metadata.adminId)
+			.order('created_at', { ascending: false })) as PostgrestSingleResponse<LiveResult[]>
 	};
 };
 

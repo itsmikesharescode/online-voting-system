@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ViewBallot from '$lib/components/struct/voter/voting-process/view-ballot.svelte';
 	import VotingCard from '$lib/components/struct/voter/voting-process/voting-card.svelte';
-	import { voterState } from '$lib/runes.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	import { fromVotingProcessRouteState } from '$lib/runes/VotingProcessRoute.svelte.js';
 
 	const { data } = $props();
@@ -21,9 +21,11 @@
 		{/if}
 	</div>
 
-	{#if voterState.getVotes().length}
-		<div class="fixed bottom-0 left-0 m-[2rem]">
+	{#if votingProcessRoute.getCastedVotes().length}
+		<div class="fixed bottom-0 left-0 m-[2rem] flex items-center gap-[10px]">
 			<ViewBallot />
+
+			<Button onclick={() => votingProcessRoute.setCastedVotes([])}>Reset Votes</Button>
 		</div>
 	{/if}
 </div>

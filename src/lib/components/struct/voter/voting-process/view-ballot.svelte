@@ -1,7 +1,6 @@
 <script lang="ts">
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { voterState } from '$lib/runes.svelte';
 	import type { ResultModel } from '$lib/types';
 	import * as Card from '$lib/components/ui/card';
 	import { enhance } from '$app/forms';
@@ -11,10 +10,13 @@
 	import { transformCandidates } from '$lib/helpers';
 	import { LoaderCircle } from 'lucide-svelte';
 	import { userState } from '$lib/runes/userState.svelte';
+	import { fromVotingProcessRouteState } from '$lib/runes/VotingProcessRoute.svelte';
+	import { ListChecks, Check } from 'lucide-svelte';
 
 	const user = userState();
+	const votingProcessRoute = fromVotingProcessRouteState();
 
-	let open = $state(false);
+	let open = $state(true);
 
 	let submitLoader = $state(false);
 	const insertVote: SubmitFunction = () => {
@@ -28,7 +30,7 @@
 			switch (status) {
 				case 200:
 					toast.success('', { description: msg });
-					voterState.resetVote();
+					votingProcessRoute.setCastedVotes([]);
 					goto('/voter', { invalidateAll: true });
 					break;
 
@@ -42,53 +44,56 @@
 	};
 </script>
 
-<Button onclick={() => (open = true)}>View Button</Button>
+<Button onclick={() => (open = true)} class="flex items-center gap-[5px]">
+	<ListChecks class="h-[15px] w-[15px]" />
+	View Ballot
+</Button>
 
 <AlertDialog.Root bind:open>
-	<AlertDialog.Content class="w-full md:max-w-[80dvw]">
+	<AlertDialog.Content class="flex h-[100dvh] max-w-[100dvw] flex-col">
 		<AlertDialog.Header>
 			<AlertDialog.Title>Voting Ballot Penoy</AlertDialog.Title>
 			<AlertDialog.Description>Voting ballot penoy hopya mani popcorn</AlertDialog.Description>
 		</AlertDialog.Header>
 
-		<div class="grid h-[50dvh] gap-[10px] overflow-auto p-[1rem] lg:max-h-[70dvh] lg:grid-cols-3">
-			{#each transformCandidates(voterState.getVotes()) as position}
-				<Card.Root>
-					<Card.Header>
-						<Card.Title>{position.position_name}</Card.Title>
-					</Card.Header>
-					<Card.Content>
-						{#each position.candidate_list_tb as candidate}
-							<p>{candidate.display_name}</p>
-						{/each}
-					</Card.Content>
-				</Card.Root>
+		<div class="h-full overflow-auto">
+			{#each transformCandidates(votingProcessRoute.getCastedVotes()) as position}
+				<div class="grid gap-[10px] p-[10px]">
+					<p class="text-xl font-semibold">{position.position_name}</p>
+					{#each position.candidate_list_tb as candidate}
+						<div class="grid grid-cols-[15px,1fr] items-center text-muted-foreground">
+							<Check class="h-[15px] w-[15px] " />
+							<p class="">{candidate.display_name}</p>
+						</div>
+					{/each}
+				</div>
 			{/each}
 		</div>
 
-		<AlertDialog.Footer>
-			<AlertDialog.Cancel disabled={submitLoader}>Cancel</AlertDialog.Cancel>
-			{#if user}
-				<form method="post" action="?/insertVote" use:enhance={insertVote}>
-					<input
-						name="serialVotes"
-						hidden
-						value={JSON.stringify({
-							displayName: user.getUser()?.user_metadata.displayName,
-							voterId: user.getUser()?.id,
-							adminId: user.getUser()?.user_metadata.adminId,
-							votes: voterState.getVotes()
-						})}
-					/>
-					<Button disabled={submitLoader} type="submit" class="w-full">
-						{#if submitLoader}
-							<LoaderCircle class="animate-spin" />
-						{:else}
-							Submit Vote
-						{/if}
-					</Button>
-				</form>
-			{/if}
-		</AlertDialog.Footer>
+		<form
+			method="post"
+			action="?/insertVote"
+			use:enhance={insertVote}
+			class="flex items-center justify-end gap-[10px]"
+		>
+			<input
+				name="serialVotes"
+				hidden
+				value={JSON.stringify({
+					displayName: user.getUser()?.user_metadata.displayName,
+					voterId: user.getUser()?.id,
+					adminId: user.getUser()?.user_metadata.adminId,
+					votes: votingProcessRoute.getCastedVotes()
+				})}
+			/>
+			<Button variant="secondary" onclick={() => (open = false)}>Close</Button>
+			<Button disabled={submitLoader} type="submit">
+				{#if submitLoader}
+					<LoaderCircle class="animate-spin" />
+				{:else}
+					Submit Vote
+				{/if}
+			</Button>
+		</form>
 	</AlertDialog.Content>
 </AlertDialog.Root>
