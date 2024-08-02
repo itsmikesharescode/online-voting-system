@@ -16,4 +16,4 @@ This is an [Online Voting System](https://mike-voting-sys.vercel.app/) project c
 
 Join our community of filipino developers creating universal apps.
 
-- [Filipino Web Development Peers](https://discord.gg/BVYCDRBF): Chat with Expo users and ask questions.
+- [Filipino Web Development Peers](https://discord.gg/BVYCDRBF): Chat with Svelte and Sveltekit users and ask questions.
