@@ -23,8 +23,8 @@
         </p>
       </div>
 
-      <div class="relative mt-[10px] h-40 w-[40rem]">
-        <!-- Gradients -->
+      <!-- <div class="relative mt-[10px] h-40 w-[40rem]">
+      
         <div
           class="absolute inset-x-20 top-0 h-[2px] w-3/4 bg-gradient-to-r from-transparent via-indigo-500 to-transparent blur-sm"
         ></div>
@@ -38,7 +38,7 @@
           class="absolute inset-x-60 top-0 h-px w-1/4 bg-gradient-to-r from-transparent via-sky-500 to-transparent"
         ></div>
 
-        <!-- Core component -->
+
         <Sparkles
           minSize={0.8}
           maxSize={2}
@@ -48,11 +48,11 @@
           speed={3}
         />
 
-        <!-- Radial Gradient to prevent sharp edges -->
+    
         <div
           class="absolute inset-0 h-full w-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"
         ></div>
-      </div>
+      </div> -->
     </div>
   </div>
 
